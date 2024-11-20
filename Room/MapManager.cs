@@ -26,6 +26,7 @@ public class MapManager : MonoBehaviour
     private IBuild _roomBuilder;
     public GameObject floorTile;
     public GameObject[] floorDecorations;
+    public GameObject[] roomDecorations;
     
     [Header("Room Settings")]
     public float spacing = 2f;
@@ -43,7 +44,7 @@ public class MapManager : MonoBehaviour
         _instance = this;
         DontDestroyOnLoad(this.gameObject);
         
-        _roomBuilder = new RoomBuilder(floorTile, floorDecorations, spacing, objectYOffset, roomWidth, roomHeight);
+        _roomBuilder = new RoomBuilder(floorTile, floorDecorations, roomDecorations, spacing, objectYOffset, roomWidth, roomHeight);
     }
 
     private void Start()

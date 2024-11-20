@@ -34,10 +34,10 @@ public class RoomBuilder : IBuild
             for (int z = 0; z < _widthY; z++)
             {
                 Vector3 tilePosition = new Vector3(x * _spacing - offsetX, 0, z * _spacing - offsetZ);
-                GameObject tile = Object.Instantiate(_roomAttribute., tilePosition, Quaternion.identity);
+                GameObject tile = Object.Instantiate(_roomAttribute._tiles, tilePosition, Quaternion.identity);
                 tile.isStatic = true;
 
-                if (Random.value > 0.60f && Random.value < 0.70f)
+                if (Random.value > 0.90f)
                 {
                     RandomizeFloor(tilePosition);
                 }
@@ -50,7 +50,7 @@ public class RoomBuilder : IBuild
         float randomRotation = Random.Range(0, 3) * 90f;
         Quaternion randomRotationQuat = Quaternion.Euler(0, randomRotation, 0);
 
-        GameObject randomDecoration = _floorDecorations[Random.Range(0, _floorDecorations.Length)];
+        GameObject randomDecoration = _roomAttribute._floorDecorations[Random.Range(0, _roomAttribute._floorDecorations.Length)];
         GameObject topDecoration = Object.Instantiate(
             randomDecoration, 
             tilePosition + new Vector3(0, _objectYOffset, 0), 
