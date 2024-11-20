@@ -22,38 +22,39 @@ public class MapManager : MonoBehaviour
             return _instance;
         }
     }
-
-    private IBuild _roomBuilder;
-    public GameObject floorTile;
-    public GameObject[] floorDecorations;
-    public GameObject[] roomDecorations;
     
-    [Header("Room Settings")]
-    public float spacing = 2f;
-    public float objectYOffset = 2f;
-    public int roomWidth = 10;
-    public int roomHeight = 10;
+    [Header("Map Settings Data")]
+    public RoomConfig roomConfig;
+    public TunnelConfig tunnelConfig;
+    
+    private RoomBuilder _roomBuilder;
+    private TunnelBuilder _tunnelBuilder;
+    
+    private MapGraph _mapGraph;
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
+        if (_instance == null)
         {
-            Destroy(this.gameObject);
-            return;
+            _instance = this;
+            DontDestroyOnLoad(gameObject); 
         }
-        _instance = this;
-        DontDestroyOnLoad(this.gameObject);
-        
-        _roomBuilder = new RoomBuilder(floorTile, floorDecorations, roomDecorations, spacing, objectYOffset, roomWidth, roomHeight);
+        else if (_instance != this)
+        {
+            Destroy(gameObject); 
+        }
     }
 
     private void Start()
-    {
-        GenerateRoom(new Vector3(0, 0, 0));
+    {   
+        _roomBuilder = new RoomBuilder(roomConfig);
+        _tunnelBuilder = new TunnelBuilder(tunnelConfig);
+        GenerateMap();
     }
 
-    private void GenerateRoom(Vector3 position)
-    {
-        _roomBuilder.Build(position);
+    private void GenerateMap()
+    {   
+        _mapGraph = new MapGraph();
+        _roomBuilder.Build();
     }
 }

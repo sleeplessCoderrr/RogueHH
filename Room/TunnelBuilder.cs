@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TunnelBuilder : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
+public class TunnelBuilder : IBuild
+{   
+    private TunnelConfig _tunnelConfig;
+    public TunnelBuilder(TunnelConfig tunnelConfig)
+    {
+        this._tunnelConfig = tunnelConfig;
+    }
+
+    public void Build()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Reset()
     {
         
     }
 }
+

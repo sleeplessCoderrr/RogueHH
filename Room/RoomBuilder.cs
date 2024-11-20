@@ -4,37 +4,34 @@ using UnityEngine;
 
 public class RoomBuilder : IBuild
 {
-    private Room _roomAttribute;
-    private float _spacing;
-    private float _objectYOffset;
-    private int _widthX;
-    private int _widthY;
+    private RoomConfig _roomConfig;
 
-    public RoomBuilder(GameObject floor, GameObject[] floorDecorations, GameObject[] roomDecorations, float spacing, float objectYOffset, int widthX, int widthY)
+    public RoomBuilder(RoomConfig roomConfig)
     {
-        this._roomAttribute = new Room(floor, floorDecorations, roomDecorations);   
-        this._spacing = spacing;
-        this._objectYOffset = objectYOffset;
-        this._widthX = widthX;
-        this._widthY = widthY;
+        this._roomConfig = roomConfig;
     }
     
-    public void Build(Vector3 position, params object[] args)
+    public void Build()
     {
-        GenerateFloor(position);
+        GenerateFloor();
+    }
+
+    public void Reset()
+    {
+        
     }
     
-    private void GenerateFloor(Vector3 position)
+    private void GenerateFloor()
     {
-        float offsetX = (_widthX - 1) * _spacing * 0.5f;
-        float offsetZ = (_widthY - 1) * _spacing * 0.5f;
+        float offsetX = (_roomConfig.widthX - 1) * _roomConfig.spacing * 0.5f;
+        float offsetZ = (_roomConfig.widthY - 1) * _roomConfig.spacing * 0.5f;
 
-        for (int x = 0; x < _widthX; x++)
+        for (int x = 0; x < _roomConfig.widthX; x++)
         {
-            for (int z = 0; z < _widthY; z++)
+            for (int z = 0; z < _roomConfig.widthY; z++)
             {
-                Vector3 tilePosition = new Vector3(x * _spacing - offsetX, 0, z * _spacing - offsetZ);
-                GameObject tile = Object.Instantiate(_roomAttribute._tiles, tilePosition, Quaternion.identity);
+                Vector3 tilePosition = new Vector3(x * _roomConfig.spacing - offsetX, 0, z * _roomConfig.spacing - offsetZ);
+                GameObject tile = Object.Instantiate(_roomConfig.floorTile, tilePosition, Quaternion.identity);
                 tile.isStatic = true;
 
                 if (Random.value > 0.90f)
@@ -50,10 +47,10 @@ public class RoomBuilder : IBuild
         float randomRotation = Random.Range(0, 3) * 90f;
         Quaternion randomRotationQuat = Quaternion.Euler(0, randomRotation, 0);
 
-        GameObject randomDecoration = _roomAttribute._floorDecorations[Random.Range(0, _roomAttribute._floorDecorations.Length)];
+        GameObject randomDecoration = _roomConfig.floorDecorations[Random.Range(0, _roomConfig.floorDecorations.Length)];
         GameObject topDecoration = Object.Instantiate(
             randomDecoration, 
-            tilePosition + new Vector3(0, _objectYOffset, 0), 
+            tilePosition + new Vector3(0, _roomConfig.objectYOffset, 0), 
             randomRotationQuat
         );
         
