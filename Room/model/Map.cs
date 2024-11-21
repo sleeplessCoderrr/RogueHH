@@ -6,9 +6,9 @@ using UnityEngine.UIElements;
 public class Map
 {
     private List<List<Tile>> _tiles;
-    public MapConfig MapConfig;
-
-    public Map(MapConfig mapConfig)
+    public MapConfigSO MapConfig;
+ 
+    public Map(MapConfigSO mapConfig)
     {
         this.MapConfig = mapConfig;
         InitializeMap();
@@ -17,12 +17,12 @@ public class Map
     private void InitializeMap()
     {   
         _tiles = new List<List<Tile>>();
-        for (int x=0; x < MapConfig.widthX; x++)
+        for (var x=0; x < MapConfig.widthX; x++)
         {   
-            List<Tile> row = new List<Tile>();
-            for (int z = 0; z < MapConfig.widthY; z++)
+            var row = new List<Tile>();
+            for (var z = 0; z < MapConfig.widthY; z++)
             {
-                Vector3 tilePos = new Vector3(x, 0, z);
+                var tilePos = new Vector3(x, 0, z);
                 row.Add(new Tile(tilePos, false));
             }
             _tiles.Add(row);
@@ -44,6 +44,28 @@ public class Map
         {
             _tiles[x][z] = tile;
         }
+    }
+    
+    public List<Tile> GetNeighbors(Tile tile)
+    {
+        var neighbors = new List<Tile>();
+        Vector3[] directions = {
+            Vector3.forward, Vector3.back, Vector3.left, Vector3.right,
+            new Vector3(1, 0, 1), new Vector3(1, 0, -1), new Vector3(-1, 0, 1), new Vector3(-1, 0, -1)
+        };
+        
+        foreach (var dir in directions)
+        {
+            var neighbor = GetTile(
+                Mathf.RoundToInt(tile.Position.x + dir.x),
+                Mathf.RoundToInt(tile.Position.z + dir.z)
+            );
+            
+            if (neighbor != null && neighbor.IsWalkable)
+                neighbors.Add(neighbor);
+        }
+
+        return neighbors;
     }
     
 }

@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class RoomBuilder : IBuild
 {
-    private RoomConfig _roomConfig;
+    private RoomConfigSO _roomConfig;
     private List<Tile> _roomTiles;
+    private GameObject _tile;
+    private GameObject[] _floorDecorations;
+    private GameObject[] _roomDecorations;
 
-    public RoomBuilder(RoomConfig roomConfig)
+    public RoomBuilder(RoomConfigSO roomConfig, GameObject tile, GameObject[] floorDecorations, GameObject[] roomDecorations)
     {
         this._roomConfig = roomConfig;
-        _roomTiles = new List<Tile>();
+        this._tile = tile;
+        this._floorDecorations = floorDecorations;
+        this._roomDecorations = roomDecorations;
+        this._roomTiles = new List<Tile>();
     }
     
     public void Build(Vector3 position)
@@ -27,12 +33,12 @@ public class RoomBuilder : IBuild
         {
             for (var z = 0; z < _roomConfig.widthY; z++)
             {
-                var tilePosition = new Vector3(x * _roomConfig.spacing - offsetX, 0, z * _roomConfig.spacing - offsetZ);
+                var tilePosition = new Vector3(x * _roomConfig.spacing - offsetX, position.y, z * _roomConfig.spacing - offsetZ);
                 var tile = new Tile(tilePosition);
                 
                 _roomTiles.Add(tile);
                 
-                var tileObject = Object.Instantiate(_roomConfig.floorTile, tilePosition, Quaternion.identity);
+                var tileObject = Object.Instantiate(_tile, tilePosition, Quaternion.identity);
                 tileObject.isStatic = true;
 
                 if (Random.value > 0.90f)
@@ -48,7 +54,7 @@ public class RoomBuilder : IBuild
         var randomRotation = Random.Range(0, 3) * 90f;
         var randomRotationQuat = Quaternion.Euler(0, randomRotation, 0);
 
-        var randomDecoration = _roomConfig.floorDecorations[Random.Range(0, _roomConfig.floorDecorations.Length)];
+        var randomDecoration = _floorDecorations[Random.Range(0, _floorDecorations.Length)];
         var topDecoration = Object.Instantiate(
             randomDecoration, 
             tilePosition + new Vector3(0, _roomConfig.objectYOffset, 0), 

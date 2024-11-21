@@ -15,7 +15,7 @@ public class MapManager : MonoBehaviour
                 _instance = FindObjectOfType<MapManager>();
                 if (_instance == null)
                 {
-                    GameObject mapManager = new GameObject("MapManager");
+                    var mapManager = new GameObject("MapManager");
                     _instance = mapManager.AddComponent<MapManager>();
                 }
             }
@@ -24,17 +24,17 @@ public class MapManager : MonoBehaviour
     }
     
     [Header("Map Settings Data")]
-    public MapConfig mapConfig;
-    public RoomConfig roomConfig;
-    public TunnelConfig tunnelConfig;
+    public MapConfigSO mapConfig;
+    public RoomConfigSO roomConfig;
+    public TunnelConfigSO tunnelConfig;
     
     [Header("Map Data")]
-    private Map _map;
+    private Map _currentMap;
     
     //Builder
     private RoomBuilder _roomBuilder;
     private TunnelBuilder _tunnelBuilder;
-    private HelperUtils _utils = new HelperUtils();
+    private HelperUtils _utils;
     
     private void Awake()
     {
@@ -48,32 +48,47 @@ public class MapManager : MonoBehaviour
             Destroy(gameObject); 
         }
     }
-
+    
     private void Start()
-    {   
-        _roomBuilder = new RoomBuilder(roomConfig);
-        _tunnelBuilder = new TunnelBuilder(tunnelConfig);
-        _map = new Map(mapConfig);
-        
-        GenerateMap();
-    }
-
-    private void GenerateMap()
-    {   
-        //Generating random number of rooms
-        int numberOfRooms = Random.Range(5, 10);
-        for (int i = 0; i < numberOfRooms; i++)
+    {
+        if (mapConfig != null
+            && roomConfig != null
+            && tunnelConfig != null)
         {
-            Vector3 randomPosition = _utils.GenerateRandomPosition();
-            CreateRoomAtPosition(randomPosition);
+            GenerateMap();
+        }
+        else
+        {
+            Debug.LogError("Config is not assigned!");
         }
     }
-
-    private void CreateRoomAtPosition(Vector3 position)
+    
+    private void GenerateMap()
     {
-        _roomBuilder.Build(position);
+        _utils = new HelperUtils(mapConfig);
+        _currentMap = new Map(mapConfig);
+        _roomBuilder = new RoomBuilder(
+            roomConfig, 
+            mapConfig.floorTile, 
+            mapConfig.floorDecorations, 
+            mapConfig.roomDecorations);
+        _tunnelBuilder = new TunnelBuilder(tunnelConfig);
+        
+        GenerateRandomRooms();
     }
 
-    
-    
+    private void CreateGameObject()
+    { 
+        
+    }
+
+    private void GenerateRandomRooms()
+    { 
+        _roomBuilder.Build(new Vector3(0, 5, 0));   
+    }
+
+    public Map GetMap()
+    {
+        return _currentMap;
+    }
 }

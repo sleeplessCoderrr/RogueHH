@@ -1,8 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "MapConfig", menuName = "Map/MapConfig")]
-public class MapConfig : ScriptableObject
+public class MapConfigSO : ScriptableObject
 {
-    public int widthX;
-    public int widthY;
+    [Header("Prefabs Assets")]
+    public GameObject floorTile;
+    public GameObject[] floorDecorations;
+    public GameObject[] roomDecorations;
+    [Header("Map Size")]
+    public int widthX = 10;
+    public int widthY = 10;
 }
