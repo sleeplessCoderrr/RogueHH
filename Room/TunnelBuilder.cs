@@ -11,17 +11,12 @@ public class TunnelBuilder : IBuild
         this._tunnelConfig = tunnelConfig;
     }
 
-    public void Build()
+    public void Build(Vector3 position)
     {
         foreach (var point in _path)
         {
             GameObject.Instantiate(_tunnelConfig.floorTile, point, Quaternion.identity);
         }
-    }
-
-    public void Reset()
-    {
-        _path = new List<Vector3>();        
     }
 }
 

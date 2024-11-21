@@ -4,6 +4,5 @@ using UnityEngine;
 
 public interface IBuild
 {
-    void Build();
-    void Reset();
+    void Build(Vector3 position);
 }

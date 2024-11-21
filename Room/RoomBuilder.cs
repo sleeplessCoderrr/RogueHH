@@ -5,34 +5,35 @@ using UnityEngine;
 public class RoomBuilder : IBuild
 {
     private RoomConfig _roomConfig;
+    private List<Tile> _roomTiles;
 
     public RoomBuilder(RoomConfig roomConfig)
     {
         this._roomConfig = roomConfig;
+        _roomTiles = new List<Tile>();
     }
     
-    public void Build()
+    public void Build(Vector3 position)
     {
-        GenerateFloor();
-    }
-
-    public void Reset()
-    {
-        
+        GenerateFloor(position);
     }
     
-    private void GenerateFloor()
+    private void GenerateFloor(Vector3 position)
     {
-        float offsetX = (_roomConfig.widthX - 1) * _roomConfig.spacing * 0.5f;
-        float offsetZ = (_roomConfig.widthY - 1) * _roomConfig.spacing * 0.5f;
+        var offsetX = (_roomConfig.widthX - 1) * _roomConfig.spacing * 0.5f;
+        var offsetZ = (_roomConfig.widthY - 1) * _roomConfig.spacing * 0.5f;
 
-        for (int x = 0; x < _roomConfig.widthX; x++)
+        for (var x = 0; x < _roomConfig.widthX; x++)
         {
-            for (int z = 0; z < _roomConfig.widthY; z++)
+            for (var z = 0; z < _roomConfig.widthY; z++)
             {
-                Vector3 tilePosition = new Vector3(x * _roomConfig.spacing - offsetX, 0, z * _roomConfig.spacing - offsetZ);
-                GameObject tile = Object.Instantiate(_roomConfig.floorTile, tilePosition, Quaternion.identity);
-                tile.isStatic = true;
+                var tilePosition = new Vector3(x * _roomConfig.spacing - offsetX, 0, z * _roomConfig.spacing - offsetZ);
+                var tile = new Tile(tilePosition);
+                
+                _roomTiles.Add(tile);
+                
+                var tileObject = Object.Instantiate(_roomConfig.floorTile, tilePosition, Quaternion.identity);
+                tileObject.isStatic = true;
 
                 if (Random.value > 0.90f)
                 {
@@ -44,16 +45,21 @@ public class RoomBuilder : IBuild
 
     private void RandomizeFloor(Vector3 tilePosition)
     {
-        float randomRotation = Random.Range(0, 3) * 90f;
-        Quaternion randomRotationQuat = Quaternion.Euler(0, randomRotation, 0);
+        var randomRotation = Random.Range(0, 3) * 90f;
+        var randomRotationQuat = Quaternion.Euler(0, randomRotation, 0);
 
-        GameObject randomDecoration = _roomConfig.floorDecorations[Random.Range(0, _roomConfig.floorDecorations.Length)];
-        GameObject topDecoration = Object.Instantiate(
+        var randomDecoration = _roomConfig.floorDecorations[Random.Range(0, _roomConfig.floorDecorations.Length)];
+        var topDecoration = Object.Instantiate(
             randomDecoration, 
             tilePosition + new Vector3(0, _roomConfig.objectYOffset, 0), 
             randomRotationQuat
         );
         
         topDecoration.isStatic = true;
+    }
+
+    public List<Tile> GetRoomTiles()
+    {
+        return _roomTiles;
     }
 }

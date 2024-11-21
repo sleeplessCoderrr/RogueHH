@@ -24,17 +24,18 @@ public class MapManager : MonoBehaviour
     }
     
     [Header("Map Settings Data")]
+    public MapConfig mapConfig;
     public RoomConfig roomConfig;
     public TunnelConfig tunnelConfig;
-    [Header("List of Rooms")]
-    private List<Map> _finalizedMap = new List<Map>();
     
+    [Header("Map Data")]
+    private Map _map;
+    
+    //Builder
     private RoomBuilder _roomBuilder;
     private TunnelBuilder _tunnelBuilder;
     private HelperUtils _utils = new HelperUtils();
     
-    private MapGraph _mapGraph;
-
     private void Awake()
     {
         if (_instance == null)
@@ -52,14 +53,13 @@ public class MapManager : MonoBehaviour
     {   
         _roomBuilder = new RoomBuilder(roomConfig);
         _tunnelBuilder = new TunnelBuilder(tunnelConfig);
+        _map = new Map(mapConfig);
+        
         GenerateMap();
     }
 
     private void GenerateMap()
     {   
-        //TBD
-        _mapGraph = new MapGraph();
-    
         //Generating random number of rooms
         int numberOfRooms = Random.Range(5, 10);
         for (int i = 0; i < numberOfRooms; i++)
@@ -71,7 +71,7 @@ public class MapManager : MonoBehaviour
 
     private void CreateRoomAtPosition(Vector3 position)
     {
-        _roomBuilder.Build();
+        _roomBuilder.Build(position);
     }
 
     
