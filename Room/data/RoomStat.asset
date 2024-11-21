@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e192a30ab541b34bb5f932ef769ce75, type: 3}
   m_Name: RoomStat
   m_EditorClassIdentifier: 
-  floorTile: {fileID: 0}
-  floorDecorations: []
+  floorTile: {fileID: 919132149155446097, guid: 6d716fa368a856e4c8fbc3f71e85aa2f, type: 3}
+  floorDecorations:
+  - {fileID: 919132149155446097, guid: 2856894f58fe65049afdc9ed85387c80, type: 3}
+  - {fileID: 919132149155446097, guid: bb38d20fb5b15a940a1fda736eda6431, type: 3}
   roomDecorations: []
   widthX: 10
   widthY: 10
-  spacing: 1
-  objectYOffset: 2
+  spacing: 2
+  objectYOffset: 1
