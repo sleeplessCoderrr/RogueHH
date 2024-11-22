@@ -5,13 +5,15 @@ using UnityEngine;
 public class Tile
 {
     public int X, Y;
-    public bool IsWalkable;
+    public bool IsRoom;
+    public bool IsTunnelPath;
 
-    public Tile(int x, int y, bool isWalkable)
+    public Tile(int x, int y, bool isRoom, bool isTunnelPath)
     {
         this.X = x;
         this.Y = y;
-        this.IsWalkable = isWalkable;
+        this.IsRoom = isRoom;
+        this.IsTunnelPath = isTunnelPath;
     }
 }
 

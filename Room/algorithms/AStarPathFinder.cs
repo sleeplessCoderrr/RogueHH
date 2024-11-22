@@ -84,7 +84,7 @@ public static class AStarPathfinder
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
 
-        return pos.x >= 0 && pos.y >= 0 && pos.x < width && pos.y < height && grid[pos.x, pos.y].IsWalkable;
+        return pos.x >= 0 && pos.y >= 0 && pos.x < width && pos.y < height && grid[pos.x, pos.y].IsRoom;
     }
 
     private static float Heuristic(Vector2Int a, Vector2Int b)

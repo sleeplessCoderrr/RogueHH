@@ -3,9 +3,11 @@ using System.Collections.Generic;
 
 public class MapBuilder
 {
-    private int _width, _height;
     private Tile[,] _grid;
+    private int _width, _height;
     private GameObject _floorPrefab;
+
+    private Material _tunnelMaterial;
     private Transform _parentTransform;
     private List<Room> _rooms  = new List<Room>();
 
@@ -21,7 +23,7 @@ public class MapBuilder
         this._parentTransform = parent;
         return this;
     }
-
+    
     public MapBuilder SetPrefab(GameObject floorPrefab)
     {
         this._floorPrefab = floorPrefab;
@@ -35,7 +37,7 @@ public class MapBuilder
         {
             for (var y = 0; y < _height; y++)
             {
-                _grid[x, y] = new Tile(x, y, false);
+                _grid[x, y] = new Tile(x, y, false, false);
             }
         }
         return this;
@@ -48,24 +50,24 @@ public class MapBuilder
             return false;
         }
 
-        const int buffer = 10;
-        for (var x = startX - buffer; x < startX + roomWidth + buffer; x++)
+        const int minDistance = 5;
+        for (var x = startX - minDistance; x < startX + roomWidth + minDistance; x++)
         {
-            for (var y = startY - buffer; y < startY + roomHeight + buffer; y++)
+            for (var y = startY - minDistance; y < startY + roomHeight + minDistance; y++)
             {
                 if (x < 0 || y < 0 || x >= _width || y >= _height)
                 {
                     continue;
                 }
 
-                if (_grid[x, y].IsWalkable)
+                if (_grid[x, y].IsRoom)
                 {
                     return false;
                 }
             }
         }
 
-        return true; // Valid position
+        return true;
     }
     
     private MapBuilder AddRoom(int startX, int startY, int roomWidth, int roomHeight)
@@ -80,7 +82,7 @@ public class MapBuilder
         {
             for (var y = startY; y < startY + roomHeight; y++)
             {
-                _grid[x, y].IsWalkable = true;
+                _grid[x, y].IsRoom = true;
             }
         }
 
@@ -118,7 +120,8 @@ public class MapBuilder
         {
             var direction = end.x > current.x ? 1 : -1;
             current.x += direction;
-            _grid[current.x, current.y].IsWalkable = true; 
+            _grid[current.x, current.y].IsRoom = false; 
+            _grid[current.x, current.y].IsTunnelPath = true; 
         }
 
         // Then tunnel vertically
@@ -126,28 +129,40 @@ public class MapBuilder
         {
             var direction = end.y > current.y ? 1 : -1;
             current.y += direction;
-            _grid[current.x, current.y].IsWalkable = true; 
+            _grid[current.x, current.y].IsRoom = false; 
+            _grid[current.x, current.y].IsTunnelPath = true; 
         }
 
         return this;
     }
-
-
+    
     public Tile[,] Build()
     {
         for (var x = 0; x < _width; x++)
         {
             for (var y = 0; y < _height; y++)
             {
-                if (_grid[x, y].IsWalkable)
+                if (_grid[x, y].IsRoom || _grid[x,y].IsTunnelPath)
                 {
-                    var position = new Vector3(x, 0, y);
+                    var position = new Vector3(x*2, 0, y*2);
                     Object.Instantiate(_floorPrefab, position, Quaternion.identity, _parentTransform);
                 }
             }
         }
 
         return _grid;
+    }
+    
+    public List<Vector2Int> GetAllRoomCenters(List<Room> rooms)
+    {
+        var roomCenters = new List<Vector2Int>();
+        foreach (var room in _rooms)
+        {
+            var center = room.GetCenter();
+            roomCenters.Add(center);
+        }
+
+        return roomCenters;
     }
     
     public List<Room> GetRooms()

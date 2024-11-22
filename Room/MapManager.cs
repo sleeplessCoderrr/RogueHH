@@ -1,65 +1,62 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MapManager : MonoBehaviour
 {
-    [Header("Prefabs for Floor")]
-    public GameObject floorTile;
+    public static MapManager Instance;
+    
+    [Header("Map Settings")]
+    public MapConfig mapConfig;
     private Tile[,] _mapGrid;
     private List<Room> _rooms;
     private MapBuilder _mapBuilder;
     private List<Vector2Int> _roomCenters = new List<Vector2Int>();
     private KruskalMST _kruskalMst = new KruskalMST();
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     
     private void Start()
     {
         _mapBuilder = new MapBuilder();
         _mapGrid = _mapBuilder
-            .SetDimensions(100, 100)
+            .SetDimensions(mapConfig.width, mapConfig.height)
             .SetParent(transform)
-            .SetPrefab(floorTile)
+            .SetPrefab(mapConfig.floorTile)
             .InitializeGrid()
-            .AddRandomRooms(8, 8, 8, 12, 12)
+            .AddRandomRooms(
+                Random.Range(8, 12), 
+                        mapConfig.minWidth, 
+                        mapConfig.minHeight, 
+                        mapConfig.maxWidth, 
+                        mapConfig.maxHeight)
             .Build();
 
         _rooms = _mapBuilder.GetRooms();
-        _roomCenters = GetAllRoomCenters();
+        _roomCenters = _mapBuilder.GetAllRoomCenters(_rooms);
 
-        //A* and MST pathfinding
         var mstEdges = _kruskalMst.Compute(_roomCenters);
         foreach (var edge in mstEdges)
         {
             _mapBuilder.AddTunnelBetweenPoints(edge.Item1, edge.Item2);
-            
-            //To be Search Again
-            //===================
-            // var path = AStarPathfinder.FindPath(_mapGrid, edge.Item1, edge.Item2);
-            // CreateTunnel(path);
         }
+        
         _mapBuilder.Build();
-       
-    }
-    
-    private List<Vector2Int> GetAllRoomCenters()
-    {
-        var roomCenters = new List<Vector2Int>();
-        foreach (var room in _rooms)
-        {
-            var center = room.GetCenter();
-            roomCenters.Add(center);
-        }
-
-        return roomCenters;
-    }
-
-    private void CreateTunnel(List<Vector2Int> path)
-    {
-        foreach (var point in path)
-        {
-            _mapGrid[point.x, point.y].IsWalkable = true;
-            _mapBuilder.Build();
-        }
+        
+        //AStar for the movement
+        // var path = AStarPathfinder.FindPath(_mapGrid, edge.Item1, edge.Item2);
     }
 }
 
