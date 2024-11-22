@@ -18,19 +18,21 @@ public class MapManager : MonoBehaviour
             .SetParent(transform)
             .SetPrefab(floorTile)
             .InitializeGrid()
-            .AddRandomRooms(8, 8, 8, 12, 12) // Generate 5 random rooms
+            .AddRandomRooms(8, 8, 8, 12, 12)
             .Build();
 
         _rooms = _mapBuilder.GetRooms();
         _roomCenters = GetAllRoomCenters();
 
         //A* and MST pathfinding
-        var mstEdges = ComputeMst(_roomCenters);
+        var mstEdges = ComputeKruskalMst(_roomCenters);
         foreach (var edge in mstEdges)
         {
+            _mapBuilder.AddTunnelBetweenPoints(edge.Item1, edge.Item2);
             var path = AStarPathfinder.FindPath(_mapGrid, edge.Item1, edge.Item2);
             CreateTunnel(path);
         }
+        Debug.Log("Ended");
     }
     
     private List<Vector2Int> GetAllRoomCenters()
@@ -45,60 +47,67 @@ public class MapManager : MonoBehaviour
         return roomCenters;
     }
     
-    private List<(Vector2Int, Vector2Int)> ComputeMst(List<Vector2Int> roomCenters)
+    private List<(Vector2Int, Vector2Int)> ComputeKruskalMst(List<Vector2Int> roomCenters)
     {
-        List<(Vector2Int, Vector2Int)> mstEdges = new List<(Vector2Int, Vector2Int)>();
-        HashSet<int> visited = new HashSet<int>(); // To track visited rooms
-        List<Vector2Int> unvisited = new List<Vector2Int>(roomCenters); // List of unvisited rooms
+        var mstEdges = new List<(Vector2Int, Vector2Int)>();
+        var edges = new List<(float, Vector2Int, Vector2Int)>();
 
-        // Ensure there are rooms before accessing
-        if (roomCenters.Count == 0)
+        // Generate all edges with distances
+        for (int i = 0; i < roomCenters.Count; i++)
         {
-            Debug.LogError("No rooms available for MST calculation.");
-            return mstEdges; // Early exit if no rooms
+            for (int j = i + 1; j < roomCenters.Count; j++)
+            {
+                float distance = Vector2Int.Distance(roomCenters[i], roomCenters[j]);
+                edges.Add((distance, roomCenters[i], roomCenters[j]));
+            }
         }
 
-        // Start from the first room center
-        visited.Add(0);
-        unvisited.RemoveAt(0); // Remove the first room from unvisited list
+        // Sort edges by distance
+        edges.Sort((a, b) => a.Item1.CompareTo(b.Item1));
 
-        while (visited.Count < roomCenters.Count)
+        // Initialize Union-Find structure
+        var parent = new Dictionary<Vector2Int, Vector2Int>();
+        foreach (var room in roomCenters)
         {
-            float minDistance = float.MaxValue;
-            int selectedRoom1 = -1, selectedRoom2 = -1;
+            parent[room] = room; // Each room starts as its own parent
+        }
 
-            // Look for the closest edge between visited and unvisited rooms
-            foreach (int visitedIndex in visited)
+        // Find root of a set (with path compression)
+        Vector2Int Find(Vector2Int node)
+        {
+            if (parent[node] != node)
             {
-                for (int unvisitedIndex = 0; unvisitedIndex < unvisited.Count; unvisitedIndex++)
-                {
-                    // Calculate distance between room centers
-                    float distance = Vector2Int.Distance(roomCenters[visitedIndex], unvisited[unvisitedIndex]);
-
-                    // If the distance is smaller, update the closest edge
-                    if (distance < minDistance)
-                    {
-                        minDistance = distance;
-                        selectedRoom1 = visitedIndex;
-                        selectedRoom2 = unvisitedIndex;
-                    }
-                }
+                parent[node] = Find(parent[node]);
             }
+            return parent[node];
+        }
 
-            // Ensure valid indices before accessing
-            if (selectedRoom1 != -1 && selectedRoom2 != -1)
+        // Union two sets
+        void Union(Vector2Int a, Vector2Int b)
+        {
+            var rootA = Find(a);
+            var rootB = Find(b);
+            if (rootA != rootB)
             {
-                // Add the closest edge to the MST and update sets
-                mstEdges.Add((roomCenters[selectedRoom1], roomCenters[selectedRoom2]));
-                visited.Add(selectedRoom2); // Mark the selected room as visited
-                unvisited.RemoveAt(selectedRoom2); // Remove it from unvisited list
-            }
-            else
-            {
-                Debug.LogWarning("Failed to find a valid room connection.");
-                break; // Exit loop if no valid edge is found
+                parent[rootB] = rootA;
             }
         }
+
+        // Add edges to the MST
+        foreach (var (distance, room1, room2) in edges)
+        {
+            if (Find(room1) != Find(room2)) // Avoid cycles
+            {
+                mstEdges.Add((room1, room2));
+                Union(room1, room2);
+
+                // Stop if we have enough edges for an MST
+            }
+            if (mstEdges.Count == roomCenters.Count - 1)
+            {
+                    break;
+            }
+            }
 
         return mstEdges;
     }

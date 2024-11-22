@@ -109,8 +109,7 @@ public class MapBuilder
             }
         }
         return this;
-    }  
-    
+    }
 
     public MapBuilder AddTunnelBetweenPoints(Vector2Int start, Vector2Int end)
     {
