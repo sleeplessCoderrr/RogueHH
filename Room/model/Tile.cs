@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile 
+public class Tile
 {
-    public Vector3 Position {get; set;}
-    public bool IsWalkable {get; set;}
-    public float cost {get; set;}
+    public int X, Y;
+    public bool IsWalkable;
 
-    public Tile(Vector3 pos, bool isWalkable = true)
+    public Tile(int x, int y, bool isWalkable)
     {
-        this.Position = pos;
+        this.X = x;
+        this.Y = y;
         this.IsWalkable = isWalkable;
-        this.cost = 1;
     }
 }
+
 
