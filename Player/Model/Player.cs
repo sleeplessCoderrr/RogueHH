@@ -5,12 +5,12 @@ public class Player
     [Header("Player Config")]
     public PlayerConfig PlayerConfig;
     
-    [Header("Player Stats")]
-    public Vector2 PlayerPosition;
+    [Header("Player Data")]
+    public PlayerData PlayerData;
 
-    public Player(PlayerConfig playerConfig, Vector2 playerPosition)
+    public Player(PlayerConfig playerConfig, PlayerData playerData)
     {
         this.PlayerConfig = playerConfig;
-        this.PlayerPosition = playerPosition;
+        this.PlayerData = playerData;
     }
 }

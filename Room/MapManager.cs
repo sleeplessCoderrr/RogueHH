@@ -13,7 +13,7 @@ public class MapManager : MonoBehaviour
     
     [Header("Factory")]
     private MapBuilder _mapBuilder;
-    private KruskalMST _kruskalMst = new KruskalMST();
+    private KruskalMST _kruskalMst;
 
     private void Awake()
     {
@@ -30,34 +30,43 @@ public class MapManager : MonoBehaviour
     
     private void Start()
     {
+        _kruskalMst = new KruskalMST();
         _mapBuilder = new MapBuilder();
+        
+        MakeRooms();
+        GetData();
+        MakeTunnels();
+    }
+    private void MakeRooms()
+    {
         mapData.MapTileData = _mapBuilder
-            .SetDimensions(mapConfig.width, mapConfig.height)
-            .SetParent(transform)
-            .SetPrefab(mapConfig.floorTile)
-            .InitializeGrid()
-            .AddRandomRooms(
-                Random.Range(8, 12), 
-                        mapConfig.minWidth, 
-                        mapConfig.minHeight, 
-                        mapConfig.maxWidth, 
-                        mapConfig.maxHeight)
-            .Build();
+        .SetDimensions(mapConfig.width, mapConfig.height)
+        .SetParent(transform)
+        .SetPrefab(mapConfig.floorTile)
+        .InitializeGrid()
+        .AddRandomRooms(
+Random.Range(8, 12), 
+        mapConfig.minWidth, 
+        mapConfig.minHeight, 
+        mapConfig.maxWidth, 
+        mapConfig.maxHeight)
+        .Build();
+    }
 
+    private void MakeTunnels()
+    {
+        _mapBuilder.AddTunnel(mapData.MstEdges);
+        _mapBuilder.Build();
+    }
+
+    private void GetData()
+    {
         mapData.Rooms = _mapBuilder.GetRooms();
         mapData.roomCenters = _mapBuilder.GetAllRoomCenters(mapData.Rooms);
-
-        var mstEdges = _kruskalMst.Compute(mapData.roomCenters);
-        foreach (var edge in mstEdges)
-        {
-            _mapBuilder.AddTunnelBetweenPoints(edge.Item1, edge.Item2);
-        }
-        
-        _mapBuilder.Build();
-        
-        //AStar for the movement
-        // var path = AStarPathfinder.FindPath(_mapGrid, edge.Item1, edge.Item2);
+        mapData.MstEdges = _kruskalMst.Compute(mapData.roomCenters);
     }
+
+    
 }
 
 

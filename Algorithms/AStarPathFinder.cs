@@ -13,7 +13,6 @@ public static class AStarPathfinder
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
 
-        // Initialize scores
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -33,13 +32,12 @@ public static class AStarPathfinder
         {
             var current = openSet.Dequeue();
 
-            // If we reached the goal
             if (current == end)
                 return ReconstructPath(cameFrom, current);
 
             foreach (var neighbor in GetNeighbors(grid, current))
             {
-                float tentativeGScore = gScore[current] + 1; // Assuming uniform cost
+                float tentativeGScore = gScore[current] + 1; 
 
                 if (tentativeGScore < gScore[neighbor])
                 {
@@ -53,7 +51,6 @@ public static class AStarPathfinder
             }
         }
 
-        // No path found
         return new List<Vector2Int>();
     }
 
@@ -89,7 +86,7 @@ public static class AStarPathfinder
 
     private static float Heuristic(Vector2Int a, Vector2Int b)
     {
-        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y); // Manhattan Distance
+        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 
     private static List<Vector2Int> ReconstructPath(Dictionary<Vector2Int, Vector2Int> cameFrom, Vector2Int current)
@@ -102,7 +99,7 @@ public static class AStarPathfinder
             path.Add(current);
         }
 
-        path.Reverse(); // Start-to-end order
+        path.Reverse();
         return path;
     }
 }

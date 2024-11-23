@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using States;
+using UnityEngine;
 
-public class PlayerStateManager : MonoBehaviour
+public class PlayerStateManager 
 {
     
 }

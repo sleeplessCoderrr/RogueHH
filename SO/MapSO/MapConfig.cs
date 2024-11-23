@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "MapConfig", menuName = "SO/MapConfig")]
+[CreateAssetMenu(fileName = "MapConfig", menuName = "SO/Config/MapConfig")]
 public class MapConfig : ScriptableObject
 {
     [Header("Map Prefabs")]

@@ -4,12 +4,11 @@ using System.Collections.Generic;
 public class MapBuilder
 {
     private Tile[,] _grid;
+    private List<Room> _rooms;
     private int _width, _height;
     private GameObject _floorPrefab;
-
     private Material _tunnelMaterial;
     private Transform _parentTransform;
-    private List<Room> _rooms  = new List<Room>();
 
     public MapBuilder SetDimensions(int width, int height)
     {
@@ -86,13 +85,16 @@ public class MapBuilder
             }
         }
 
+        
         _rooms.Add(room); 
         return this;
     }
 
     public MapBuilder AddRandomRooms(int roomCount, int minWidth, int minHeight, int maxWidth, int maxHeight)
     {
+        _rooms = new List<Room>();
         var rand = new System.Random();
+        
         for (var i = 0; i < roomCount; i++)
         {
             var roomAdded = false;
@@ -131,6 +133,16 @@ public class MapBuilder
             current.y += direction;
             _grid[current.x, current.y].IsRoom = false; 
             _grid[current.x, current.y].IsTunnelPath = true; 
+        }
+
+        return this;
+    }
+
+    public MapBuilder AddTunnel(List<(Vector2Int, Vector2Int)> mstEdges)
+    {
+        foreach (var edge in mstEdges)
+        {
+            AddTunnelBetweenPoints(edge.Item1, edge.Item2);
         }
 
         return this;
