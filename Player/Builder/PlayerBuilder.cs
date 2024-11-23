@@ -29,8 +29,10 @@ public class PlayerBuilder
             {
                     var worldPosition = new Vector3(x*2, 1, y*2);
                     GameObject.Instantiate(_playerConfig.playerPrefab, worldPosition, Quaternion.identity);
-                    _playerData.playerPosition = new Vector2(x, y);
+                    _playerData.playerPosition = new Vector3Int(x, 1, y);
+                    Debug.Log(_playerData.playerPosition);
                     isNotValid = true;
+                    return this;
             }
         }
         

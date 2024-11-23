@@ -11,6 +11,8 @@ public enum PlayerState
 
 public class PlayerStateManager : MonoBehaviour
 {
+    public static PlayerStateManager Instance;
+    
     [Header("Player Config & Data")]
     public PlayerConfig playerConfig;
     public PlayerData playerData;
@@ -24,14 +26,24 @@ public class PlayerStateManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
         _player = new Player(playerConfig, playerData);
         _playerBuilder = new PlayerBuilder();
     }
 
     private async void Start()
     {
-        //Delay 3 Seconds
-        await Task.Delay(3000);
+        //Delay 1 Seconds
+        await Task.Delay(1000);
         
         GetMapData();
         Initialize();
