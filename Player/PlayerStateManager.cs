@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using States;
 using UnityEngine;
@@ -16,13 +17,16 @@ public class PlayerStateManager : MonoBehaviour
     [Header("Player Config & Data")]
     public PlayerConfig playerConfig;
     public PlayerData playerData;
+    
     private Player _player;
+    private PlayerBuilder _playerBuilder;
+    
+    public Dictionary<PlayerState, BaseState<PlayerState>> States { get; private set; }
+    public BaseState<PlayerState> CurrentState { get; private set; }
     
     [Header("Importing Map Data")]
     public MapData mapData;
     public MapConfig mapConfig;
-
-    private PlayerBuilder _playerBuilder;
 
     private void Awake()
     {
@@ -38,6 +42,7 @@ public class PlayerStateManager : MonoBehaviour
         
         _player = new Player(playerConfig, playerData);
         _playerBuilder = new PlayerBuilder();
+        Initialize();
     }
 
     private async void Start()
@@ -46,14 +51,47 @@ public class PlayerStateManager : MonoBehaviour
         await Task.Delay(1000);
         
         GetMapData();
-        Initialize();
+        _playerBuilder
+            .SetData(_player.PlayerConfig, _player.PlayerData)
+            .InitializeRandomPosition(mapConfig, mapData);
     }
 
     private void Initialize()
     {
-        _playerBuilder
-            .SetData(_player.PlayerConfig, _player.PlayerData)
-            .InitializeRandomPosition(mapConfig, mapData);
+        States = new Dictionary<PlayerState, BaseState<PlayerState>>
+        {
+            { PlayerState.Idle, new PlayerIdleState(this, PlayerState.Idle) },
+            { PlayerState.Walking, new PlayerWalkingState(this, PlayerState.Walking) }
+        };
+
+        // Set initial state
+        CurrentState = States[PlayerState.Idle];
+    }
+    
+    private void Update()
+    {
+        if (CurrentState == null) return;
+
+        PlayerState nextState = CurrentState.GetNextState();
+        if (nextState != CurrentState.StateKey)
+        {
+            TransitionTo(nextState);
+        }
+        else
+        {
+            CurrentState.UpdateState();
+        }
+    }
+
+    private void TransitionTo(PlayerState newState)
+    {
+        if (CurrentState != null)
+        {
+            CurrentState.ExitState();
+        }
+
+        CurrentState = States[newState];
+        CurrentState.EnterState();
     }
 
     private void GetMapData()
