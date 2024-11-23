@@ -9,11 +9,11 @@ public class MapManager : MonoBehaviour
     
     [Header("Map Settings")]
     public MapConfig mapConfig;
-    private Tile[,] _mapGrid;
-    private List<Room> _rooms;
+    public MapData mapData;
+    
+    [Header("Factory")]
     private MapBuilder _mapBuilder;
     private KruskalMST _kruskalMst = new KruskalMST();
-    private List<Vector2Int> _roomCenters = new List<Vector2Int>();
 
     private void Awake()
     {
@@ -31,7 +31,7 @@ public class MapManager : MonoBehaviour
     private void Start()
     {
         _mapBuilder = new MapBuilder();
-        _mapGrid = _mapBuilder
+        mapData.MapTileData = _mapBuilder
             .SetDimensions(mapConfig.width, mapConfig.height)
             .SetParent(transform)
             .SetPrefab(mapConfig.floorTile)
@@ -44,10 +44,10 @@ public class MapManager : MonoBehaviour
                         mapConfig.maxHeight)
             .Build();
 
-        _rooms = _mapBuilder.GetRooms();
-        _roomCenters = _mapBuilder.GetAllRoomCenters(_rooms);
+        mapData.Rooms = _mapBuilder.GetRooms();
+        mapData.roomCenters = _mapBuilder.GetAllRoomCenters(mapData.Rooms);
 
-        var mstEdges = _kruskalMst.Compute(_roomCenters);
+        var mstEdges = _kruskalMst.Compute(mapData.roomCenters);
         foreach (var edge in mstEdges)
         {
             _mapBuilder.AddTunnelBetweenPoints(edge.Item1, edge.Item2);
