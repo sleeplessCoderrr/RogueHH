@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23562bf6a4e54963a26c1472074f5d83, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 0}
+  playerPrefab: {fileID: 1782702501690864755, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
   animator: {fileID: 0}
   walkSpeed: 5
