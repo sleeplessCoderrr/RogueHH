@@ -12,8 +12,8 @@ public class MapManager : MonoBehaviour
     private Tile[,] _mapGrid;
     private List<Room> _rooms;
     private MapBuilder _mapBuilder;
-    private List<Vector2Int> _roomCenters = new List<Vector2Int>();
     private KruskalMST _kruskalMst = new KruskalMST();
+    private List<Vector2Int> _roomCenters = new List<Vector2Int>();
 
     private void Awake()
     {
