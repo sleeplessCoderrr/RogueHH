@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class PlayerWalkingState : BaseState<PlayerState>
 {
-    public PlayerWalkingState(StateManager<PlayerState> stateManager, PlayerState key) : base(stateManager, key)
+    public PlayerWalkingState(StateManager<PlayerState> stateManager, Animator animator, PlayerState key) : base(stateManager, animator, key)
     {
-        
     }
 
     public override void EnterState()

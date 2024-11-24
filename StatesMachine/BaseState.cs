@@ -3,13 +3,15 @@ using UnityEngine;
 
 public abstract class BaseState<TState> where TState : Enum
 {
-    protected StateManager<TState> StateManager;
+    protected readonly StateManager<TState> StateManager;
+    protected readonly Animator Animator;
     public TState StateKey { get; private set; }
 
-    public BaseState(StateManager<TState> stateManager, TState key)
+    public BaseState(StateManager<TState> stateManager, Animator animator,TState key)
     {
-        StateManager = stateManager ?? throw new ArgumentNullException(nameof(stateManager));
-        StateKey = key;
+        this.StateManager = stateManager ?? throw new ArgumentNullException(nameof(stateManager));
+        this.StateKey = key;
+        this.Animator = animator ?? throw new ArgumentNullException(nameof(animator));
     }
     
     public abstract void EnterState();

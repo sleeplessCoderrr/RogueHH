@@ -3,18 +3,19 @@ using UnityEngine;
 
 public class PlayerIdleState : BaseState<PlayerState>
 {
-    public PlayerIdleState(StateManager<PlayerState> stateManager, PlayerState key) : base(stateManager, key)
+    public PlayerIdleState(StateManager<PlayerState> stateManager, Animator animator, PlayerState key) : base(stateManager, animator, key)
     {
         
     }
 
     public override void EnterState()
     {
+         Animator.SetTrigger("IsIdle");
     }
 
     public override void ExitState()
     {
-    }
+    }   
 
     public override void UpdateState()
     {
@@ -22,6 +23,6 @@ public class PlayerIdleState : BaseState<PlayerState>
 
     public override PlayerState GetNextState()
     {
-        throw new NotImplementedException();
+        return StateKey;
     }
 }

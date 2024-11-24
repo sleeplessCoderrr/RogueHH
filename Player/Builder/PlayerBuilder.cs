@@ -18,7 +18,7 @@ public class PlayerBuilder
         return mapData.MapTileData[x, y].IsRoom;
     }
 
-    public PlayerBuilder InitializeRandomPosition(MapConfig mapConfig, MapData mapData)
+    public GameObject InitializeRandomPosition(MapConfig mapConfig, MapData mapData)
     {
         var isNotValid = false;
         while (!isNotValid)
@@ -28,12 +28,12 @@ public class PlayerBuilder
             if (IsValidPosition(mapData, x, y))
             {
                     var worldPosition = new Vector3(x*2, 1, y*2);
-                    GameObject.Instantiate(_playerConfig.playerPrefab, worldPosition, Quaternion.identity);
+                    var objectInstance = GameObject.Instantiate(_playerConfig.playerPrefab, worldPosition, Quaternion.identity);
                     _playerData.playerPosition = new Vector3Int(x, 1, y);
                     isNotValid = true;
-                    return this;
+                    return objectInstance;
             }
         }
-        return this;
+        return null;
     }
 }

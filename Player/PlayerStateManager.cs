@@ -17,14 +17,17 @@ public class PlayerStateManager : StateManager<PlayerState>
     public PlayerConfig playerConfig;
     public PlayerData playerData;
     
+    [Header("Importing Map Data")]
+    public MapConfig mapConfig;
+    public MapData mapData;
+    
     private Player _player;
     private PlayerBuilder _playerBuilder;
-
-    [Header("Importing Map Data")]
-    public MapData mapData;
-    public MapConfig mapConfig;
-
-    private void Awake()
+    
+    private Animator _animator;
+    private GameObject _playerInstance;
+    
+    private async void Awake()
     {
         if (Instance == null)
         {
@@ -36,32 +39,33 @@ public class PlayerStateManager : StateManager<PlayerState>
             Destroy(gameObject);
         }
         
-        _player = new Player(playerConfig, playerData);
-        _playerBuilder = new PlayerBuilder();
+        InitializePlayer();
+        await Task.Delay(1000);
+        SetAnimator();
         InitializeStates();
+        CurrentState = States[PlayerState.Idle];
     }
     
-    private async void Start()
+    protected override void InitializeStates()
     {
-        //Delay 1 Seconds
+        States[PlayerState.Idle] = new PlayerIdleState(this, _animator, PlayerState.Idle);
+        States[PlayerState.Walking] = new PlayerWalkingState(this, _animator,PlayerState.Walking);
+    }
+
+    private async void InitializePlayer()
+    {
         await Task.Delay(1000);
+        _player = new Player(playerConfig, playerData);
+        _playerBuilder = new PlayerBuilder();
         
-        GetMapData();
-        _playerBuilder
+        _playerInstance = _playerBuilder
             .SetData(_player.PlayerConfig, _player.PlayerData)
             .InitializeRandomPosition(mapConfig, mapData);
     }
 
-
-    protected override void InitializeStates()
+    private void SetAnimator()
     {
-        States[PlayerState.Idle] = new PlayerIdleState(this, PlayerState.Idle);
-        States[PlayerState.Walking] = new PlayerIdleState(this, PlayerState.Walking);
-    }
-    
-    private void GetMapData()
-    {
-        mapData = MapManager.Instance.mapData;
-        mapConfig = MapManager.Instance.mapConfig;
+        _animator = _playerInstance.GetComponent<Animator>();
     }
 }
+

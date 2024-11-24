@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public abstract class StateManager<TState> : MonoBehaviour where TState : Enum
@@ -7,8 +8,9 @@ public abstract class StateManager<TState> : MonoBehaviour where TState : Enum
     protected Dictionary<TState, BaseState<TState>> States = new Dictionary<TState, BaseState<TState>>();
     protected BaseState<TState> CurrentState;
 
-    protected void Start()
+    protected async void Start()
     {
+        await Task.Delay(3000);
         if (CurrentState == null)
             throw new InvalidOperationException("CurrentState is not set!");
 
