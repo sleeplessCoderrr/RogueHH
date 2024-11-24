@@ -2,45 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace States
+public abstract class StateManager<TState> : MonoBehaviour where TState : Enum
 {
-    public abstract class StateManager<EState> : MonoBehaviour where EState : Enum
+    protected Dictionary<TState, BaseState<TState>> States = new Dictionary<TState, BaseState<TState>>();
+    protected BaseState<TState> CurrentState;
+
+    protected void Start()
     {
-        protected Dictionary<EState, BaseState<EState>> States = new Dictionary <EState, BaseState<EState>>();
-        protected BaseState<EState> CurrentState;
-        protected bool IsTransitioning = false;
+        if (CurrentState == null)
+            throw new InvalidOperationException("CurrentState is not set!");
 
-        void Start()
-        {
-            CurrentState.EnterState();
-        }
-
-        void Update()
-        {
-            EState nextState = CurrentState.GetNextState();
-            if (nextState.Equals(CurrentState.StateKey) && !IsTransitioning)
-            {
-                CurrentState.UpdateState();
-            }
-            else
-            {
-                TransitionState(nextState);       
-            }
-        }
-
-        private void TransitionState(EState stateKey)
-        {
-            IsTransitioning = true;
-            CurrentState.ExitState();
-            CurrentState = States[stateKey];
-            CurrentState.EnterState();
-            IsTransitioning = false;
-        }
-
-        void OnTriggerEnter(Collider other){}
-
-        void OnTriggerStay(Collider other){}
-
-        void OnTriggerExit(Collider other){}
+        CurrentState.EnterState();
     }
+
+    protected void Update()
+    {
+        if (CurrentState == null)
+            return;
+
+        var nextState = CurrentState.GetNextState();
+        if (!nextState.Equals(CurrentState.StateKey))
+        {
+            TransitionState(nextState);
+        }
+        else
+        {
+            CurrentState.UpdateState();
+        }
+    }
+
+    private void TransitionState(TState newStateKey)
+    {
+        if (!States.ContainsKey(newStateKey))
+            throw new InvalidOperationException($"State {newStateKey} is not defined!");
+
+        CurrentState.ExitState();
+        CurrentState = States[newStateKey];
+        CurrentState.EnterState();
+    }
+
+    protected abstract void InitializeStates();
 }

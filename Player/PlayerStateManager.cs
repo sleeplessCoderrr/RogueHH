@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using States;
 using UnityEngine;
 
 public enum PlayerState
@@ -10,7 +9,7 @@ public enum PlayerState
     Walking
 }
 
-public class PlayerStateManager : MonoBehaviour
+public class PlayerStateManager : StateManager<PlayerState>
 {
     public static PlayerStateManager Instance;
     
@@ -20,10 +19,7 @@ public class PlayerStateManager : MonoBehaviour
     
     private Player _player;
     private PlayerBuilder _playerBuilder;
-    
-    public Dictionary<PlayerState, BaseState<PlayerState>> States { get; private set; }
-    public BaseState<PlayerState> CurrentState { get; private set; }
-    
+
     [Header("Importing Map Data")]
     public MapData mapData;
     public MapConfig mapConfig;
@@ -42,9 +38,9 @@ public class PlayerStateManager : MonoBehaviour
         
         _player = new Player(playerConfig, playerData);
         _playerBuilder = new PlayerBuilder();
-        Initialize();
+        InitializeStates();
     }
-
+    
     private async void Start()
     {
         //Delay 1 Seconds
@@ -56,44 +52,13 @@ public class PlayerStateManager : MonoBehaviour
             .InitializeRandomPosition(mapConfig, mapData);
     }
 
-    private void Initialize()
-    {
-        States = new Dictionary<PlayerState, BaseState<PlayerState>>
-        {
-            { PlayerState.Idle, new PlayerIdleState(this, PlayerState.Idle) },
-            { PlayerState.Walking, new PlayerWalkingState(this, PlayerState.Walking) }
-        };
 
-        // Set initial state
-        CurrentState = States[PlayerState.Idle];
+    protected override void InitializeStates()
+    {
+        States[PlayerState.Idle] = new PlayerIdleState(this, PlayerState.Idle);
+        States[PlayerState.Walking] = new PlayerIdleState(this, PlayerState.Walking);
     }
     
-    private void Update()
-    {
-        if (CurrentState == null) return;
-
-        PlayerState nextState = CurrentState.GetNextState();
-        if (nextState != CurrentState.StateKey)
-        {
-            TransitionTo(nextState);
-        }
-        else
-        {
-            CurrentState.UpdateState();
-        }
-    }
-
-    private void TransitionTo(PlayerState newState)
-    {
-        if (CurrentState != null)
-        {
-            CurrentState.ExitState();
-        }
-
-        CurrentState = States[newState];
-        CurrentState.EnterState();
-    }
-
     private void GetMapData()
     {
         mapData = MapManager.Instance.mapData;
