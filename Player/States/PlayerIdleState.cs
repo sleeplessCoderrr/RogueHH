@@ -10,7 +10,6 @@ public class PlayerIdleState : BaseState<PlayerState>
 
     public override void EnterState()
     {
-         Animator.SetTrigger("IsIdle");
     }
 
     public override void ExitState()
