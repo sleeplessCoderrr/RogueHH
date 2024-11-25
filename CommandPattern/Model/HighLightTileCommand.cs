@@ -1,17 +1,57 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class HighLightTileCommand : ICommand
 {
-    public void Execute(Renderer target)
+    private Color _highlightColor;
+    private Dictionary<GameObject, Color> _originalColors;
+    private GameObject _lastHoveredTile;
+
+    public HighLightTileCommand(Color highlightColor)
     {
-        var renderer = target.GetComponentInChildren<Renderer>();
+        _highlightColor = highlightColor;
+        _originalColors = new Dictionary<GameObject, Color>();
+    }
+
+    public void HighlightTile(GameObject tile)
+    {
+        if (tile == null) return;
+
+        var renderer = tile.GetComponentInChildren<Renderer>();
         if (renderer != null)
         {
-            renderer.material.color = Color.white;
+            if (!_originalColors.ContainsKey(tile))
+            {
+                _originalColors[tile] = renderer.material.color;
+            }
+
+            renderer.material.color = _highlightColor;
         }
-        else
+    }
+
+    public void ResetPreviousTile()
+    {
+        if (_lastHoveredTile == null) return;
+
+        var renderer = _lastHoveredTile.GetComponentInChildren<Renderer>();
+        if (renderer != null)
         {
-            Debug.LogWarning("Target does not have a Renderer component.");
+            if (_originalColors.TryGetValue(_lastHoveredTile, out var originalColor))
+            {
+                renderer.material.color = originalColor;
+            }
+        }
+
+        _lastHoveredTile = null;
+    }
+
+    public void Execute (GameObject newTile)
+    {
+        if (newTile != _lastHoveredTile)
+        {
+            ResetPreviousTile();
+            _lastHoveredTile = newTile;
+            HighlightTile(newTile);
         }
     }
 }

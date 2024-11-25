@@ -2,5 +2,5 @@
 
 public interface ICommand
 {
-    void Execute(Renderer target);
+    void Execute(GameObject target);
 }
