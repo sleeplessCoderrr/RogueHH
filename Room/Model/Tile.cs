@@ -5,6 +5,7 @@ using UnityEngine;
 public class Tile
 {
     public int X, Y;
+    public GameObject TileObject;
     public bool IsRoom;
     public bool IsTunnelPath;
 

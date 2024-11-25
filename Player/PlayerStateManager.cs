@@ -59,6 +59,7 @@ public class PlayerStateManager : StateManager<PlayerState>
         _playerBuilder = new PlayerBuilder();
         
         _playerInstance = _playerBuilder
+            .SetParent(transform)
             .SetData(_player.PlayerConfig, _player.PlayerData)
             .InitializeRandomPosition(mapConfig, mapData);
     }

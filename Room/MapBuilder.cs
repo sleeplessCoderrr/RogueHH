@@ -157,12 +157,22 @@ public class MapBuilder
                 if (_grid[x, y].IsRoom || _grid[x,y].IsTunnelPath)
                 {
                     var position = new Vector3(x*2, 0, y*2);
-                    Object.Instantiate(_floorPrefab, position, Quaternion.identity, _parentTransform);
+                    var tileObject = Object.Instantiate(_floorPrefab, position, Quaternion.identity, _parentTransform);
+                    
+                    SetTileAttribute(tileObject);
+                    _grid[x, y].TileObject = tileObject;
                 }
             }
         }
 
         return _grid;
+    }
+
+    private void SetTileAttribute(GameObject tileObject)
+    {
+        tileObject.tag = "Tile";
+        tileObject.AddComponent<BoxCollider>();
+        tileObject.AddComponent<Renderer>();
     }
     
     public List<Vector2Int> GetAllRoomCenters(List<Room> rooms)
