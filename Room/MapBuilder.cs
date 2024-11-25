@@ -172,7 +172,6 @@ public class MapBuilder
     {
         tileObject.tag = "Tile";
         tileObject.AddComponent<BoxCollider>();
-        tileObject.AddComponent<Renderer>();
     }
     
     public List<Vector2Int> GetAllRoomCenters(List<Room> rooms)

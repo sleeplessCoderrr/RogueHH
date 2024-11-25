@@ -2,16 +2,9 @@
 
 public class HighLightTileCommand : ICommand
 {
-    private GameObject _target;
-    
-    public HighLightTileCommand(GameObject target)
+    public void Execute(Renderer target)
     {
-        _target = target;
-    }
-    
-    public void Execute()
-    {
-        var renderer = _target?.GetComponentInChildren<Renderer>();
+        var renderer = target.GetComponentInChildren<Renderer>();
         if (renderer != null)
         {
             renderer.material.color = Color.white;
