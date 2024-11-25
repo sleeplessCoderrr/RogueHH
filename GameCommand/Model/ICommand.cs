@@ -2,5 +2,5 @@
 
 public interface ICommand
 {
-    void Execute(GameObject target);
+    public abstract void Execute();
 }

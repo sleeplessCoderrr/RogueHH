@@ -3,17 +3,35 @@ using UnityEngine;
 
 public class HighLightTileCommand : ICommand
 {
-    private Color _highlightColor;
     private Dictionary<GameObject, Color> _originalColors;
     private GameObject _lastHoveredTile;
+    private Color _highlightColor;
+    private GameObject _newTile;
 
-    public HighLightTileCommand(Color highlightColor)
+    public HighLightTileCommand SetColor(Color highlightColor)
     {
-        _highlightColor = highlightColor;
+        this._highlightColor = highlightColor;
         _originalColors = new Dictionary<GameObject, Color>();
+        return this;
+    }
+    
+    public HighLightTileCommand SetNewTile(GameObject tile)
+    {
+        _newTile = tile;
+        return this;
     }
 
-    public void HighlightTile(GameObject tile)
+    public void Execute ()
+    {
+        if (_newTile != _lastHoveredTile)
+        {
+            ResetPreviousTile();
+            _lastHoveredTile = _newTile;
+            HighlightTile(_newTile);
+        }
+    }
+
+    private void HighlightTile(GameObject tile)
     {
         if (tile == null) return;
 
@@ -29,7 +47,7 @@ public class HighLightTileCommand : ICommand
         }
     }
 
-    public void ResetPreviousTile()
+    private void ResetPreviousTile()
     {
         if (_lastHoveredTile == null) return;
 
@@ -44,14 +62,5 @@ public class HighLightTileCommand : ICommand
 
         _lastHoveredTile = null;
     }
-
-    public void Execute (GameObject newTile)
-    {
-        if (newTile != _lastHoveredTile)
-        {
-            ResetPreviousTile();
-            _lastHoveredTile = newTile;
-            HighlightTile(newTile);
-        }
-    }
+    
 }

@@ -9,13 +9,17 @@ public class InputManager : MonoBehaviour
     private void Awake()
     {
         _camera = Camera.main; 
-        _tileHighlighter = new HighLightTileCommand(new Color(0.4f, 0.4f, 0.4f)); 
+        _tileHighlighter = new HighLightTileCommand(); 
     }
 
     private void Update()
     {
         var hoveredTile = GetTileFromRaycast();
-        _tileHighlighter.Execute(hoveredTile); 
+        _tileHighlighter = new HighLightTileCommand()
+            .SetColor(new Color(0.4f, 0.4f, 0.4f))
+            .SetNewTile(hoveredTile);
+        
+        _tileHighlighter.Execute(); 
     }
 
     private GameObject GetTileFromRaycast()
