@@ -10,12 +10,12 @@ public static class AStarPathfinder
         var gScore = new Dictionary<Vector2Int, float>();
         var fScore = new Dictionary<Vector2Int, float>();
 
-        int width = grid.GetLength(0);
-        int height = grid.GetLength(1);
+        var width = grid.GetLength(0);
+        var height = grid.GetLength(1);
 
-        for (int x = 0; x < width; x++)
+        for (var x = 0; x < width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (var y = 0; y < height; y++)
             {
                 var pos = new Vector2Int(x, y);
                 gScore[pos] = float.MaxValue;
@@ -37,7 +37,7 @@ public static class AStarPathfinder
 
             foreach (var neighbor in GetNeighbors(grid, current))
             {
-                float tentativeGScore = gScore[current] + 1; 
+                var tentativeGScore = gScore[current] + 1; 
 
                 if (tentativeGScore < gScore[neighbor])
                 {
@@ -78,8 +78,8 @@ public static class AStarPathfinder
 
     private static bool IsValid(Tile[,] grid, Vector2Int pos)
     {
-        int width = grid.GetLength(0);
-        int height = grid.GetLength(1);
+        var width = grid.GetLength(0);
+        var height = grid.GetLength(1);
 
         return pos.x >= 0 && pos.y >= 0 && pos.x < width && pos.y < height && grid[pos.x, pos.y].IsRoom;
     }
@@ -117,9 +117,9 @@ public class PriorityQueue<T>
 
     public T Dequeue()
     {
-        int bestIndex = 0;
+        var bestIndex = 0;
 
-        for (int i = 1; i < _elements.Count; i++)
+        for (var i = 1; i < _elements.Count; i++)
         {
             if (_elements[i].priority < _elements[bestIndex].priority)
                 bestIndex = i;

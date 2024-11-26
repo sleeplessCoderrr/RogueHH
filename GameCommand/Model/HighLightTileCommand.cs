@@ -8,14 +8,18 @@ public class HighLightTileCommand : ICommand
     private Color _highlightColor;
     private GameObject _newTile;
 
+    public HighLightTileCommand()
+    {
+        this._originalColors = new Dictionary<GameObject, Color>();
+    }
+
     public HighLightTileCommand SetColor(Color highlightColor)
     {
         this._highlightColor = highlightColor;
-        _originalColors = new Dictionary<GameObject, Color>();
         return this;
     }
     
-    public HighLightTileCommand SetNewTile(GameObject tile)
+    public HighLightTileCommand SetNewTile(GameObject tile) 
     {
         _newTile = tile;
         return this;
@@ -25,42 +29,49 @@ public class HighLightTileCommand : ICommand
     {
         if (_newTile != _lastHoveredTile)
         {
-            ResetPreviousTile();
-            _lastHoveredTile = _newTile;
+            ResetPreviousTile(); 
+            this. _lastHoveredTile = _newTile;
             HighlightTile(_newTile);
         }
     }
 
     private void HighlightTile(GameObject tile)
     {
-        if (tile == null) return;
+        if (tile == null) 
+            return;
 
         var renderer = tile.GetComponentInChildren<Renderer>();
-        if (renderer != null)
-        {
-            if (!_originalColors.ContainsKey(tile))
-            {
-                _originalColors[tile] = renderer.material.color;
-            }
+        if (renderer == null) 
+            return;
 
-            renderer.material.color = _highlightColor;
+        if (!_originalColors.ContainsKey(tile))
+        {
+            _originalColors[tile] = renderer.material.color;
         }
+
+        renderer.material.color = _highlightColor;
     }
+
 
     private void ResetPreviousTile()
     {
-        if (_lastHoveredTile == null) return;
+        if (_lastHoveredTile == null) 
+            return;
 
         var renderer = _lastHoveredTile.GetComponentInChildren<Renderer>();
-        if (renderer != null)
+        if (renderer == null) 
         {
-            if (_originalColors.TryGetValue(_lastHoveredTile, out var originalColor))
-            {
-                renderer.material.color = originalColor;
-            }
+            _lastHoveredTile = null;
+            return;
+        }
+
+        if (_originalColors.TryGetValue(_lastHoveredTile, out var originalColor))
+        {
+            renderer.material.color = originalColor;
         }
 
         _lastHoveredTile = null;
     }
+
     
 }

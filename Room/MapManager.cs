@@ -46,10 +46,10 @@ public class MapManager : MonoBehaviour
         .InitializeGrid()
         .AddRandomRooms(
 Random.Range(8, 12), 
-        mapConfig.minWidth, 
-        mapConfig.minHeight, 
-        mapConfig.maxWidth, 
-        mapConfig.maxHeight)
+            mapConfig.minWidth, 
+            mapConfig.minHeight, 
+            mapConfig.maxWidth, 
+            mapConfig.maxHeight)
         .Build();
     }
 
