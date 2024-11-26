@@ -8,15 +8,10 @@ public class HighLightTileCommand : ICommand
     private Color _highlightColor;
     private GameObject _newTile;
 
-    public HighLightTileCommand()
-    {
-        this._originalColors = new Dictionary<GameObject, Color>();
-    }
-
-    public HighLightTileCommand SetColor(Color highlightColor)
+    public HighLightTileCommand(Color highlightColor)
     {
         this._highlightColor = highlightColor;
-        return this;
+        this._originalColors = new Dictionary<GameObject, Color>();
     }
     
     public HighLightTileCommand SetNewTile(GameObject tile) 

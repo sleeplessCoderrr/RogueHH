@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public enum PlayerState
 {
@@ -25,7 +26,7 @@ public class PlayerStateManager : StateManager<PlayerState>
     private PlayerBuilder _playerBuilder;
     
     private Animator _animator;
-    private GameObject _playerInstance;
+    [FormerlySerializedAs("_playerInstance")] public GameObject PlayerInstance;
     
     private async void Awake()
     {
@@ -58,7 +59,7 @@ public class PlayerStateManager : StateManager<PlayerState>
         _player = new Player(playerConfig, playerData);
         _playerBuilder = new PlayerBuilder();
         
-        _playerInstance = _playerBuilder
+        PlayerInstance = _playerBuilder
             .SetParent(transform)
             .SetData(_player.PlayerConfig, _player.PlayerData)
             .InitializeRandomPosition(mapConfig, mapData);
@@ -66,7 +67,7 @@ public class PlayerStateManager : StateManager<PlayerState>
 
     private void SetAnimator()
     {
-        _animator = _playerInstance.GetComponent<Animator>();
+        _animator = PlayerInstance.GetComponent<Animator>();
     }
 }
 
