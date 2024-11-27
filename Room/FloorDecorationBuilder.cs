@@ -1,15 +1,9 @@
 ﻿using UnityEngine;
 
-public class FloorDecorationBuilder
+public class FloorDecorationBuilder : BaseMapBuilder
 {
-    private Transform _parentTransform;
-    private GameObject[] _decorations;
-    private Tile[,] _gird;
-
-    public FloorDecorationBuilder SetParent(Transform parent)
+    public override void InitializeGrid()
     {
-        _parentTransform = parent;
-        return this;
+        Grid = MapManager.Instance.mapData.MapTileData;
     }
-    
 }

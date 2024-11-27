@@ -11,7 +11,9 @@ public class MapManager : MonoBehaviour
     public MapConfig mapConfig;
     public MapData mapData;
     
-    [Header("Factory")]
+    [Header("Builder")]
+    private FloorDecorationBuilder _floorDecorationBuilder;
+    private RoomDecorationBuilder _roomDecorationBuilder;
     private TunnelBuilder _tunnelBuilder;
     private RoomBuilder _roomBuilder;
     private KruskalMST _kruskalMst;
@@ -34,6 +36,8 @@ public class MapManager : MonoBehaviour
         _kruskalMst = new KruskalMST();
         _roomBuilder = new RoomBuilder();
         _tunnelBuilder = new TunnelBuilder();
+        _roomDecorationBuilder = new RoomDecorationBuilder();
+        _floorDecorationBuilder = new FloorDecorationBuilder();
         
         MakeRooms();
         GetData();
@@ -63,6 +67,20 @@ Random.Range(8, 12),
         _tunnelBuilder.SetParent(transform);
         _tunnelBuilder.AddTunnel(mapData.MstEdges);
         _tunnelBuilder.Build();
+    }
+
+    private void MakeDecorations()
+    {
+        _floorDecorationBuilder.SetParent(transform);
+        _roomDecorationBuilder.SetParent(transform);
+        
+        _floorDecorationBuilder.SetPrefab(mapConfig.floorDecorations);
+        _roomDecorationBuilder.SetPrefab(mapConfig.roomDecorations);
+        
+        _floorDecorationBuilder.InitializeGrid();
+        _roomDecorationBuilder.InitializeGrid();
+        
+        
     }
 
     private void GetData()

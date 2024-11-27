@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
-public class RoomDecorationBuilder
+public class RoomDecorationBuilder : BaseMapBuilder
 {
-    private Transform _parentTransform;
-    private GameObject[] _decorations;
-    private Tile[,] _gird;
+    public override void InitializeGrid()
+    {
+        Grid = MapManager.Instance.mapData.MapTileData;
+    }
 }
