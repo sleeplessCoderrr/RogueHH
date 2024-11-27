@@ -22,11 +22,11 @@ public class PlayerStateManager : StateManager<PlayerState>
     public MapConfig mapConfig;
     public MapData mapData;
     
-    private Player _player;
     private PlayerBuilder _playerBuilder;
+    private Player _player;
     
     private Animator _animator;
-    [FormerlySerializedAs("_playerInstance")] public GameObject PlayerInstance;
+    public GameObject playerInstance;
     
     private async void Awake()
     {
@@ -59,7 +59,7 @@ public class PlayerStateManager : StateManager<PlayerState>
         _player = new Player(playerConfig, playerData);
         _playerBuilder = new PlayerBuilder();
         
-        PlayerInstance = _playerBuilder
+        playerInstance = _playerBuilder
             .SetParent(transform)
             .SetData(_player.PlayerConfig, _player.PlayerData)
             .InitializeRandomPosition(mapConfig, mapData);
@@ -67,7 +67,7 @@ public class PlayerStateManager : StateManager<PlayerState>
 
     private void SetAnimator()
     {
-        _animator = PlayerInstance.GetComponent<Animator>();
+        _animator = playerInstance.GetComponent<Animator>();
     }
 }
 

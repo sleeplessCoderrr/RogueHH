@@ -48,8 +48,6 @@ public class PlayerBuilder
                     var objectInstance = Object.Instantiate(_playerConfig.playerPrefab, worldPosition, Quaternion.identity, _parentTransform);
                     _playerData.playerPosition = new Vector3Int(x*2, 1, y*2);
                     return objectInstance;
-                    isNotValid = true;
-                    break;
             }
         }
         return null;

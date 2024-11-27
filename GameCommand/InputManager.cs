@@ -51,7 +51,6 @@ public class InputManager : MonoBehaviour
         if (!_hoveredTile) return;
         
         GetPathData();
-        if (_currentPath.Count != null) Debug.Log(_currentPath.Count);
         if(_currentPath == null) return;
         
         HandleHover();
