@@ -12,7 +12,8 @@ public class MapManager : MonoBehaviour
     public MapData mapData;
     
     [Header("Factory")]
-    private MapBuilder _mapBuilder;
+    private TunnelBuilder _tunnelBuilder;
+    private RoomBuilder _roomBuilder;
     private KruskalMST _kruskalMst;
 
     private void Awake()
@@ -31,7 +32,8 @@ public class MapManager : MonoBehaviour
     private void Start()
     {
         _kruskalMst = new KruskalMST();
-        _mapBuilder = new MapBuilder();
+        _roomBuilder = new RoomBuilder();
+        _tunnelBuilder = new TunnelBuilder();
         
         MakeRooms();
         GetData();
@@ -39,11 +41,13 @@ public class MapManager : MonoBehaviour
     }
     private void MakeRooms()
     {
-        mapData.MapTileData = _mapBuilder
-        .SetDimensions(mapConfig.width, mapConfig.height)
-        .SetParent(transform)
-        .SetPrefab(mapConfig.floorTile)
-        .InitializeGrid()
+        _roomBuilder.SetParent(transform);
+        _roomBuilder.SetPrefab(new GameObject[] { mapConfig.floorTile });
+
+        _roomBuilder.SetDimensions(mapConfig.width, mapConfig.height);
+        _roomBuilder.InitializeGrid();
+        
+        mapData.MapTileData = _roomBuilder
         .AddRandomRooms(
 Random.Range(8, 12), 
             mapConfig.minWidth, 
@@ -55,14 +59,16 @@ Random.Range(8, 12),
 
     private void MakeTunnels()
     {
-        _mapBuilder.AddTunnel(mapData.MstEdges);
-        _mapBuilder.Build();
+        _tunnelBuilder.InitializeGrid();
+        _tunnelBuilder.SetParent(transform);
+        _tunnelBuilder.AddTunnel(mapData.MstEdges);
+        _tunnelBuilder.Build();
     }
 
     private void GetData()
     {
-        mapData.Rooms = _mapBuilder.GetRooms();
-        mapData.roomCenters = _mapBuilder.GetAllRoomCenters(mapData.Rooms);
+        mapData.Rooms = _roomBuilder.GetRooms();
+        mapData.roomCenters = MapUtility.GetAllRoomCenters(mapData.Rooms);
         mapData.MstEdges = _kruskalMst.Compute(mapData.roomCenters);
     }
 
