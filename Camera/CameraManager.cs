@@ -30,6 +30,6 @@ public class CameraManager : MonoBehaviour
     private void Update()
     {
         _playerData = PlayerStateManager.Instance.playerData;
-        transform.position = new Vector3((_playerData.playerPosition.x*2)-10, 10, (_playerData.playerPosition.z*2)-10);
+        transform.position = new Vector3((_playerData.playerPosition.x)-10, 10, (_playerData.playerPosition.z)-10);
     }
 }

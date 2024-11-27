@@ -10,6 +10,7 @@ public class InputManager : MonoBehaviour
     private Vector2Int _hoveredPosition;
     private Vector3 _playerPosition;
     private GameObject _hoveredTile;
+    private Color _hoverColor;
     private bool _isMapInit;
     private Camera _camera;
     private Tile[,] _tiles;
@@ -20,7 +21,8 @@ public class InputManager : MonoBehaviour
         _isMapInit = false;
         _camera = Camera.main;
         _currentPath = new List<Vector2Int>();
-        _tileHighlighter = new HighLightTileCommand(new Color(0.4f, 0.4f, 0.4f)); 
+        _hoverColor = new Color(0.4f, 0.4f, 0.4f);
+        _tileHighlighter = new HighLightTileCommand(_hoverColor); 
     }
     
     private void Singleton()
@@ -41,6 +43,7 @@ public class InputManager : MonoBehaviour
         if (!_isMapInit)
         {
             _tiles = MapManager.Instance.mapData.MapTileData;
+            _tileHighlighter.SetTile(_tiles);
             _isMapInit = true;
         }
         
@@ -48,11 +51,8 @@ public class InputManager : MonoBehaviour
         if (!_hoveredTile) return;
         
         GetPathData();
-        if (_currentPath == null)
-        {
-            Debug.Log("Eror pathfinding");
-            return;
-        }
+        if (_currentPath.Count != null) Debug.Log(_currentPath.Count);
+        if(_currentPath == null) return;
         
         HandleHover();
     }
@@ -60,16 +60,20 @@ public class InputManager : MonoBehaviour
     private void HandleHover()
     {
         _tileHighlighter
-        .SetNewTile(_hoveredTile);
-        _tileHighlighter.Execute(); 
+        .SetNewTile(_hoveredTile)
+        .SetPath(_currentPath)
+        .Execute(); 
     }
 
     private void GetPathData()
     {
         _currentPath = MoveUtility.GetPath(
         _tiles, 
-        new Vector2Int((int)_playerPosition.x, (int)_playerPosition.z),
-        new Vector2Int((int)_hoveredTile.transform.position.x, (int)_hoveredTile.transform.position.z));
+        new Vector2Int((int)_playerPosition.x/2, (int)_playerPosition.z/2),
+        new Vector2Int((int)_hoveredTile.transform.position.x/2, (int)_hoveredTile.transform.position.z/2));
+        
+        // Debug.Log(_tiles[(int)_hoveredTile.transform.position.x/2, (int)_hoveredTile.transform.position.z/2].IsRoom);
+        // Debug.Log(_tiles[(int)_hoveredTile.transform.position.x/2, (int)_hoveredTile.transform.position.z/2].Y);
     }
 
     private void GetInitialData()

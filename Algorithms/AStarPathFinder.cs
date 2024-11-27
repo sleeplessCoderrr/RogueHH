@@ -5,6 +5,12 @@ public static class AStarPathfinder
 {
     public static List<Vector2Int> FindPath(Tile[,] grid, Vector2Int start, Vector2Int end)
     {
+        if (!IsValid(grid, start) || !IsValid(grid, end))
+        {
+            Debug.LogWarning("Start or end position is invalid.");
+            return new List<Vector2Int>();
+        }
+
         var openSet = new PriorityQueue<Vector2Int>();
         var cameFrom = new Dictionary<Vector2Int, Vector2Int>();
         var gScore = new Dictionary<Vector2Int, float>();
@@ -37,7 +43,10 @@ public static class AStarPathfinder
 
             foreach (var neighbor in GetNeighbors(grid, current))
             {
-                var tentativeGScore = gScore[current] + 1; 
+                if (!IsValid(grid, neighbor))
+                    continue;
+
+                var tentativeGScore = gScore[current] + 1;
 
                 if (tentativeGScore < gScore[neighbor])
                 {
@@ -51,6 +60,7 @@ public static class AStarPathfinder
             }
         }
 
+        Debug.LogWarning("No path found.");
         return new List<Vector2Int>();
     }
 
@@ -59,10 +69,10 @@ public static class AStarPathfinder
         var neighbors = new List<Vector2Int>();
         var directions = new Vector2Int[]
         {
-            new Vector2Int(0, 1), // Up
+            new Vector2Int(0, 1),  // Up
             new Vector2Int(0, -1), // Down
-            new Vector2Int(1, 0), // Right
-            new Vector2Int(-1, 0) // Left
+            new Vector2Int(1, 0),  // Right
+            new Vector2Int(-1, 0)  // Left
         };
 
         foreach (var dir in directions)
@@ -81,12 +91,13 @@ public static class AStarPathfinder
         var width = grid.GetLength(0);
         var height = grid.GetLength(1);
 
-        return pos.x >= 0 && pos.y >= 0 && pos.x < width && pos.y < height && grid[pos.x, pos.y].IsRoom;
+        return pos.x >= 0 && pos.y >= 0 && pos.x < width && pos.y < height &&
+               grid[pos.x, pos.y] != null && grid[pos.x, pos.y].IsRoom;
     }
 
     private static float Heuristic(Vector2Int a, Vector2Int b)
     {
-        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+        return Mathf.Sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
     }
 
     private static List<Vector2Int> ReconstructPath(Dictionary<Vector2Int, Vector2Int> cameFrom, Vector2Int current)
@@ -103,6 +114,7 @@ public static class AStarPathfinder
         return path;
     }
 }
+
 
 public class PriorityQueue<T>
 {

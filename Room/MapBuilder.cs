@@ -122,7 +122,7 @@ public class MapBuilder
         {
             var direction = end.x > current.x ? 1 : -1;
             current.x += direction;
-            _grid[current.x, current.y].IsRoom = false; 
+            _grid[current.x, current.y].IsRoom = true; 
             _grid[current.x, current.y].IsTunnelPath = true; 
         }
 
@@ -131,7 +131,7 @@ public class MapBuilder
         {
             var direction = end.y > current.y ? 1 : -1;
             current.y += direction;
-            _grid[current.x, current.y].IsRoom = false; 
+            _grid[current.x, current.y].IsRoom = true; 
             _grid[current.x, current.y].IsTunnelPath = true; 
         }
 
@@ -154,7 +154,7 @@ public class MapBuilder
         {
             for (var y = 0; y < _height; y++)
             {
-                if (_grid[x, y].IsRoom || _grid[x,y].IsTunnelPath)
+                if (_grid[x, y].IsRoom)
                 {
                     var position = new Vector3(x*2, 0, y*2);
                     var tileObject = Object.Instantiate(_floorPrefab, position, Quaternion.identity, _parentTransform);

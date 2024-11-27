@@ -20,9 +20,19 @@ public class PlayerBuilder
         return this;
     }
 
-    private bool IsValidPosition(MapData mapData, int x, int y)
+    private bool IsTunnel(MapData mapData, int x, int y)
+    {
+        return mapData.MapTileData[x, y].IsTunnelPath;
+    }
+
+    private bool IsRoom(MapData mapData, int x, int y)
     {
         return mapData.MapTileData[x, y].IsRoom;
+    }
+
+    private bool IsValidPosition(MapData mapData, int x, int y)
+    {
+        return !IsTunnel(mapData, x, y) && IsRoom(mapData, x, y);
     }
 
     public GameObject InitializeRandomPosition(MapConfig mapConfig, MapData mapData)
@@ -36,9 +46,10 @@ public class PlayerBuilder
             {
                     var worldPosition = new Vector3(x*2, 1, y*2);
                     var objectInstance = Object.Instantiate(_playerConfig.playerPrefab, worldPosition, Quaternion.identity, _parentTransform);
-                    _playerData.playerPosition = new Vector3Int(x, 1, y);
-                    isNotValid = true;
+                    _playerData.playerPosition = new Vector3Int(x*2, 1, y*2);
                     return objectInstance;
+                    isNotValid = true;
+                    break;
             }
         }
         return null;

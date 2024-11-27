@@ -3,15 +3,26 @@ using UnityEngine;
 
 public class HighLightTileCommand : ICommand
 {
-    private Dictionary<GameObject, Color> _originalColors;
+    private List<Vector2Int> _previousPath;
     private GameObject _lastHoveredTile;
+    private List<Vector2Int> _path;
     private Color _highlightColor;
+    private Color _originalColor;
     private GameObject _newTile;
+    private Tile[,] _tiles;
+    private bool _isInitColor;
 
     public HighLightTileCommand(Color highlightColor)
     {
+        this._isInitColor = false;
         this._highlightColor = highlightColor;
-        this._originalColors = new Dictionary<GameObject, Color>();
+        this._previousPath = new List<Vector2Int>();
+    }
+    
+    public HighLightTileCommand SetTile(Tile[,] tiles)
+    {
+        this._tiles = tiles;
+        return this;
     }
     
     public HighLightTileCommand SetNewTile(GameObject tile) 
@@ -20,53 +31,67 @@ public class HighLightTileCommand : ICommand
         return this;
     }
 
+    public HighLightTileCommand SetPath(List<Vector2Int> path)
+    {
+        _path = path;
+        return this;
+    }
+
     public void Execute ()
     {
+        if (!_isInitColor)
+        {
+            _originalColor = GetNormalColor();
+            _isInitColor = true;
+        }
+        
         if (_newTile != _lastHoveredTile)
         {
-            ResetPreviousTile(); 
-            this. _lastHoveredTile = _newTile;
-            HighlightTile(_newTile);
+            _lastHoveredTile = _newTile;
+            ResetHighlightTile(); 
+            HighlightPath();      
         }
     }
 
-    private void HighlightTile(GameObject tile)
+    private void HighlightPath()
     {
-        if (tile == null) 
-            return;
+        if (_path == null) return;
 
-        var renderer = tile.GetComponentInChildren<Renderer>();
-        if (renderer == null) 
-            return;
-
-        if (!_originalColors.ContainsKey(tile))
+        foreach (var position in _path)
         {
-            _originalColors[tile] = renderer.material.color;
+            var tile = GetTileFromGrid(position);
+            if (tile == null) continue;
+
+            var renderer = tile.GetComponentInChildren<Renderer>();
+            renderer.material.color = _highlightColor;
         }
 
-        renderer.material.color = _highlightColor;
+        _previousPath = new List<Vector2Int>(_path);
     }
-
-
-    private void ResetPreviousTile()
-    {
-        if (_lastHoveredTile == null) 
-            return;
-
-        var renderer = _lastHoveredTile.GetComponentInChildren<Renderer>();
-        if (renderer == null) 
-        {
-            _lastHoveredTile = null;
-            return;
-        }
-
-        if (_originalColors.TryGetValue(_lastHoveredTile, out var originalColor))
-        {
-            renderer.material.color = originalColor;
-        }
-
-        _lastHoveredTile = null;
-    }
-
     
+    private void ResetHighlightTile()
+    {
+        if (_previousPath == null) return;
+
+        foreach (var position in _previousPath)
+        {
+            var tile = GetTileFromGrid(position);
+            if (tile == null) continue;
+
+            var renderer = tile.GetComponentInChildren<Renderer>();
+            renderer.material.color = _originalColor;
+        }
+
+        _previousPath.Clear();
+    }
+
+    private Color GetNormalColor()
+    {
+        return _newTile.GetComponentInChildren<Renderer>().material.color;
+    }
+    
+    private GameObject GetTileFromGrid(Vector2Int position)
+    {
+        return _tiles[position.x, position.y]?.TileObject;
+    }
 }
