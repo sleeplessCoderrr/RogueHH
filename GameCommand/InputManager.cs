@@ -71,9 +71,6 @@ public class InputManager : MonoBehaviour
         _tiles, 
         new Vector2Int((int)_playerPosition.x/2, (int)_playerPosition.z/2),
         new Vector2Int((int)_hoveredTile.transform.position.x/2, (int)_hoveredTile.transform.position.z/2));
-        
-        // Debug.Log(_tiles[(int)_hoveredTile.transform.position.x/2, (int)_hoveredTile.transform.position.z/2].IsRoom);
-        // Debug.Log(_tiles[(int)_hoveredTile.transform.position.x/2, (int)_hoveredTile.transform.position.z/2].Y);
     }
 
     private void GetInitialData()

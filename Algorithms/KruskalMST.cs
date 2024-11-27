@@ -27,12 +27,12 @@ public class KruskalMST
         edges.Sort((a, b) => a.Item1.CompareTo(b.Item1));
         foreach (var room in roomCenters)
         {
-            _parent[room] = room; // Each room starts as its own parent
+            _parent[room] = room;
         }
 
         foreach (var (distance, room1, room2) in edges)
         {
-            if (Find(room1) != Find(room2)) // Avoid cycles
+            if (Find(room1) != Find(room2)) 
             {
                 mstEdges.Add((room1, room2));
                 Union(room1, room2);
