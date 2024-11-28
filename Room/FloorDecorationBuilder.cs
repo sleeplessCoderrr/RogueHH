@@ -33,8 +33,8 @@ public class FloorDecorationBuilder : BaseMapBuilder
                         Prefabs[randomIndex], 
                         position, 
                         Quaternion.identity, 
-                        ParentTransform);
-                    
+                        ParentTransform
+                    );
                 }
             }
         }

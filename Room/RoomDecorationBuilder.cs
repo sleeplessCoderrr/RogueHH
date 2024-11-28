@@ -25,11 +25,6 @@ public class RoomDecorationBuilder : BaseMapBuilder
         return this;
     }
 
-    private void MakeDecorationBuffer(int type, int x, int y)
-    {
-        
-    }
-    
     private void MakeRoomDecoration(Room room)
     {
         var roomSize = room.Width * room.Height;
@@ -40,7 +35,8 @@ public class RoomDecorationBuilder : BaseMapBuilder
         {
             var x = Random.Range(room.X, room.X + room.Width);
             var y = Random.Range(room.Y, room.Y + room.Height);
-            if (MapUtility.IsValidDecoration(Grid, x, y) 
+            if (MapUtility.IsValidDecoration(Grid, x, y)
+                && MapUtility.IsNoNeighbourDecoration(Grid, x, y)
                 && !MapUtility.IsValidFloorDecoration(Grid, x, y)
                 && !MapUtility.IsValidRoomDecoration(Grid, x, y)
                 && MapUtility.DecorationChance())
@@ -54,8 +50,8 @@ public class RoomDecorationBuilder : BaseMapBuilder
                     Prefabs[randomIndex], 
                     position, 
                     Quaternion.identity, 
-                    ParentTransform);
-                
+                    ParentTransform
+                );
             }
         }
     }

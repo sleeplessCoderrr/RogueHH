@@ -49,7 +49,33 @@ public static class MapUtility
                (y <= 0 || !grid[x, y - 1].IsTunnelPath) && // Bottom
                (y >= grid.GetLength(1) - 1 || !grid[x, y + 1].IsTunnelPath); // Top
     }
+    
+    public static bool IsNoNeighbourDecoration(Tile[,] grid, int x, int y)
+    {
+        var maxX = grid.GetLength(0);
+        var maxY = grid.GetLength(1);
 
+        for (var dx = -2; dx <= 2; dx++)
+        {
+            for (var dy = -2; dy <= 2; dy++)
+            {
+                if (dx == 0 && dy == 0) continue; 
+
+                var nx = x + dx;
+                var ny = y + dy;
+
+                if (nx >= 0 && nx < maxX && ny >= 0 && ny < maxY)
+                {
+                    if (grid[nx, ny].IsRoomDecoration)
+                        return false; 
+                }
+            }
+        }
+
+        return true;
+    }
+
+    
     public static bool IsValidRoom(Tile[,] tiles, int x, int y)
     {
         return tiles[x, y].IsRoom;
@@ -70,7 +96,6 @@ public static class MapUtility
         return tiles[x, y].IsRoomDecoration;
     }
 
-
     public static int TakeRandomPrefabs(GameObject[] prefabs)
     {
         return Random.Range(0, prefabs.Length);
@@ -89,6 +114,6 @@ public static class MapUtility
     
     public static bool DecorationChance()
     {
-        return UnityEngine.Random.Range(0f, 100f) >= 98;
+        return UnityEngine.Random.Range(0f, 100f) >= 99;
     }
 }

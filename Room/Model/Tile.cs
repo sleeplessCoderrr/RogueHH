@@ -12,7 +12,7 @@ public class Tile
     public bool IsBuffer;
     public bool IsRoom;
 
-    public Tile(int x, int y, bool isRoom, bool isTunnelPath, bool isRoomDecoration, bool isFloorDecoration)
+    public Tile(int x, int y, bool isRoom, bool isTunnelPath, bool isRoomDecoration, bool isFloorDecoration, bool isBuffer)
     {
         this.X = x;
         this.Y = y;
@@ -20,6 +20,7 @@ public class Tile
         this.IsTunnelPath = isTunnelPath;
         this.IsRoomDecoration = isRoomDecoration;
         this.IsFloorDecoration = isFloorDecoration;
+        this.IsBuffer = isBuffer;
     }
 }
 
