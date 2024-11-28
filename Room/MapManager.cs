@@ -84,7 +84,7 @@ Random.Range(8, 12),
         _floorDecorationBuilder.InitializeGrid();
         _roomDecorationBuilder.InitializeGrid();
 
-        _floorDecorationBuilder.AddFloorDecoration(mapData.Rooms);
+        _floorDecorationBuilder.AddFloorDecoration();
         _roomDecorationBuilder.AddRoomDecoration(mapData.Rooms);
     }
 

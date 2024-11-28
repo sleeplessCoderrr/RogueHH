@@ -6,17 +6,20 @@ public class Tile
 {
     public int X, Y;
     public GameObject TileObject;
+    public bool IsFloorDecoration;
+    public bool IsRoomDecoration;
     public bool IsTunnelPath;
-    public bool IsDecoration;
+    public bool IsBuffer;
     public bool IsRoom;
 
-    public Tile(int x, int y, bool isRoom, bool isTunnelPath, bool isDecoration)
+    public Tile(int x, int y, bool isRoom, bool isTunnelPath, bool isRoomDecoration, bool isFloorDecoration)
     {
         this.X = x;
         this.Y = y;
         this.IsRoom = isRoom;
         this.IsTunnelPath = isTunnelPath;
-        this.IsDecoration = isDecoration;
+        this.IsRoomDecoration = isRoomDecoration;
+        this.IsFloorDecoration = isFloorDecoration;
     }
 }
 

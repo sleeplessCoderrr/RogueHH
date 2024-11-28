@@ -17,7 +17,7 @@ public class RoomBuilder : BaseMapBuilder
         {
             for (var y = 0; y < Height; y++)
             {
-                Grid[x, y] = new Tile(x, y, false, false, false);
+                Grid[x, y] = new Tile(x, y, false, false, false, false);
             }
         }
     }

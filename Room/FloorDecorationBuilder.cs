@@ -15,34 +15,26 @@ public class FloorDecorationBuilder : BaseMapBuilder
         Height = MapManager.Instance.mapConfig.height;
         Width = MapManager.Instance.mapConfig.width;
     }
-
-    public FloorDecorationBuilder AddFloorDecoration(List<Room> rooms)
-    {
-        foreach (var room in rooms)
-        {
-            MakeFloorDecoration(room);
-        }
-
-        return this;
-    }
     
-    
-    private FloorDecorationBuilder MakeFloorDecoration(Room room)
+    public FloorDecorationBuilder AddFloorDecoration()
     {
-        for (var x = room.X; x < room.X + room.Width; x++)
+        for (var x = 0; x < Width; x++)
         {
-            for (var y = room.Y; y < room.Y + room.Height; y++)
+            for (var y = 0; y < Height; y++)
             {
                 if (MapUtility.IsValidRoom(Grid, x, y) 
-                    && !MapUtility.IsValidPath(Grid, x, y)
                     && MapUtility.FloorDecorationChance())
                 {
+                    Grid[x,y].IsFloorDecoration = true;
+                    
+                    var randomIndex = MapUtility.TakeRandomPrefabs(Prefabs);
                     var position = new Vector3(x*2, 1, y*2);
                     var tileObject = Object.Instantiate(
-                        MapUtility.TakeRandomPrefabs(Prefabs), 
+                        Prefabs[randomIndex], 
                         position, 
                         Quaternion.identity, 
                         ParentTransform);
+                    
                 }
             }
         }

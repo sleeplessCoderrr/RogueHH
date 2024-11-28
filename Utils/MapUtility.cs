@@ -60,6 +60,28 @@ public static class MapUtility
         return tiles[x, y].IsTunnelPath;
     }
 
+    public static bool IsValidFloorDecoration(Tile[,] tiles, int x, int y)
+    {
+        return tiles[x, y].IsFloorDecoration;
+    }
+
+    public static bool IsValidRoomDecoration(Tile[,] tiles, int x, int y)
+    {
+        return tiles[x, y].IsRoomDecoration;
+    }
+
+
+    public static int TakeRandomPrefabs(GameObject[] prefabs)
+    {
+        return Random.Range(0, prefabs.Length);
+    }
+    
+    public static void SetTileAttribute(GameObject tileObject)
+    {
+        tileObject.tag = "Tile";
+        tileObject.AddComponent<BoxCollider>();
+    }
+    
     public static bool FloorDecorationChance()
     {
         return UnityEngine.Random.Range(0f, 100f) >= 95;
@@ -68,16 +90,5 @@ public static class MapUtility
     public static bool DecorationChance()
     {
         return UnityEngine.Random.Range(0f, 100f) >= 98;
-    }
-
-    public static GameObject TakeRandomPrefabs(GameObject[] prefabs)
-    {
-        return prefabs[UnityEngine.Random.Range(0, prefabs.Length)];
-    }
-    
-    public static void SetTileAttribute(GameObject tileObject)
-    {
-        tileObject.tag = "Tile";
-        tileObject.AddComponent<BoxCollider>();
     }
 }
