@@ -18,16 +18,16 @@ public class FloorDecorationBuilder : BaseMapBuilder
 
     public FloorDecorationBuilder AddFloorDecoration(List<Room> rooms)
     {
-        foreach (Room room in rooms)
+        foreach (var room in rooms)
         {
             MakeFloorDecoration(room);
-            Debug.Log(room.X + "," + room.Y + "," + room.Width + "," + room.Height);
         }
 
         return this;
     }
     
-    private void MakeFloorDecoration(Room room)
+    
+    private FloorDecorationBuilder MakeFloorDecoration(Room room)
     {
         for (var x = room.X; x < room.X + room.Width; x++)
         {
@@ -39,12 +39,13 @@ public class FloorDecorationBuilder : BaseMapBuilder
                 {
                     var position = new Vector3(x*2, 1, y*2);
                     var tileObject = Object.Instantiate(
-                        MapUtility.TakeRandomFloor(Prefabs), 
+                        MapUtility.TakeRandomPrefabs(Prefabs), 
                         position, 
                         Quaternion.identity, 
                         ParentTransform);
                 }
             }
         }
+        return this;
     }
 }

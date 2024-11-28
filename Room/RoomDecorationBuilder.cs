@@ -18,32 +18,34 @@ public class RoomDecorationBuilder : BaseMapBuilder
 
     public RoomDecorationBuilder AddRoomDecoration(List<Room> rooms)
     {
-        foreach (Room room in rooms)
+        foreach (var room in rooms)
         {
             MakeRoomDecoration(room);
         }
         return this;
     }
     
-    private RoomDecorationBuilder MakeRoomDecoration(Room room)
+    private void MakeRoomDecoration(Room room)
     {
-        for (var x = room.X; x < room.X + room.Width; x++)
+        var roomSize = room.Width * room.Height;
+        var thirtyPercent = (roomSize * 10) / 100;
+
+        var decorCount = 0;
+        while (decorCount < thirtyPercent)
         {
-            for (var y = room.Y; y < room.Y + room.Height; y++)
+            var x = Random.Range(room.X, room.X + room.Width);
+            var y = Random.Range(room.Y, room.Y + room.Height);
+            if (MapUtility.IsValidDecoration(Grid, x, y) && MapUtility.DecorationChance())
             {
-                if (MapUtility.IsValidRoom(Grid, x, y) 
-                    && !MapUtility.IsValidPath(Grid, x, y)
-                    && MapUtility.DecorationChance())
-                {
-                    var position = new Vector3(x*2, 1, y*2);
-                    var tileObject = Object.Instantiate(
-                        MapUtility.TakeRandomFloor(Prefabs), 
-                        position, 
-                        Quaternion.identity, 
-                        ParentTransform);
-                }
+                decorCount++;
+                var position = new Vector3(x*2, 1, y*2);
+                var tileObject = Object.Instantiate(
+                    MapUtility.TakeRandomPrefabs(Prefabs), 
+                    position, 
+                    Quaternion.identity, 
+                    ParentTransform);
             }
         }
-        return this;
+        
     }
 }
