@@ -41,6 +41,31 @@ public static class MapUtility
 
         return roomCenters;
     }
+
+    public static bool IsValidRoom(Tile[,] tiles, int x, int y)
+    {
+        return tiles[x, y].IsRoom;
+    }
+
+    public static bool IsValidPath(Tile[,] tiles, int x, int y)
+    {
+        return tiles[x, y].IsTunnelPath;
+    }
+
+    public static bool FloorDecorationChance()
+    {
+        return UnityEngine.Random.Range(0f, 100f) >= 95;
+    }
+    
+    public static bool DecorationChance()
+    {
+        return UnityEngine.Random.Range(0f, 100f) >= 98;
+    }
+
+    public static GameObject TakeRandomFloor(GameObject[] prefabs)
+    {
+        return prefabs[UnityEngine.Random.Range(0, prefabs.Length)];
+    }
     
     public static void SetTileAttribute(GameObject tileObject)
     {

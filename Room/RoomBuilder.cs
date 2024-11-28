@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 public class RoomBuilder : BaseMapBuilder
 {
-    private List<Room> _rooms;
-
     public RoomBuilder SetDimensions(int width, int height)
     {
         this.Width = width;
@@ -36,13 +34,13 @@ public class RoomBuilder : BaseMapBuilder
         }
 
         
-        _rooms.Add(room); 
+        Rooms.Add(room); 
         return this;
     }
 
     public RoomBuilder AddRandomRooms(int roomCount, int minWidth, int minHeight, int maxWidth, int maxHeight)
     {
-        _rooms = new List<Room>();
+        Rooms = new List<Room>();
         var rand = new System.Random();
 
         for (var i = 0; i < roomCount; i++)
@@ -68,6 +66,6 @@ public class RoomBuilder : BaseMapBuilder
 
     public List<Room> GetRooms()
     {
-        return _rooms;
+        return Rooms;
     } 
 }

@@ -5,8 +5,9 @@ public abstract class BaseMapBuilder
 {
     protected Transform ParentTransform;
     protected GameObject[] Prefabs;
-    protected Tile[,] Grid;
     protected int Width, Height;
+    protected List<Room> Rooms;
+    protected Tile[,] Grid;
     
     public void SetParent(Transform parent)
     {

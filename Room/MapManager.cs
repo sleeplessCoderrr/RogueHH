@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -31,7 +32,7 @@ public class MapManager : MonoBehaviour
         }
     }
     
-    private void Start()
+    private async void Start()
     {
         _kruskalMst = new KruskalMST();
         _roomBuilder = new RoomBuilder();
@@ -40,8 +41,12 @@ public class MapManager : MonoBehaviour
         _floorDecorationBuilder = new FloorDecorationBuilder();
         
         MakeRooms();
+
+        await Task.Delay(1000);
         GetData();
         MakeTunnels();
+        MakeDecorations();
+        _roomBuilder.Build();
     }
     private void MakeRooms()
     {
@@ -66,7 +71,6 @@ Random.Range(8, 12),
         _tunnelBuilder.InitializeGrid();
         _tunnelBuilder.SetParent(transform);
         _tunnelBuilder.AddTunnel(mapData.MstEdges);
-        _tunnelBuilder.Build();
     }
 
     private void MakeDecorations()
@@ -79,8 +83,9 @@ Random.Range(8, 12),
         
         _floorDecorationBuilder.InitializeGrid();
         _roomDecorationBuilder.InitializeGrid();
-        
-        
+
+        _floorDecorationBuilder.AddFloorDecoration(mapData.Rooms);
+        _roomDecorationBuilder.AddRoomDecoration(mapData.Rooms);
     }
 
     private void GetData()
