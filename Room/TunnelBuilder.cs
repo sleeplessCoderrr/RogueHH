@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class TunnelBuilder : BaseMapBuilder
+public class TunnelBuilder : BaseBuilder
 {
     public override void InitializeGrid()
     {

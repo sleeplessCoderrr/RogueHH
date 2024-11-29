@@ -109,7 +109,7 @@ public static class MapUtility
     
     public static bool FloorDecorationChance()
     {
-        return UnityEngine.Random.Range(0f, 100f) >= 95;
+        return UnityEngine.Random.Range(0f, 100f) >= 96;
     }
     
     public static bool DecorationChance()

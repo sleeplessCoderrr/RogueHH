@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class RoomBuilder : BaseMapBuilder
+public class RoomBuilder : BaseBuilder
 {
     public RoomBuilder SetDimensions(int width, int height)
     {

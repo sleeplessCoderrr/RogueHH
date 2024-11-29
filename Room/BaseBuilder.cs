@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseMapBuilder
+public abstract class BaseBuilder
 {
     protected Transform ParentTransform;
     protected GameObject[] Prefabs;

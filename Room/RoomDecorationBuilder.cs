@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomDecorationBuilder : BaseMapBuilder
+public class RoomDecorationBuilder : BaseBuilder
 {
     public override void InitializeGrid()
     {
@@ -28,7 +28,7 @@ public class RoomDecorationBuilder : BaseMapBuilder
     private void MakeRoomDecoration(Room room)
     {
         var roomSize = room.Width * room.Height;
-        var thirtyPercent = (roomSize * 10) / 100;
+        var thirtyPercent = (roomSize * 5) / 100;
 
         var decorCount = 0;
         while (decorCount < thirtyPercent)

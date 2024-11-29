@@ -1,7 +1,4 @@
-﻿namespace Enemy
+﻿public class EnemyBuilder
 {
-    public class EnemyBuilder
-    {
         
-    }
 }
