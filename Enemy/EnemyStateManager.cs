@@ -27,7 +27,7 @@ public class EnemyStateManager : StateManager<EnemyState>
     private Animator _animator;
     public GameObject[] enemyInstance;
 
-    private void Awake()
+    private async void Awake()
     {
         if (Instance == null)
         {
@@ -40,6 +40,7 @@ public class EnemyStateManager : StateManager<EnemyState>
         }
         
         InitializeStates();
+        await Task.Delay(3000);
         InitializeEnemy();
     }
     
