@@ -58,11 +58,10 @@ public class PlayerStateManager : StateManager<PlayerState>
         await Task.Delay(1000);
         _player = new Player(playerConfig, playerData);
         _playerBuilder = new PlayerBuilder();
-        
+        _playerBuilder.SetParent(transform);
         playerInstance = _playerBuilder
-            .SetParent(transform)
             .SetData(_player.PlayerConfig, _player.PlayerData)
-            .InitializeRandomPosition(mapConfig, mapData);
+            .Build(mapConfig, mapData, 1)[0];
     }
 
     private void SetAnimator()

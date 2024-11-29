@@ -74,7 +74,6 @@ public static class MapUtility
 
         return true;
     }
-
     
     public static bool IsValidRoom(Tile[,] tiles, int x, int y)
     {

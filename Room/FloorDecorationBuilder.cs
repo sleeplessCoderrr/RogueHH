@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Builder;
 using UnityEngine;
 
-public class FloorDecorationBuilder : BaseBuilder
+public class FloorDecorationBuilder : MapBaseBuilder
 {
     public override void InitializeGrid()
     {

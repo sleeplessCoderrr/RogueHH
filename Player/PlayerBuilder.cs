@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 
-public class PlayerBuilder
+public class PlayerBuilder : EntitiesBuilder
 {
     [Header("Data")]
     private PlayerData _playerData;
     private PlayerConfig _playerConfig;
-    private Transform _parentTransform;
     
     public PlayerBuilder SetData(PlayerConfig playerConfig, PlayerData playerData)
     {
@@ -14,42 +13,20 @@ public class PlayerBuilder
         return this;
     }
 
-    public PlayerBuilder SetParent(Transform parentTransform)
+    public override GameObject[] Build(MapConfig mapConfig, MapData mapData, int count)
     {
-        _parentTransform = parentTransform;
-        return this;
-    }
-
-    private bool IsTunnel(MapData mapData, int x, int y)
-    {
-        return mapData.MapTileData[x, y].IsTunnelPath;
-    }
-
-    private bool IsRoom(MapData mapData, int x, int y)
-    {
-        return mapData.MapTileData[x, y].IsRoom;
-    }
-
-    private bool IsValidPosition(MapData mapData, int x, int y)
-    {
-        return !IsTunnel(mapData, x, y) && IsRoom(mapData, x, y);
-    }
-
-    public GameObject InitializeRandomPosition(MapConfig mapConfig, MapData mapData)
-    {
-        var isNotValid = false;
-        while (!isNotValid)
+        var objects = new GameObject[count];
+        while (true)
         {
             var x = Random.Range(0, mapConfig.width - 1);
             var y = Random.Range(0, mapConfig.height - 1);
             if (IsValidPosition(mapData, x, y))
             {
-                    var worldPosition = new Vector3(x*2, 1, y*2);
-                    var objectInstance = Object.Instantiate(_playerConfig.playerPrefab, worldPosition, Quaternion.identity, _parentTransform);
-                    _playerData.playerPosition = new Vector3Int(x*2, 1, y*2);
-                    return objectInstance;
+                var worldPosition = new Vector3(x*2, 1, y*2);
+                objects[0] = Object.Instantiate(_playerConfig.playerPrefab, worldPosition, Quaternion.identity, ParentTransform);
+                _playerData.playerPosition = new Vector3Int(x*2, 1, y*2);
+                return objects;
             }
         }
-        return null;
     }
 }
