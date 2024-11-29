@@ -7,7 +7,7 @@ public abstract class BaseState<TState> where TState : Enum
     protected readonly Animator Animator;
     public TState StateKey { get; private set; }
 
-    public BaseState(StateManager<TState> stateManager, Animator animator,TState key)
+    protected BaseState(StateManager<TState> stateManager, Animator animator,TState key)
     {
         this.StateManager = stateManager ?? throw new ArgumentNullException(nameof(stateManager));
         this.StateKey = key;

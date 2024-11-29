@@ -26,6 +26,11 @@ public class RoomDecorationBuilder : MapBaseBuilder
         return this;
     }
 
+    private static Vector3Int HeightBaseOnPrefabs(int index, int x, int y)
+    {
+        return index == 0 ? new Vector3Int(x*2, -1, y*2) : new Vector3Int(x*2, 1, y*2);
+    }
+
     private void MakeRoomDecoration(Room room)
     {
         var roomSize = room.Width * room.Height;
@@ -43,10 +48,11 @@ public class RoomDecorationBuilder : MapBaseBuilder
                 && MapUtility.DecorationChance())
             {
                 Grid[x,y].IsRoomDecoration = true;
+                Grid[x,y].IsRoom = false;
                 decorCount++;
 
                 var randomIndex = MapUtility.TakeRandomPrefabs(Prefabs);
-                var position = new Vector3(x*2, 1, y*2);
+                var position = HeightBaseOnPrefabs(randomIndex, x, y);
                 var tileObject = Object.Instantiate(
                     Prefabs[randomIndex], 
                     position, 

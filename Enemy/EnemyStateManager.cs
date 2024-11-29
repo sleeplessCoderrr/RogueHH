@@ -27,7 +27,7 @@ public class EnemyStateManager : StateManager<EnemyState>
     private Animator _animator;
     public GameObject[] enemyInstance;
 
-    private async void Awake()
+    private void Awake()
     {
         if (Instance == null)
         {
