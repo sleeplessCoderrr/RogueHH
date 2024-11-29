@@ -14,6 +14,7 @@ public abstract class EntitiesBuilder
     protected static bool IsValidPosition(MapData mapData, int x, int y)
     {
         return !MapUtility.IsValidPath(mapData.MapTileData, x, y) 
-               && MapUtility.IsValidRoom(mapData.MapTileData, x, y);
+               && MapUtility.IsValidRoom(mapData.MapTileData, x, y)
+               && !MapUtility.IsValidRoomDecoration(mapData.MapTileData, x, y);
     }
 }

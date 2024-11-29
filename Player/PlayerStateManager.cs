@@ -56,12 +56,13 @@ public class PlayerStateManager : StateManager<PlayerState>
     private async void InitializePlayer()
     {
         await Task.Delay(1000);
-        _player = new Player(playerConfig, playerData);
         _playerBuilder = new PlayerBuilder();
+        _player = new Player(playerConfig, playerData);
+        
         _playerBuilder.SetParent(transform);
         playerInstance = _playerBuilder
-            .SetData(_player.PlayerConfig, _player.PlayerData)
-            .Build(mapConfig, mapData, 1)[0];
+                        .SetData(_player.PlayerConfig, _player.PlayerData)
+                        .Build(mapConfig, mapData, 1)[0];
     }
 
     private void SetAnimator()

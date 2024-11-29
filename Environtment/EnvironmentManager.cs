@@ -39,7 +39,7 @@ public class EnvironmentManager : MonoBehaviour
         _playerLight = new PlayerLightBuilder()
             .SetType(LightType.Point)
             .SetColor(new Color(1f, 0.8f, 0.6f)) 
-            .SetIntensity(1.5f)
+            .SetIntensity(2.5f)
             .SetRange(15f)
             .SetParent(_player.transform) 
             .SetShadow()
