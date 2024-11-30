@@ -21,7 +21,7 @@ public class InputManager : MonoBehaviour
         _isMapInit = false;
         _camera = Camera.main;
         _currentPath = new List<Vector2Int>();
-        _hoverColor = new Color(0.4f, 0.4f, 0.4f);
+        _hoverColor = new Color(0.5f, 0.5f, 0.5f);
         _tileHighlighter = new HighLightTileCommand(_hoverColor); 
     }
     

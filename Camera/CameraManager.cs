@@ -24,12 +24,12 @@ public class CameraManager : MonoBehaviour
 
     private void Start()
     {
-        _playerData = PlayerStateManager.Instance.playerData;
+        _playerData = PlayerDirector.Instance.playerData;
     }
 
     private void Update()
     {
-        _playerData = PlayerStateManager.Instance.playerData;
+        _playerData = PlayerDirector.Instance.playerData;
         transform.position = new Vector3((_playerData.playerPosition.x)-10, 10, (_playerData.playerPosition.z)-10);
     }
 }

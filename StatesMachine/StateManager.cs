@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public abstract class StateManager<TState> : MonoBehaviour where TState : Enum
+public abstract class StateManager<TState, TEntity> : MonoBehaviour where TState : Enum
 {
-    protected Dictionary<TState, BaseState<TState>> States = new Dictionary<TState, BaseState<TState>>();
-    protected BaseState<TState> CurrentState;
+    protected Dictionary<TState, BaseState<TState, TEntity>> States = new Dictionary<TState, BaseState<TState, TEntity>>();
+    protected BaseState<TState, TEntity> CurrentState;
+    protected TEntity Entity;
 
+    protected StateManager(TEntity entity)
+    {
+        Entity = entity;
+    }
+    
     protected async void Start()
     {
         await Task.Delay(3000);

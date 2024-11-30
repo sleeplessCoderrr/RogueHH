@@ -7,10 +7,13 @@ public class Enemy
     
     [Header("Enemy Data")]
     public EnemyData EnemyData;
+    
+    public Animator Animator;
 
-    public Enemy(EnemyConfig enemyConfig, EnemyData enemyData)
+    public Enemy(EnemyConfig enemyConfig, EnemyData enemyData, Animator animator)
     {
         this.EnemyConfig = enemyConfig;
         this.EnemyData = enemyData;
+        this.Animator = animator;
     }
 }

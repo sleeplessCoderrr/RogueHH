@@ -29,11 +29,12 @@ public class FloorDecorationBuilder : MapBaseBuilder
                     Grid[x,y].IsFloorDecoration = true;
                     
                     var randomIndex = MapUtility.TakeRandomPrefabs(Prefabs);
+                    var randomRotation = MapUtility.GetRandomRotation();
                     var position = new Vector3(x*2, 1, y*2);
                     var tileObject = Object.Instantiate(
                         Prefabs[randomIndex], 
                         position, 
-                        Quaternion.identity, 
+                        Quaternion.Euler(0, randomRotation, 0), 
                         ParentTransform
                     );
                 }

@@ -34,7 +34,7 @@ public class RoomDecorationBuilder : MapBaseBuilder
     private void MakeRoomDecoration(Room room)
     {
         var roomSize = room.Width * room.Height;
-        var thirtyPercent = (roomSize * 5) / 100;
+        var thirtyPercent = (roomSize * 8) / 100;
 
         var decorCount = 0;
         while (decorCount < thirtyPercent)
@@ -47,16 +47,17 @@ public class RoomDecorationBuilder : MapBaseBuilder
                 && !MapUtility.IsValidRoomDecoration(Grid, x, y)
                 && MapUtility.DecorationChance())
             {
-                Grid[x,y].IsRoomDecoration = true;
-                Grid[x,y].IsRoom = false;
+                Grid[x, y].IsRoomDecoration = true;
+                Grid[x, y].IsRoom = false;
                 decorCount++;
 
                 var randomIndex = MapUtility.TakeRandomPrefabs(Prefabs);
+                var randomRotation = MapUtility.GetRandomRotation();
                 var position = HeightBaseOnPrefabs(randomIndex, x, y);
                 var tileObject = Object.Instantiate(
                     Prefabs[randomIndex], 
                     position, 
-                    Quaternion.identity, 
+                    Quaternion.Euler(0, randomRotation, 0), 
                     ParentTransform
                 );
             }

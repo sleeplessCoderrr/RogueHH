@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 
-public class EnemyWalkingState : BaseState<EnemyState>
+public class EnemyAlertState : BaseState<EnemyState, Enemy>
 {
-    public EnemyWalkingState(StateManager<EnemyState> stateManager, Animator animator, EnemyState key) : base(stateManager, animator, key) {}
+    public EnemyAlertState(StateManager<EnemyState, Enemy> stateManager, Animator animator, EnemyState key, Enemy entity) : base(stateManager, animator, key, entity)
+    {
+    }
     public override void EnterState()
     {
         throw new System.NotImplementedException();

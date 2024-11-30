@@ -55,9 +55,9 @@ public static class MapUtility
         var maxX = grid.GetLength(0);
         var maxY = grid.GetLength(1);
 
-        for (var dx = -2; dx <= 2; dx++)
+        for (var dx = -1; dx <= 1; dx++)
         {
-            for (var dy = -2; dy <= 2; dy++)
+            for (var dy = -1; dy <= 1; dy++)
             {
                 if (dx == 0 && dy == 0) continue; 
 
@@ -74,6 +74,13 @@ public static class MapUtility
 
         return true;
     }
+    
+    public static float GetRandomRotation()
+    {
+        float[] rotations = { 90f, 180f, 270f };
+        return rotations[Random.Range(0, rotations.Length)];
+    }
+
     
     public static bool IsValidRoom(Tile[,] tiles, int x, int y)
     {
@@ -108,11 +115,11 @@ public static class MapUtility
     
     public static bool FloorDecorationChance()
     {
-        return UnityEngine.Random.Range(0f, 100f) >= 94;
+        return UnityEngine.Random.Range(0f, 100f) >= 98;
     }
     
     public static bool DecorationChance()
     {
-        return UnityEngine.Random.Range(0f, 100f) >= 98;
+        return UnityEngine.Random.Range(0f, 100f) >= 90;
     }
 }

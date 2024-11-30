@@ -1,12 +1,12 @@
 ﻿using System;
 using UnityEngine;
 
-public class PlayerWalkingState : BaseState<PlayerState>
+public class PlayerWalkingState : BaseState<PlayerState, Player>
 {
-    public PlayerWalkingState(StateManager<PlayerState> stateManager, Animator animator, PlayerState key) : base(stateManager, animator, key)
+    public PlayerWalkingState(StateManager<PlayerState, Player> stateManager, Animator animator, PlayerState key, Player entity) : base(stateManager, animator, key, entity)
     {
     }
-
+    
     public override void EnterState()
     {
     }

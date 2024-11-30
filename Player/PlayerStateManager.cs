@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public enum PlayerState
 {
@@ -10,64 +7,17 @@ public enum PlayerState
     Walking
 }
 
-public class PlayerStateManager : StateManager<PlayerState>
+public class PlayerStateManager : StateManager<PlayerState, Player>
 {
-    public static PlayerStateManager Instance;
-    
-    [Header("Player Config & Data")]
-    public PlayerConfig playerConfig;
-    public PlayerData playerData;
-    
-    [Header("Importing Map Data")]
-    public MapConfig mapConfig;
-    public MapData mapData;
-    
-    private PlayerBuilder _playerBuilder;
-    private Player _player;
-    
-    private Animator _animator;
-    public GameObject playerInstance;
-    
-    private async void Awake()
+    public PlayerStateManager(Player entity) : base(entity)
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(this);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        
-        InitializePlayer();
-        await Task.Delay(1000);
-        SetAnimator();
         InitializeStates();
-        CurrentState = States[PlayerState.Idle];
     }
-    
+
     protected override void InitializeStates()
     {
-        States[PlayerState.Idle] = new PlayerIdleState(this, _animator, PlayerState.Idle);
-        States[PlayerState.Walking] = new PlayerWalkingState(this, _animator,PlayerState.Walking);
-    }
-
-    private async void InitializePlayer()
-    {
-        await Task.Delay(1000);
-        _playerBuilder = new PlayerBuilder();
-        _player = new Player(playerConfig, playerData);
-        
-        _playerBuilder.SetParent(transform);
-        playerInstance = _playerBuilder
-                        .SetData(_player.PlayerConfig, _player.PlayerData)
-                        .Build(mapConfig, mapData, 1)[0];
-    }
-
-    private void SetAnimator()
-    {
-        _animator = playerInstance.GetComponent<Animator>();
+        States[PlayerState.Idle] = new PlayerIdleState(this, Entity.Animator, PlayerState.Idle, Entity);
+        States[PlayerState.Walking] = new PlayerWalkingState(this, Entity.Animator, PlayerState.Walking, Entity);
     }
 }
 

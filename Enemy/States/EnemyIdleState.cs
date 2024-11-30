@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 
-public class EnemyIdleState : BaseState<EnemyState>
+public class EnemyIdleState : BaseState<EnemyState, Enemy>
 {
-    public EnemyIdleState(StateManager<EnemyState> stateManager, Animator animator, EnemyState key) : base(stateManager, animator, key) {}
+    public EnemyIdleState(StateManager<EnemyState, Enemy> stateManager, Animator animator, EnemyState key, Enemy entity) : base(stateManager, animator, key, entity)
+    {
+    }
 
     public override void EnterState()
     {

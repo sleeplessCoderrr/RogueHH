@@ -1,19 +1,21 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class BaseState<TState> where TState : Enum
+public abstract class BaseState<TState, TEntity> where TState : Enum
 {
-    protected readonly StateManager<TState> StateManager;
+    protected readonly StateManager<TState, TEntity> StateManager;
     protected readonly Animator Animator;
+    protected readonly TEntity Entity; // Generic entity reference
     public TState StateKey { get; private set; }
 
-    protected BaseState(StateManager<TState> stateManager, Animator animator,TState key)
+    protected BaseState(StateManager<TState, TEntity> stateManager, Animator animator, TState key, TEntity entity)
     {
-        this.StateManager = stateManager ?? throw new ArgumentNullException(nameof(stateManager));
-        this.StateKey = key;
-        this.Animator = animator ?? throw new ArgumentNullException(nameof(animator));
+        StateManager = stateManager ?? throw new ArgumentNullException(nameof(stateManager));
+        StateKey = key;
+        Animator = animator ?? throw new ArgumentNullException(nameof(animator));
+        Entity = entity ?? throw new ArgumentNullException(nameof(entity));
     }
-    
+
     public abstract void EnterState();
     public abstract void ExitState();
     public abstract void UpdateState();

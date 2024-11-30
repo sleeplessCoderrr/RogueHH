@@ -5,7 +5,7 @@ public static class MoveUtility
 {
     public static Vector3 GetPlayerData()
     {
-        return PlayerStateManager.Instance.playerData.playerPosition;
+        return PlayerDirector.Instance.playerData.playerPosition;
     }
     
     public static List<Vector2Int> GetPath(Tile[,] tileMap, Vector2Int start, Vector2Int end)

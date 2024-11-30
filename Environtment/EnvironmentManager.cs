@@ -35,7 +35,7 @@ public class EnvironmentManager : MonoBehaviour
             .Apply();
 
         await Task.Delay(1500);
-        _player = PlayerStateManager.Instance.playerInstance;
+        _player = PlayerDirector.Instance.playerInstance;
         _playerLight = new PlayerLightBuilder()
             .SetType(LightType.Point)
             .SetColor(new Color(1f, 0.8f, 0.6f)) 

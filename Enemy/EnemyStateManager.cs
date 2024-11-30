@@ -6,63 +6,21 @@ using Task = System.Threading.Tasks.Task;
 public enum EnemyState
 {
     Idle,
-    Walk
+    Alert,
+    Aggro,
+    Attack
 }
 
-public class EnemyStateManager : StateManager<EnemyState>
+public class EnemyStateManager : StateManager<EnemyState, Enemy>
 {
-    public static EnemyStateManager Instance;
-
-    [Header("Enemy Config & Data")]
-    public EnemyConfig enemyConfig;
-    public EnemyData enemyData;
-    
-    [Header("MapConfig & Data")]
-    public MapConfig mapConfig;
-    public MapData mapData;
-
-    private EnemyBuilder _enemyBuilder;
-    private Enemy _enemy;
-    
-    private Animator _animator;
-    public GameObject[] enemyInstance;
-
-    private async void Awake()
+    public EnemyStateManager(Enemy entity, Enemy enemy) : base(entity)
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(this);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        
         InitializeStates();
-        await Task.Delay(3000);
-        InitializeEnemy();
     }
-    
+
     protected override void InitializeStates()
     {
-        // States[EnemyState.Idle] = new
-    }
-
-    private async void InitializeEnemy()
-    {
-        await Task.Delay(1000);
-        _enemyBuilder = new EnemyBuilder();
-        _enemy = new Enemy(enemyConfig, enemyData);
-        
-        _enemyBuilder.SetParent(transform);
-        enemyInstance = _enemyBuilder
-                        .SetData(enemyConfig, enemyData)
-                        .Build(mapConfig, mapData, 2);
-    }
-
-    private void SetAnimator()
-    {
-        
+        States[EnemyState.Idle] = new EnemyIdleState(this, Entity.Animator, EnemyState.Idle, Entity);
+        States[EnemyState.Alert] = new EnemyAlertState(this, Entity.Animator, EnemyState.Alert, Entity);
     }
 }
