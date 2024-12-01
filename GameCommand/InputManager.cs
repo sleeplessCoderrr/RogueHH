@@ -6,8 +6,10 @@ public class InputManager : MonoBehaviour
     public static InputManager Instance;
     
     private HighLightTileCommand _tileHighlighter;
+    private CommandInvoker _commandInvoker;
     private List<Vector2Int> _currentPath;
     private Vector2Int _hoveredPosition;
+    private ICommand _currentCommand;
     private Vector3 _playerPosition;
     private GameObject _hoveredTile;
     private Color _hoverColor;
@@ -15,12 +17,13 @@ public class InputManager : MonoBehaviour
     private Camera _camera;
     private Tile[,] _tiles;
 
-    private void Awake()
+    private void Start()
     {
         Singleton();
         _isMapInit = false;
         _camera = Camera.main;
         _currentPath = new List<Vector2Int>();
+        _commandInvoker = new CommandInvoker();
         _hoverColor = new Color(0.5f, 0.5f, 0.5f);
         _tileHighlighter = new HighLightTileCommand(_hoverColor); 
     }
@@ -51,9 +54,16 @@ public class InputManager : MonoBehaviour
         if (!_hoveredTile) return;
         
         GetPathData();
-        if(_currentPath == null) return;
+        if (_currentPath == null) return;
         
         HandleHover();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            _currentCommand = new PlayerMoveCommand(_currentPath);
+            _commandInvoker.AddCommand(_currentCommand);
+            _commandInvoker.ExecuteCommand();
+        }
     }
 
     private void HandleHover()
@@ -67,9 +77,10 @@ public class InputManager : MonoBehaviour
     private void GetPathData()
     {
         _currentPath = MoveUtility.GetPath(
-        _tiles, 
-        new Vector2Int((int)_playerPosition.x/2, (int)_playerPosition.z/2),
-        new Vector2Int((int)_hoveredTile.transform.position.x/2, (int)_hoveredTile.transform.position.z/2));
+            _tiles, 
+            new Vector2Int((int)_playerPosition.x / 2, (int)_playerPosition.z / 2),
+            new Vector2Int((int)_hoveredTile.transform.position.x / 2, (int)_hoveredTile.transform.position.z / 2)
+        );
     }
 
     private void GetInitialData()

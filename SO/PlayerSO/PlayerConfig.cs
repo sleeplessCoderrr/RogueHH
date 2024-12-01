@@ -8,5 +8,5 @@ public class PlayerConfig : ScriptableObject
     public Animator animator;
     
     [Header("Player Settings")]
-    public float walkSpeed = 5f;
+    public float walkSpeed = 2f;
 }

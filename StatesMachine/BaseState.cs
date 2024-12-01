@@ -5,7 +5,7 @@ public abstract class BaseState<TState, TEntity> where TState : Enum
 {
     protected readonly StateManager<TState, TEntity> StateManager;
     protected readonly Animator Animator;
-    protected readonly TEntity Entity; // Generic entity reference
+    protected readonly TEntity Entity; 
     public TState StateKey { get; private set; }
 
     protected BaseState(StateManager<TState, TEntity> stateManager, Animator animator, TState key, TEntity entity)
