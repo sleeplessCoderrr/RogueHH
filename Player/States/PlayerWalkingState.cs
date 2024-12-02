@@ -1,26 +1,30 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayerWalkingState : BaseState<PlayerState, Player>
+public class PlayerWalkingState : PlayerStateBase
 {
-    public PlayerWalkingState(StateManager<PlayerState, Player> stateManager, Animator animator, PlayerState key, Player entity) : base(stateManager, animator, key, entity)
+    public PlayerWalkingState(Player entity, Animator animator) : base(entity, animator)
     {
     }
-    
+
     public override void EnterState()
     {
+        Debug.Log("Entering Walking State");
+        Animator.SetBool("IsWalk", true);
     }
 
     public override void ExitState()
     {
+        Debug.Log("Exiting Walking State");
+        Animator.SetBool("IsWalk", false);
     }
 
     public override void UpdateState()
     {
+        
     }
 
-    public override PlayerState GetNextState()
+    public override PlayerState? GetNextState()
     {
-        throw new NotImplementedException();
+        throw new System.NotImplementedException();
     }
 }

@@ -24,6 +24,8 @@ public class PlayerBuilder : EntitiesBuilder
             {
                 var worldPosition = new Vector3(x*2, 1, y*2);
                 objects[0] = Object.Instantiate(_playerConfig.playerPrefab, worldPosition, Quaternion.identity, ParentTransform);
+                objects[0].AddComponent<Rigidbody>();
+                objects[0].GetComponent<Rigidbody>().useGravity = false;
                 _playerData.playerPosition = new Vector3Int(x*2, 1, y*2);
                 return objects;
             }

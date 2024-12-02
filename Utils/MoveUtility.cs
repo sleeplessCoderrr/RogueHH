@@ -12,6 +12,15 @@ public static class MoveUtility
     {
         return AStarPathfinder.FindPath(tileMap, start, end);
     }
+
+    public static Vector3 GetTargetPosition(Vector3 targetPosition)
+    {
+        return new Vector3(
+            targetPosition.x,
+            targetPosition.y,
+            targetPosition.z
+        );
+    }
     
     public static GameObject GetTileFromRaycast(Camera camera)
     {

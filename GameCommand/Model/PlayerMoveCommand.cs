@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class PlayerMoveCommand : ICommand
 {
+    private readonly Player _player;
     private readonly List<Vector2Int> _path;
     private readonly PlayerData _playerData;
-    private readonly PlayerConfig _playerConfig;
+    private readonly GameObject _playerInstance;
+    private readonly PlayerStateManager _playerStateManager;
     
 
     public PlayerMoveCommand(List<Vector2Int> path)
     {
         _path = path;
-        _playerData = PlayerDirector.Instance.playerData;
-        _playerConfig = PlayerDirector.Instance.playerConfig;
+        _player = PlayerDirector.Instance.Player;
+        _playerData = _player.PlayerData;
+        _playerStateManager = PlayerStateManager.Instance;
+        _playerInstance = _player.PlayerInstance;
     }
 
     public void Execute()
@@ -23,29 +27,33 @@ public class PlayerMoveCommand : ICommand
 
     private IEnumerator MovePlayer()
     {
-        var player = PlayerDirector.Instance.playerInstance;
+        _playerStateManager.SetState(PlayerState.Walking);
         foreach (var pathPoint in _path)
         {
-            var targetPosition = new Vector3(
-                pathPoint.x * 2, 
-                player.transform.position.y, 
-                pathPoint.y * 2
-            );
-            while (Vector3.Distance(player.transform.position, targetPosition) > 0.01f)
-            {
-                player.transform.position = Vector3.MoveTowards(
-                    player.transform.position, 
-                    targetPosition, 
-                    Time.deltaTime * _playerConfig.walkSpeed
+            var targetPosition = GetTargetPosition(pathPoint);
+            _player.TargetPosition = targetPosition;
+            _player.LookAtTarget(_playerInstance, targetPosition); 
+            
+            yield return 
+                CoroutineManager.Instance.StartCoroutine(
+                    _player.MoveToTarget(
+                        _player, 
+                        _playerInstance, 
+                        targetPosition)
                 );
-                player.transform.LookAt(player.transform.position + player.transform.forward);
-                _playerData.playerPosition = new Vector3(
-                    player.transform.position.x, 
-                    player.transform.position.y, 
-                    player.transform.position.z
-                );
-                yield return null;
-            }
+            _player.UpdateData(_playerInstance); 
         }
+
+        _playerStateManager.SetState(PlayerState.Idle);
+    }
+    
+    private Vector3 GetTargetPosition(Vector2Int pathPoint)
+    {
+        return new Vector3(
+            pathPoint.x * 2,
+            _playerInstance.transform.position.y,
+            pathPoint.y * 2
+        );
     }
 }
+

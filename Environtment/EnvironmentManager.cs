@@ -22,7 +22,6 @@ public class EnvironmentManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
     }
 
     private async void Start()
@@ -35,7 +34,7 @@ public class EnvironmentManager : MonoBehaviour
             .Apply();
 
         await Task.Delay(1500);
-        _player = PlayerDirector.Instance.playerInstance;
+        _player = PlayerDirector.Instance.Player.PlayerInstance;
         _playerLight = new PlayerLightBuilder()
             .SetType(LightType.Point)
             .SetColor(new Color(1f, 0.8f, 0.6f)) 

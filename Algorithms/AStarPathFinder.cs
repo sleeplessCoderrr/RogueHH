@@ -5,12 +5,6 @@ public static class AStarPathfinder
 {
     public static List<Vector2Int> FindPath(Tile[,] grid, Vector2Int start, Vector2Int end)
     {
-        if (!IsValid(grid, start) || !IsValid(grid, end))
-        {
-            Debug.LogWarning("Start or end position is invalid.");
-            return new List<Vector2Int>();
-        }
-
         var openSet = new PriorityQueue<Vector2Int>();
         var cameFrom = new Dictionary<Vector2Int, Vector2Int>();
         var gScore = new Dictionary<Vector2Int, float>();
@@ -60,7 +54,6 @@ public static class AStarPathfinder
             }
         }
 
-        Debug.LogWarning("No path found.");
         return new List<Vector2Int>();
     }
 

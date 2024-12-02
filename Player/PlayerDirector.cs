@@ -14,10 +14,7 @@ public class PlayerDirector : MonoBehaviour
     public MapData mapData;
     
     private PlayerBuilder _playerBuilder;
-    public Player player;
-    
-    public Animator animator;
-    public GameObject playerInstance;
+    public Player Player;
     
     private void Start()
     {
@@ -38,11 +35,12 @@ public class PlayerDirector : MonoBehaviour
     {
         await Task.Delay(1000);
         _playerBuilder = new PlayerBuilder();
-        player = new Player(playerConfig, playerData, animator);
+        Player = new Player(playerConfig, playerData);
 
         _playerBuilder.SetParent(transform);
-        playerInstance = _playerBuilder
-            .SetData(player.PlayerConfig, player.PlayerData)
+        Player.PlayerInstance = _playerBuilder
+            .SetData(Player.PlayerConfig, Player.PlayerData)
             .Build(mapConfig, mapData, 1)[0];
+        Player.PlayerInstance.AddComponent<PlayerStateManager>();
     }
 }

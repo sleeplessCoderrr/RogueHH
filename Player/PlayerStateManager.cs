@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public enum PlayerState
@@ -7,17 +7,49 @@ public enum PlayerState
     Walking
 }
 
-public class PlayerStateManager : StateManager<PlayerState, Player>
+public class PlayerStateManager : MonoBehaviour
 {
-    public PlayerStateManager(Player entity) : base(entity)
+    public static PlayerStateManager Instance { get; private set; }
+
+    private Player _player; 
+    private PlayerStateBase _currentState;
+    private Dictionary<PlayerState, PlayerStateBase> _states;
+    private Animator _animator;
+
+    private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         InitializeStates();
     }
 
-    protected override void InitializeStates()
+    private void InitializeStates()
     {
-        States[PlayerState.Idle] = new PlayerIdleState(this, Entity.Animator, PlayerState.Idle, Entity);
-        States[PlayerState.Walking] = new PlayerWalkingState(this, Entity.Animator, PlayerState.Walking, Entity);
+        _animator = GetComponent<Animator>();
+        _states = new Dictionary<PlayerState, PlayerStateBase>
+        {
+            { PlayerState.Idle, new PlayerIdleState(_player, _animator) },
+            { PlayerState.Walking, new PlayerWalkingState(_player, _animator) }
+        };
+        _currentState = _states[PlayerState.Idle];
+    }
+
+    public void SetState(PlayerState newState)
+    {
+        _currentState.ExitState();
+        _currentState = _states[newState];
+        _currentState.EnterState();
+    }
+
+    public void SetPlayerEntity(Player entity)
+    {
+        _player = entity;
+        InitializeStates(); 
     }
 }
-
