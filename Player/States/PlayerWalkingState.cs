@@ -2,7 +2,7 @@
 
 public class PlayerWalkingState : PlayerStateBase
 {
-    public PlayerWalkingState(Player entity, Animator animator) : base(entity, animator)
+    public PlayerWalkingState(Player player, Animator animator) : base(player, animator)
     {
     }
 

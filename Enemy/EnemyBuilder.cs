@@ -5,15 +5,13 @@ using System.Linq;
 public class EnemyBuilder : EntitiesBuilder
 {
     [Header("Data")]
-    private EnemyData _enemyData;
     private EnemyConfig _enemyConfig;
     private List<Room> _rooms;
 
-    public EnemyBuilder SetData(EnemyConfig enemyConfig, EnemyData enemyData)
+    public EnemyBuilder SetData(EnemyConfig enemyConfig)
     {
         _rooms = MapManager.Instance.mapData.Rooms;
         _enemyConfig = enemyConfig;
-        _enemyData = enemyData;
         return this;
     }
     
@@ -40,7 +38,6 @@ public class EnemyBuilder : EntitiesBuilder
                             worldPosition, 
                             Quaternion.identity, 
                             ParentTransform);
-                        _enemyData.enemyPosition = new Vector3Int(x*2, 1, y*2);
                         objects.Append(objectInstance);
                         entitiesCount++;
                         isValid = true;

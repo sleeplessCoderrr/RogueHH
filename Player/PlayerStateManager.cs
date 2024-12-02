@@ -28,7 +28,7 @@ public class PlayerStateManager : MonoBehaviour
         }
         InitializeStates();
     }
-
+    
     private void InitializeStates()
     {
         _animator = GetComponent<Animator>();

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 public class EnemyDirector : MonoBehaviour
@@ -14,13 +15,11 @@ public class EnemyDirector : MonoBehaviour
     public MapConfig mapConfig;
     public MapData mapData;
 
+    private GameObject[] _enemyInstanceList;
     private EnemyBuilder _enemyBuilder;
-    private Enemy _enemy;
-    
-    public Animator animator;
-    public GameObject[] enemyInstance;
+    private Enemy[] _enemyList;
 
-    private async void Awake()
+    private void Start()
     {
         if (Instance == null)
         {
@@ -31,25 +30,36 @@ public class EnemyDirector : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
-        await Task.Delay(3000);
         InitializeEnemy();
     }
 
     private async void InitializeEnemy()
     {
+        const int enemyCount = 10;
         await Task.Delay(1000);
+
         _enemyBuilder = new EnemyBuilder();
-        _enemy = new Enemy(enemyConfig, enemyData, animator);
+        _enemyList = new Enemy[enemyCount];
         
         _enemyBuilder.SetParent(transform);
-        enemyInstance = _enemyBuilder
-            .SetData(enemyConfig, enemyData)
-            .Build(mapConfig, mapData, 2);
+        _enemyBuilder.SetData(enemyConfig);
+        _enemyInstanceList = _enemyBuilder.Build(mapConfig, mapData, 10);
+        
+        await Task.Delay(3000);
+        AddInstance(enemyCount);
     }
 
-    private void SetAnimator()
+    private void AddInstance(int count)
     {
-        
+        for (var i = 0; i < count; i++)
+        {
+            if(!_enemyInstanceList[1])Debug.Log("Kosong");
+            var enemy = new Enemy(enemyConfig, enemyData);
+            enemy.EnemiesInstance = _enemyInstanceList[i];
+            // Debug.Log(_enemyInstanceList[i]);
+            enemy.EnemiesInstance.GetComponent<EnemyStateManager>().SetEnemyEntity(enemy);
+            // Debug.Log(enemy.EnemiesInstance.GetComponent<EnemyStateManager>()._enemy);
+            _enemyList[i] = enemy;
+        }
     }
 }

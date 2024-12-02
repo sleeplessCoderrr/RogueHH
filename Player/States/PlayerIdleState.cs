@@ -2,7 +2,7 @@
 
 public class PlayerIdleState : PlayerStateBase
 {
-    public PlayerIdleState(Player entity, Animator animator) : base(entity, animator)
+    public PlayerIdleState(Player player, Animator animator) : base(player, animator)
     {
     }
 
@@ -18,10 +18,7 @@ public class PlayerIdleState : PlayerStateBase
 
     public override void UpdateState()
     {
-        // if (!Entity.PlayerReachedDestination())
-        // {
-        //     PlayerStateManager.Instance.SetState(PlayerState.Walking);
-        // }    
+      
     }
 
     public override PlayerState? GetNextState()

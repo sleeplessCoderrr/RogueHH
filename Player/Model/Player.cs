@@ -42,17 +42,7 @@ public class Player
             PlayerInstance.transform.position = targetPosition;
         }
     }
-
-
-    public void UpdateData(GameObject playerInstance)
-    {
-        PlayerData.playerPosition = new Vector3(
-            playerInstance.transform.position.x,
-            playerInstance.transform.position.y,
-            playerInstance.transform.position.z
-        );
-    }
-
+    
     public void LookAtTarget(GameObject playerInstance, Vector3 targetPosition)
     {
         var directionToTarget = (targetPosition - playerInstance.transform.position).normalized;
@@ -67,9 +57,13 @@ public class Player
         }
     }
     
-    public bool PlayerReachedDestination()
+    public void UpdateData(GameObject playerInstance)
     {
-        var rigidbody = PlayerInstance.GetComponent<Rigidbody>();
-        return rigidbody.velocity.magnitude <= 0.1f;
+        PlayerData.playerPosition = new Vector3(
+            playerInstance.transform.position.x,
+            playerInstance.transform.position.y,
+            playerInstance.transform.position.z
+        );
     }
+
 }

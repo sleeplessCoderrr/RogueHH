@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
-public abstract class PlayerStateBase
+public abstract class EnemyBaseState
 {
-    protected Player Player;
+    protected Enemy Enemy;
     protected Animator Animator;
-    protected PlayerStateBase(Player player, Animator animator)
+
+    protected EnemyBaseState(Enemy enemy, Animator animator)
     {
-        Player = player;
+        Enemy = enemy;
         Animator = animator;
     }
-
+    
     public abstract void EnterState();
     public abstract void ExitState();
     public abstract void UpdateState();

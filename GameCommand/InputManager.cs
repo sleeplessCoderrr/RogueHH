@@ -28,7 +28,7 @@ public class InputManager : MonoBehaviour
         _hoverColor = new Color(0.5f, 0.5f, 0.5f);
         _tileHighlighter = new HighLightTileCommand(_hoverColor);
 
-        await Task.Delay(2000); // Ensure PlayerDirector is ready
+        await Task.Delay(2000); 
         if (PlayerDirector.Instance == null)
         {
             Debug.LogError("PlayerDirector instance is null.");
@@ -36,7 +36,6 @@ public class InputManager : MonoBehaviour
         }
 
         _playerEntity = PlayerDirector.Instance.Player;
-
         if (_playerEntity == null)
         {
             Debug.LogError("Player entity is null.");
@@ -44,7 +43,6 @@ public class InputManager : MonoBehaviour
         }
 
         _playerStateManager = PlayerStateManager.Instance;
-
         if (_playerStateManager == null)
         {
             Debug.LogError("PlayerStateManager instance is null.");

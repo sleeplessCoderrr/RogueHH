@@ -2,18 +2,17 @@
 
 public class Enemy
 {
-    [Header("Enemy Config")]
+    [Header("Enemy SO")]
     public EnemyConfig EnemyConfig;
-    
-    [Header("Enemy Data")]
     public EnemyData EnemyData;
     
-    public Animator Animator;
+    [Header("Enemy Data")]
+    public Animator Animator;  
+    public GameObject EnemiesInstance;
 
-    public Enemy(EnemyConfig enemyConfig, EnemyData enemyData, Animator animator)
+    public Enemy(EnemyConfig enemyConfig, EnemyData enemyData)
     {
         this.EnemyConfig = enemyConfig;
         this.EnemyData = enemyData;
-        this.Animator = animator;
     }
 }
