@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class UpgradeableItemUI : MonoBehaviour
@@ -12,8 +13,12 @@ public class UpgradeableItemUI : MonoBehaviour
 
     private void Start()
     {
-        UpdateItemUI();
         Deselect();
+    }
+
+    private void Update()
+    {
+        UpdateItemUI();
     }
 
     public void OnItemClicked()
@@ -36,29 +41,9 @@ public class UpgradeableItemUI : MonoBehaviour
 
     private void UpdateItemUI()
     {
-        if (itemData == null)
-        {
-            Debug.LogError("itemData is not assigned in UpgradeableItemUI.");
-            return;
-        }
-
-        if (itemLevelText != null)
-        {
-            itemLevelText.text = $"Lvl. {itemData.currentLevel}/{itemData.maxLevel}";
-        }
-        else
-        {
-            Debug.LogError("itemLevelText is not assigned in the Inspector.");
-        }
-
-        if (itemImage != null)
-        {
-            itemImage.sprite = itemData.itemSprite;
-        }
-        else
-        {
-            Debug.LogError("itemImage is not assigned in the Inspector.");
-        }
+        if (itemData == null) return;
+        itemLevelText.text = $"Lvl. {itemData.currentLevel}/{itemData.maxLevel}";
+        itemImage.sprite = itemData.itemSprite; 
     }
 
 

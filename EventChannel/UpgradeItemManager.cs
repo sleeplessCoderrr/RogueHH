@@ -4,6 +4,7 @@ public class UpgradeItemManager : MonoBehaviour
 {
     [SerializeField] private UpgradeItemEventChannel upgradeItemEventChannel;
     [SerializeField] private PlayerData playerData;
+    [SerializeField] private ItemDetailDisplay itemDetailDisplay;
 
     private void OnEnable()
     {
@@ -33,7 +34,7 @@ public class UpgradeItemManager : MonoBehaviour
 
         playerData.zhen -= item.upgradeCost;
         item.Upgrade();
-        Debug.Log($"Upgraded {item.itemName} to level {item.currentLevel}.");
+        itemDetailDisplay.UpdateItemDetails(item);
     }
 
     private void ApplyUpgradeBenefits(UpgradeableItem item)

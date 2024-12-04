@@ -30,4 +30,9 @@ public class MainMenuManager : MonoBehaviour
     {
         SceneManager.LoadScene("UpgradeMenu");
     }
+
+    public void GoToGame()
+    {
+        SceneManager.LoadScene("Game");
+    }
 }

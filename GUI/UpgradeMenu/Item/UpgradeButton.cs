@@ -2,9 +2,9 @@
 
 public class UpgradeButton : MonoBehaviour
 {
-    [SerializeField] private ItemDetailDisplay itemDetailsDisplay; // Panel showing the item details
-    [SerializeField] private UpgradeItemManager upgradeManager;    // Manager handling upgrade logic
-    [SerializeField] private PlayerData playerData;                // Player data to show the current gold
+    [SerializeField] private ItemDetailDisplay itemDetailsDisplay;
+    [SerializeField] private UpgradeItemManager upgradeManager;   
+    [SerializeField] private PlayerData playerData;                
 
     public void OnUpgradeClick()
     {

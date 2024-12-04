@@ -10,7 +10,15 @@ public class UpgradeableItem : ScriptableObject
     public int maxLevel = 45;
     public int upgradeCost = 10;
     public string benefitDescription;
-
-    public void Upgrade() { if(UpgradeAble()) currentLevel += 1; }
+    public PlayerData playerData;
+    
+    public void Upgrade()
+    {
+        if (UpgradeAble())
+        {
+            currentLevel += 1;
+            DataUpgrader.Upgrade(playerData, itemName);
+        }
+    }
     public bool UpgradeAble() => currentLevel < maxLevel;
 }
