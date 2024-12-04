@@ -5,7 +5,7 @@ using UnityEngine;
 public class UpgradeableItem : ScriptableObject
 {   
     public string itemName;
-    public Image ItemImage;
+    public Sprite itemSprite;
     public int currentLevel = 0;
     public int maxLevel = 45;
     public int upgradeCost = 10;
