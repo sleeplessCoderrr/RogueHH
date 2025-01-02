@@ -4,7 +4,8 @@ using UnityEngine;
 public enum PlayerState
 {
     Idle,
-    Walking
+    Walking,
+    Attack
 }
 
 public class PlayerStateManager : MonoBehaviour
@@ -35,7 +36,8 @@ public class PlayerStateManager : MonoBehaviour
         _states = new Dictionary<PlayerState, PlayerStateBase>
         {
             { PlayerState.Idle, new PlayerIdleState(_player, _animator) },
-            { PlayerState.Walking, new PlayerWalkingState(_player, _animator) }
+            { PlayerState.Walking, new PlayerWalkingState(_player, _animator) },
+            { PlayerState.Attack, new PlayerAttackState(_player, _animator) }
         };
         _currentState = _states[PlayerState.Idle];
     }

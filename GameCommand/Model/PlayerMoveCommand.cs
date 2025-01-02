@@ -9,7 +9,6 @@ public class PlayerMoveCommand : ICommand
     private readonly PlayerData _playerData;
     private readonly GameObject _playerInstance;
     private readonly PlayerStateManager _playerStateManager;
-    
 
     public PlayerMoveCommand(List<Vector2Int> path)
     {
@@ -30,6 +29,11 @@ public class PlayerMoveCommand : ICommand
         _playerStateManager.SetState(PlayerState.Walking);
         foreach (var pathPoint in _path)
         {
+            if (InputManager.Instance.isCanceled)
+            {
+                InputManager.Instance.isCanceled = false;
+                break;
+            }
             var targetPosition = GetTargetPosition(pathPoint);
             _player.TargetPosition = targetPosition;
             _player.LookAtTarget(_playerInstance, targetPosition); 

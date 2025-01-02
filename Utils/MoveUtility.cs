@@ -22,7 +22,7 @@ public static class MoveUtility
         );
     }
     
-    public static GameObject GetTileFromRaycast(Camera camera)
+    public static GameObject GetObjectFromRayCast(Camera camera)
     {
         var ray = camera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out var hit))
@@ -41,5 +41,16 @@ public static class MoveUtility
         }
 
         return true;
+    }
+
+    public static bool IsEnemy(Tile[,] tile, int x, int y)
+    {
+        return tile[x, y].IsEnemy;
+    }
+
+    public static bool IsValidMove(Tile[,] tile, int x, int y)
+    {
+        return !tile[x, y].IsEnemy
+               && !tile[x, y].IsRoomDecoration;
     }
 }

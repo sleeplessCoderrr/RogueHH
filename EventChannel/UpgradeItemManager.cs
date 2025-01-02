@@ -39,7 +39,6 @@ public class UpgradeItemManager : MonoBehaviour
 
     private void ApplyUpgradeBenefits(UpgradeableItem item)
     {
-        // Example: Apply benefits based on the item type or level.
         Debug.Log($"Applying benefits: {item.benefitDescription}");
     }
 }

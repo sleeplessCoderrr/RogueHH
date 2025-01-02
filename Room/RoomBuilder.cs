@@ -40,7 +40,6 @@ public class RoomBuilder : MapBaseBuilder
                 Grid[x, y].IsRoom = true;
             }
         }
-
         
         Rooms.Add(room); 
         return this;

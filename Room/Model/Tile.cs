@@ -11,6 +11,7 @@ public class Tile
     public bool IsTunnelPath;
     public bool IsBuffer;
     public bool IsRoom;
+    public bool IsEnemy;
 
     public Tile(int x, int y, bool isRoom, bool isTunnelPath, bool isRoomDecoration, bool isFloorDecoration, bool isBuffer)
     {

@@ -7,10 +7,12 @@ public class EnemyBuilder : EntitiesBuilder
     [Header("Data")]
     private EnemyConfig _enemyConfig;
     private List<Room> _rooms;
+    private Tile[,] _mapGrid;
 
     public EnemyBuilder SetData(EnemyConfig enemyConfig)
     {
         _rooms = MapManager.Instance.mapData.Rooms;
+        _mapGrid = MapManager.Instance.mapData.MapTileData;
         _enemyConfig = enemyConfig;
         return this;
     }
@@ -33,6 +35,8 @@ public class EnemyBuilder : EntitiesBuilder
                     {
                         var idx = MapUtility.TakeRandomPrefabs(_enemyConfig.enemyPrefabs);
                         var worldPosition = new Vector3(x*2, 1, y*2);
+                        _mapGrid[x, y].IsEnemy= true;
+                        
                         var objectInstance = Object.Instantiate(
                             _enemyConfig.enemyPrefabs[idx], 
                             worldPosition, 

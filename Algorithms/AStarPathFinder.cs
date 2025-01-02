@@ -34,7 +34,7 @@ public static class AStarPathfinder
 
             if (current == end)
                 return ReconstructPath(cameFrom, current);
-
+            
             foreach (var neighbor in GetNeighbors(grid, current))
             {
                 if (!IsValid(grid, neighbor))
@@ -71,7 +71,6 @@ public static class AStarPathfinder
         foreach (var dir in directions)
         {
             var neighbor = current + dir;
-
             if (IsValid(grid, neighbor))
                 neighbors.Add(neighbor);
         }
@@ -83,9 +82,14 @@ public static class AStarPathfinder
     {
         var width = grid.GetLength(0);
         var height = grid.GetLength(1);
-
-        return pos.x >= 0 && pos.y >= 0 && pos.x < width && pos.y < height &&
-               grid[pos.x, pos.y] != null && grid[pos.x, pos.y].IsRoom;
+        return pos.x >= 0
+               && pos.y >= 0
+               && pos.x < width
+               && pos.y < height
+               && grid[pos.x, pos.y] != null
+               && grid[pos.x, pos.y].IsRoom
+               && !grid[pos.x, pos.y].IsRoomDecoration
+               && !grid[pos.x, pos.y].IsEnemy;
     }
 
     private static float Heuristic(Vector2Int a, Vector2Int b)

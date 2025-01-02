@@ -48,7 +48,6 @@ public class RoomDecorationBuilder : MapBaseBuilder
                 && MapUtility.DecorationChance())
             {
                 Grid[x, y].IsRoomDecoration = true;
-                Grid[x, y].IsRoom = false;
                 decorCount++;
 
                 var randomIndex = MapUtility.TakeRandomPrefabs(Prefabs);
