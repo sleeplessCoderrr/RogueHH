@@ -28,14 +28,13 @@ public class CheatCodeListener : MonoBehaviour
                 playerData.zhen += 1000;
                 break;
             case "opensesame":
-                for (int i = 1; i <= 100; i++)
+                for (int i = 1; i <= 101; i++)
                 {
                     if (!playerData.playerFloorLevel.Contains(i))
                     {
                         playerData.playerFloorLevel.Add(i);
                     }
                 }
-                Debug.Log("All levels from 1 to 100 have been unlocked!");
                 DropdownHandler.Instance.PopulateDropdown();
                 break;
         }

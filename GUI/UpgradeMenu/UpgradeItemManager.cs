@@ -20,25 +20,11 @@ public class UpgradeItemManager : MonoBehaviour
 
     public void HandleUpgrade(UpgradeableItem item)
     {
-        if (!item.UpgradeAble())
-        {
-            Debug.Log("Item is already at max level!");
-            return;
-        }
-
-        if (playerData.zhen < item.upgradeCost)
-        {
-            Debug.Log("Not enough gold to upgrade!");
-            return;
-        }
+        if (!item.UpgradeAble()) return;
+        if (playerData.zhen < item.upgradeCost) return;
 
         playerData.zhen -= item.upgradeCost;
         item.Upgrade();
         itemDetailDisplay.UpdateItemDetails(item);
-    }
-
-    private void ApplyUpgradeBenefits(UpgradeableItem item)
-    {
-        Debug.Log($"Applying benefits: {item.benefitDescription}");
     }
 }

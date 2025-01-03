@@ -15,8 +15,9 @@ public class PlayerData : ScriptableObject
     public float maxHealth = 100f;
     public float currentHealth = 100f;
     
-    public List<int> playerFloorLevel = new List<int>() {1};
     public int zhen = 100;
+    public int selectedLevel = 1;
+    public List<int> playerFloorLevel = new List<int>() {1};
     public GoldUpdateEventChannel goldUpdateEventChannel;
     public int Zhen
     {

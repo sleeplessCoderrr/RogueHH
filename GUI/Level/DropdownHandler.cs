@@ -20,9 +20,10 @@ public class DropdownHandler : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         PopulateDropdown();
         SetDefaultBossLevel();
+        SetDropdownToCurrentLevel();
         levelDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
     }
 
@@ -33,7 +34,6 @@ public class DropdownHandler : MonoBehaviour
         {
             levelDropdown.options.Add(new Dropdown.OptionData("Floor " + level));
         }
-
         levelDropdown.RefreshShownValue();
     }
 
@@ -42,10 +42,33 @@ public class DropdownHandler : MonoBehaviour
         levelDropdown.options.Add(new Dropdown.OptionData("Boss"));
     }
 
+    private void SetDropdownToCurrentLevel()
+    {
+        if (playerData.selectedLevel <= playerData.playerFloorLevel.Count)
+        {
+            levelDropdown.value = playerData.selectedLevel - 1; 
+        }
+        else
+        {
+            levelDropdown.value = playerData.playerFloorLevel.Count; 
+        }
+    }
+
     private void OnDropdownValueChanged(int index)
     {
+        if (index < playerData.playerFloorLevel.Count)
+        {
+            playerData.selectedLevel = playerData.playerFloorLevel[index];
+        }
+        else
+        {
+            playerData.selectedLevel = -1; // -1 means "Boss"
+        }
+
         var selectedLevel = levelDropdown.options[index].text;
         levelSelectionEventChannel.RaiseEvent(selectedLevel);
+
+        Debug.Log("Selected Level: " + playerData.selectedLevel);
     }
 
     private void OnDestroy()
