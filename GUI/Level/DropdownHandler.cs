@@ -29,7 +29,7 @@ public class DropdownHandler : MonoBehaviour
     public void PopulateDropdown()
     {
         levelDropdown.ClearOptions();
-        foreach (int level in playerData.playerLevel)
+        foreach (int level in playerData.playerFloorLevel)
         {
             levelDropdown.options.Add(new Dropdown.OptionData("Floor " + level));
         }

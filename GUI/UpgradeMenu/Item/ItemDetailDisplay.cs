@@ -25,7 +25,7 @@ public class ItemDetailDisplay : MonoBehaviour
         itemImage.sprite = item.itemSprite;
         itemDescriptionText.text = item.benefitDescription;
         upgradeCostText.text = $"{item.upgradeCost} To Upgrade";
-        playerGoldText.text = $"Gold: {playerData.zhen}";
+        playerGoldText.text = $"{playerData.zhen}";
         if(item.itemName == "Health Up") benefitsText.text = $"Current: {playerData.currentHealth} hp                                    Upgrade: +10 hp";
         if(item.itemName == "Attack Up") benefitsText.text = $"Current: {playerData.attack} atk                                     Upgrade: +2 atk";
         if(item.itemName == "Defense Up") benefitsText.text = $"Current: {playerData.defense} def                                     Upgrade: +2 def";

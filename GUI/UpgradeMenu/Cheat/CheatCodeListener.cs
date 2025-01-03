@@ -30,9 +30,9 @@ public class CheatCodeListener : MonoBehaviour
             case "opensesame":
                 for (int i = 1; i <= 100; i++)
                 {
-                    if (!playerData.playerLevel.Contains(i))
+                    if (!playerData.playerFloorLevel.Contains(i))
                     {
-                        playerData.playerLevel.Add(i);
+                        playerData.playerFloorLevel.Add(i);
                     }
                 }
                 Debug.Log("All levels from 1 to 100 have been unlocked!");
