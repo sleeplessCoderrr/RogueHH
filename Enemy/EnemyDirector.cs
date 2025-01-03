@@ -15,6 +15,9 @@ public class EnemyDirector : MonoBehaviour
     public MapConfig mapConfig;
     public MapData mapData;
 
+    public int enemyCount;
+    public EnemyCountUpdateEventChannel enemyCountUpdateEventChannel;
+
     private GameObject[] _enemyInstanceList;
     private EnemyBuilder _enemyBuilder;
     private Enemy[] _enemyList;
@@ -35,7 +38,8 @@ public class EnemyDirector : MonoBehaviour
 
     private async void InitializeEnemy()
     {
-        const int enemyCount = 10;
+        enemyCount = 10;
+        NotifyEnemyCount(); 
         await Task.Delay(1000);
 
         _enemyBuilder = new EnemyBuilder();
@@ -43,7 +47,7 @@ public class EnemyDirector : MonoBehaviour
         
         _enemyBuilder.SetParent(transform);
         _enemyBuilder.SetData(enemyConfig);
-        _enemyInstanceList = _enemyBuilder.Build(mapConfig, mapData, 10);
+        _enemyInstanceList = _enemyBuilder.Build(mapConfig, mapData, enemyCount);
         
         await Task.Delay(3000);
         AddInstance(enemyCount);
@@ -53,13 +57,21 @@ public class EnemyDirector : MonoBehaviour
     {
         for (var i = 0; i < count; i++)
         {
-            if(!_enemyInstanceList[1])Debug.Log("Kosong");
             var enemy = new Enemy(enemyConfig, enemyData);
             enemy.EnemiesInstance = _enemyInstanceList[i];
-            // Debug.Log(_enemyInstanceList[i]);
             enemy.EnemiesInstance.GetComponent<EnemyStateManager>().SetEnemyEntity(enemy);
-            // Debug.Log(enemy.EnemiesInstance.GetComponent<EnemyStateManager>()._enemy);
             _enemyList[i] = enemy;
         }
+    }
+
+    public void OnEnemyDefeated()
+    {
+        enemyCount--;
+        NotifyEnemyCount();
+    }
+
+    private void NotifyEnemyCount()
+    {
+        enemyCountUpdateEventChannel?.RaiseEvent(enemyCount);
     }
 }

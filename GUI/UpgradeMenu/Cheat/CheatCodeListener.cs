@@ -22,10 +22,10 @@ public class CheatCodeListener : MonoBehaviour
         switch (cheatCode)
         {
             case "hesoyam":
-                playerData.expPoint += 1000;
+                playerData.currentExpPoint += 10;
                 break;
             case "tpagamegampang":
-                playerData.zhen += 1000;
+                playerData.zhen += 10000;
                 break;
             case "opensesame":
                 for (int i = 1; i <= 101; i++)
