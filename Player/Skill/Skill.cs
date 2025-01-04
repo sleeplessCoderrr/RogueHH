@@ -9,7 +9,7 @@ public class Skill
     public int unlockLevel;       
     public float cooldownTime;    
     public float activeTime;      
-    public bool IsUnlocked { get; private set; } = false;
+    public bool IsUnlocked { get; set; }
     public void Unlock(SkillUnlockEventChannel skillUnlockEventChannel)
     {
         if (!IsUnlocked)

@@ -18,7 +18,7 @@ public class SkillManager : MonoBehaviour
         playerLevelUpdateEventChannel.OnPlayerLevelUpdated -= CheckUnlockableSkills;
     }
 
-    private void Start()
+    private void Update()
     {
         CheckUnlockableSkills(playerData.PlayerLevel);
     }
