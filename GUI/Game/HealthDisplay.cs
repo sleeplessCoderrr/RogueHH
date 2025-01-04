@@ -3,23 +3,31 @@ using UnityEngine.UI;
 
 public class HealthDisplay : MonoBehaviour
 {
+    [Header("Player Data")]
     public PlayerData playerData;         
+
+    [Header("Health Display")]
     public Text healthText;             
+    public Slider healthSlider;          
     public HealthUpdateEventChannel healthUpdateEventChannel;  
 
     private void OnEnable() 
     {
-        healthUpdateEventChannel.OnHealthUpdated += UpdateHealthText;
-        UpdateHealthText(playerData.CurrentHealth, playerData.MaxHealth);
+        healthUpdateEventChannel.OnHealthUpdated += UpdateHealthDisplay;
+        UpdateHealthDisplay(playerData.CurrentHealth, playerData.MaxHealth);
     }
 
     private void OnDisable()
     {
-        healthUpdateEventChannel.OnHealthUpdated -= UpdateHealthText;
+        healthUpdateEventChannel.OnHealthUpdated -= UpdateHealthDisplay;
     }
 
-    private void UpdateHealthText(float currentHealth, float maxHealth)
+    private void UpdateHealthDisplay(float currentHealth, float maxHealth)
     {
-        healthText.text = $"{currentHealth} / {maxHealth}";
+        healthText.text = $"{currentHealth:0} / {maxHealth:0}";
+        if (healthSlider != null)
+        {
+            healthSlider.value = currentHealth / maxHealth;
+        }
     }
 }
