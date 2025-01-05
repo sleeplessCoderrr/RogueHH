@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -63,6 +64,14 @@ public class EnemyDirector : MonoBehaviour
             _enemyList[i] = enemy;
         }
     }
+
+    // private void Update()
+    // {
+    //     foreach (var enemy in _enemyList)
+    //     {
+    //         
+    //     }
+    // }
 
     public void OnEnemyDefeated()
     {

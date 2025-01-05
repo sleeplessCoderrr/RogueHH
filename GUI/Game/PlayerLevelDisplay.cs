@@ -20,6 +20,6 @@ public class PlayerLevelDisplay : MonoBehaviour
 
     private void UpdatePlayerLevelText(int level)
     {
-        levelText.text = "Player Level: " + level;
+        levelText.text = "Level " + level;
     }
 }

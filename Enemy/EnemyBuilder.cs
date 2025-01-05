@@ -42,6 +42,9 @@ public class EnemyBuilder : EntitiesBuilder
                             worldPosition, 
                             Quaternion.identity, 
                             ParentTransform);
+                        objectInstance.AddComponent<EnemyController>();
+                        objectInstance.AddComponent<EnemyStateManager>();
+                        
                         objects.Append(objectInstance);
                         entitiesCount++;
                         isValid = true;
