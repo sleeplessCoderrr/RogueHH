@@ -12,12 +12,14 @@ public class UpgradeableItem : ScriptableObject
     public string benefitDescription;
     public PlayerData playerData;
     
+    public UpgradeableItem[] upgradeableItems;
+    
     public void Upgrade()
     {
         if (UpgradeAble())
         {
             currentLevel += 1;
-            DataUpgrader.Upgrade(playerData, itemName);
+            DataUpgrader.Upgrade(playerData, itemName, upgradeableItems);
         }
     }
     public bool UpgradeAble() => currentLevel < maxLevel;

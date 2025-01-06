@@ -7,12 +7,12 @@ public class PlayerData : ScriptableObject
 {
     public Vector3 playerPosition;
     public int playerLevel = 1;
-    public float attack = 9f;
-    public float defense = 8f;
+    public float attack = 5f;
+    public float defense = 5f;
     public int currentExpPoint = 0;
     public int maxExpPoint = 5;
     public int critRate = 5;
-    public int critDamage = 20;     
+    public int critDamage = 150;     
     public float maxHealth = 20f;
     public float currentHealth = 20f;
     
