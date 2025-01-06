@@ -12,9 +12,21 @@ public class InfoDisplay : MonoBehaviour
         hpSlider.value = 0;
     }
 
-    public void SetName(string name)
+    public void SetName(string name, int idx)
     {
         nameText.text = name;
+        switch (idx)
+        {
+            case 0:
+                nameText.color = Color.white;
+                break;
+            case 1:
+                nameText.color = Color.yellow;
+                break;
+            case 2:
+                nameText.color = Color.red;
+                break;
+        }
     }
 
     public void UpdateInfo(float currentHp, float maxHp)

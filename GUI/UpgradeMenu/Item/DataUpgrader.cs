@@ -9,6 +9,7 @@ public static class DataUpgrader
         {
             case "Health Up":
                 playerData.currentHealth += 10;
+                playerData.maxHealth += 10;
                 return;
             case "Attack Up":
                 playerData.attack += 2f;

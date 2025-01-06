@@ -17,7 +17,7 @@ public class EnemyController : MonoBehaviour
         enemyData = ScriptableObject.CreateInstance<EnemyData>();
         _tiles = MapManager.Instance.mapData.MapTileData;
         _stateManager = GetComponent<EnemyStateManager>();
-        
+        SetAttribute();
     }
 
     private void Update()
@@ -43,6 +43,23 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private void SetAttribute()
+    {
+        var attributes = new EnemyAttributes(
+            enemyData.currentHealth,
+            enemyData.attack,
+            enemyData.defense
+        );
+
+        var scaledAttributes = EnemyAttributeScaler.ScaleAttributes(
+            attributes,
+            PlayerDirector.Instance.playerData.selectedLevel
+        );
+
+        enemyData.maxHealth = enemyData.currentHealth = scaledAttributes.Health;
+        enemyData.attack = scaledAttributes.Attack;
+        enemyData.defense = scaledAttributes.Defense;
+    }
 
     private void CheckLineOfSight()
     {

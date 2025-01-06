@@ -36,12 +36,16 @@ public class EnemyBuilder : EntitiesBuilder
 
                     if (IsValidPosition(mapData, x, y) && !initializeName.Contains(randomName))
                     {
-                        var idx = MapUtility.TakeRandomPrefabs(_enemyConfig.enemyPrefabs);
+                        var idx = MapUtility.TakeRandomEnemy(
+                            _enemyConfig.enemyPrefabs,
+                            PlayerDirector.Instance.playerData.selectedLevel
+                        );
+                        
                         var worldPosition = new Vector3(x * 2, 1, y * 2);
                         _mapGrid[x, y].IsEnemy = true;
 
                         var objectInstance = Object.Instantiate(
-                            _enemyConfig.enemyPrefabs[0],
+                            _enemyConfig.enemyPrefabs[idx],
                             worldPosition,
                             Quaternion.identity,
                             ParentTransform
@@ -56,7 +60,7 @@ public class EnemyBuilder : EntitiesBuilder
 
                         enemyStateManager.stateText = stateText;
                         controller.infoDisplay = infoDisplay;
-                        infoDisplay.SetName(randomName);
+                        infoDisplay.SetName(randomName, idx);
 
                         initializeName.Add(randomName);
                         objects.Add(objectInstance);

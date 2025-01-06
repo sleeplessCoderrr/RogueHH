@@ -29,6 +29,13 @@ public static class MapUtility
 
         return true;
     }
+
+    public static  int CalculateEnemies(int level, int minEnemies = 7, int maxEnemies = 22, int maxLevel = 101, float k = 2f)
+    {
+        var normalizedLevel = Mathf.Pow(level / (float)maxLevel, k);
+        return Mathf.RoundToInt(minEnemies + normalizedLevel * (maxEnemies - minEnemies));
+    }
+
     
     public static List<Vector2Int> GetAllRoomCenters(List<Room> rooms)
     {
@@ -102,6 +109,34 @@ public static class MapUtility
         return tiles[x, y].IsRoomDecoration;
     }
 
+    public static int TakeRandomEnemy(GameObject[] prefabs, int level, int maxLevel = 101)
+    {
+        var commonWeight = Mathf.Clamp(maxLevel - level, 0, maxLevel);
+        var mediumWeight = Mathf.Clamp(level * 0.5f, 0, maxLevel);
+        var eliteWeight = Mathf.Clamp(level * 0.25f, 0, maxLevel);
+
+        var totalWeight = commonWeight + mediumWeight + eliteWeight;
+
+        var commonChance = commonWeight / totalWeight;
+        var mediumChance = mediumWeight / totalWeight;
+        var eliteChance = eliteWeight / totalWeight;
+
+        var randomValue = Random.value;
+
+        if (randomValue < commonChance)
+        {
+            return 0; 
+        }
+        else if (randomValue < commonChance + mediumChance)
+        {
+            return 1; 
+        }
+        else
+        {
+            return 2; 
+        }
+    }
+    
     public static int TakeRandomPrefabs(GameObject[] prefabs)
     {
         return Random.Range(0, prefabs.Length);
