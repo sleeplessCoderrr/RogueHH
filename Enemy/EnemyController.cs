@@ -3,47 +3,46 @@
 public class EnemyController : MonoBehaviour
 {
     private Tile[,] _tiles;
-    private Vector3 _playerPosition;
     private bool _isActive;
-
+    private Vector3 _playerPosition;
+    private const float AlertRange = 8f;
     private EnemyStateManager _stateManager;
-    private float _alertRange = 8f;
+
+    public EnemyData enemyData;
+    public InfoDisplay infoDisplay;
 
     private void Start()
     {
         _isActive = false;
+        enemyData = ScriptableObject.CreateInstance<EnemyData>();
         _tiles = MapManager.Instance.mapData.MapTileData;
         _stateManager = GetComponent<EnemyStateManager>();
+        
     }
 
     private void Update()
     {
-        _playerPosition = PlayerDirector.Instance.playerData.playerPosition;
-
+        _playerPosition = PlayerDirector
+        .Instance
+        .playerData
+        .playerPosition;
         CheckPlayer();
         CheckLineOfSight();
+        CheckStats();
     }
 
     private void CheckPlayer()
     {
-        var distance = Vector3.Distance(transform.position, _playerPosition);
-        if (distance <= _alertRange)
+        var isInRange = EnemyUtils.CheckPlayerRange(transform, _playerPosition, AlertRange);
+        if (isInRange != _isActive)
         {
-            if (!_isActive)
-            {
-                _isActive = true;
-                _stateManager.SetState(EnemyState.Alert);
-            }
-        }
-        else
-        {
-            if (_isActive)
-            {
-                _isActive = false;
-                _stateManager.SetState(EnemyState.Idle); 
-            }
+            _isActive = isInRange;
+            _stateManager.SetState(
+                isInRange ? EnemyState.Alert : EnemyState.Idle
+            );
         }
     }
+
 
     private void CheckLineOfSight()
     {
@@ -54,5 +53,13 @@ public class EnemyController : MonoBehaviour
         // {
         //     _stateManager.SetState(EnemyState.Aggro);
         // }
+    }
+
+    private void CheckStats()
+    {
+        infoDisplay.UpdateInfo(
+            enemyData.currentHealth, 
+            enemyData.maxHealth
+        );
     }
 }

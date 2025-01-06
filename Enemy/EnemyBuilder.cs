@@ -21,7 +21,8 @@ public class EnemyBuilder : EntitiesBuilder
     {
         var entitiesCount = 0;
         var objects = new List<GameObject>();
-
+        var nameList = EnemyDirector.Instance.enemyConfig.initials;
+        var initializeName = new HashSet<string>(); 
         while (entitiesCount < count)
         {
             foreach (var room in _rooms)
@@ -31,7 +32,9 @@ public class EnemyBuilder : EntitiesBuilder
                 {
                     var x = Random.Range(room.X, room.X + room.Width);
                     var y = Random.Range(room.Y, room.Y + room.Height);
-                    if (IsValidPosition(mapData, x, y))
+                    var randomName = nameList[Random.Range(0, nameList.Length)];
+
+                    if (IsValidPosition(mapData, x, y) && !initializeName.Contains(randomName))
                     {
                         var idx = MapUtility.TakeRandomPrefabs(_enemyConfig.enemyPrefabs);
                         var worldPosition = new Vector3(x * 2, 1, y * 2);
@@ -44,12 +47,18 @@ public class EnemyBuilder : EntitiesBuilder
                             ParentTransform
                         );
 
-                        objectInstance.AddComponent<EnemyController>();
-                        var controller = objectInstance.AddComponent<EnemyStateManager>();
+                        var controller = objectInstance.AddComponent<EnemyController>();
+                        var enemyStateManager = objectInstance.AddComponent<EnemyStateManager>();
+
                         var canvas = objectInstance.gameObject.GetComponentInChildren<Canvas>();
                         var stateText = canvas.gameObject.GetComponent<StateText>();
-                        controller.stateText = stateText;
-                        
+                        var infoDisplay = canvas.gameObject.GetComponent<InfoDisplay>();
+
+                        enemyStateManager.stateText = stateText;
+                        controller.infoDisplay = infoDisplay;
+                        infoDisplay.SetName(randomName);
+
+                        initializeName.Add(randomName);
                         objects.Add(objectInstance);
                         entitiesCount++;
                         isValid = true;
@@ -57,6 +66,7 @@ public class EnemyBuilder : EntitiesBuilder
                 }
             }
         }
+
 
         return objects.ToArray();
     }

@@ -12,10 +12,9 @@ public enum EnemyState
     Attack
 }
 
-
 public class EnemyStateManager : MonoBehaviour
 {
-    public Enemy _enemy;
+    private Enemy _enemy;
     private EnemyBaseState _currentState;
     private Dictionary<EnemyState, EnemyBaseState> _states;
     private Animator _animator;
@@ -47,8 +46,6 @@ public class EnemyStateManager : MonoBehaviour
         _currentState = _states[state];
         _currentState.EnterState();
         stateText.UpdateIndicator(state);
-
-        Debug.Log("State changed to: " + state);
     }
     
     public void SetEnemyEntity(Enemy entity)

@@ -3,11 +3,8 @@ using UnityEngine;
 
 public static class EnemyUtils
 {
-    public static bool CheckPlayerRange(int range, Transform pos, Vector3 playerPos)
+    public static bool CheckPlayerRange(Transform transform, Vector3 playerPosition, float alertRange)
     {
-        var distance = Math.Abs(pos.position.x / 2 - playerPos.x / 2)
-                       + Math.Abs(pos.position.z / 2 - playerPos.z / 2);
-        
-        return distance <= range;
+        return Vector3.Distance(transform.position, playerPosition) <= alertRange;
     }
 }

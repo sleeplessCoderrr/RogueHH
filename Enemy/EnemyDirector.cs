@@ -1,7 +1,4 @@
-﻿using System;
-using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
+﻿using UnityEngine;
 using System.Threading.Tasks;
 
 public class EnemyDirector : MonoBehaviour
@@ -10,7 +7,6 @@ public class EnemyDirector : MonoBehaviour
 
     [Header("Enemy Config & Data")]
     public EnemyConfig enemyConfig;
-    public EnemyData enemyData;
     
     [Header("MapConfig & Data")]
     public MapConfig mapConfig;
@@ -58,20 +54,13 @@ public class EnemyDirector : MonoBehaviour
     {
         for (var i = 0; i < count; i++)
         {
-            var enemy = new Enemy(enemyConfig, enemyData);
+            var enemyData = ScriptableObject.CreateInstance<EnemyData>();
+            var enemy = new Enemy(enemyConfig);
             enemy.EnemiesInstance = _enemyInstanceList[i];
             enemy.EnemiesInstance.GetComponent<EnemyStateManager>().SetEnemyEntity(enemy);
             _enemyList[i] = enemy;
         }
     }
-
-    // private void Update()
-    // {
-    //     foreach (var enemy in _enemyList)
-    //     {
-    //         
-    //     }
-    // }
 
     public void OnEnemyDefeated()
     {
