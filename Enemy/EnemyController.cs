@@ -40,7 +40,7 @@ public class EnemyController : MonoBehaviour
             if (_isActive)
             {
                 _isActive = false;
-                _stateManager.SetState(EnemyState.Idle);
+                _stateManager.SetState(EnemyState.Idle); 
             }
         }
     }
@@ -49,6 +49,7 @@ public class EnemyController : MonoBehaviour
     {
         if (!_isActive) return;
 
+        // You can re-enable this when implementing Aggro state detection
         // if (EnemyUtils.HasLineOfSight(transform, _playerPosition, _stateManager._enemy.LOSBlockingLayers))
         // {
         //     _stateManager.SetState(EnemyState.Aggro);

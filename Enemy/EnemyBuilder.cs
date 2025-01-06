@@ -8,15 +8,12 @@ public class EnemyBuilder : EntitiesBuilder
     private List<Room> _rooms;
     private Tile[,] _mapGrid;
 
-    [Header("Dependencies")]
-    private EnemyStateChangeEventChannel _stateChangeEventChannel; 
 
     public EnemyBuilder SetData(EnemyConfig enemyConfig)
     {
         _rooms = MapManager.Instance.mapData.Rooms;
         _mapGrid = MapManager.Instance.mapData.MapTileData;
         _enemyConfig = enemyConfig;
-        _stateChangeEventChannel = EnemyDirector.Instance.stateChangeEventChannel;
         return this;
     }
 
@@ -47,11 +44,12 @@ public class EnemyBuilder : EntitiesBuilder
                             ParentTransform
                         );
 
-                        var enemyController = objectInstance.AddComponent<EnemyController>();
-                        var enemyStateManager = objectInstance.AddComponent<EnemyStateManager>();
-                        var stateChangeEventChannel = ScriptableObject.CreateInstance<EnemyStateChangeEventChannel>();
-                        enemyStateManager.stateChangeEventChannel = stateChangeEventChannel;
-
+                        objectInstance.AddComponent<EnemyController>();
+                        var controller = objectInstance.AddComponent<EnemyStateManager>();
+                        var canvas = objectInstance.gameObject.GetComponentInChildren<Canvas>();
+                        var stateText = canvas.gameObject.GetComponent<StateText>();
+                        controller.stateText = stateText;
+                        
                         objects.Add(objectInstance);
                         entitiesCount++;
                         isValid = true;

@@ -12,6 +12,7 @@ public enum EnemyState
     Attack
 }
 
+
 public class EnemyStateManager : MonoBehaviour
 {
     public Enemy _enemy;
@@ -19,7 +20,7 @@ public class EnemyStateManager : MonoBehaviour
     private Dictionary<EnemyState, EnemyBaseState> _states;
     private Animator _animator;
 
-    public EnemyStateChangeEventChannel stateChangeEventChannel;
+    public StateText stateText;
 
     private void Start()
     {
@@ -33,7 +34,6 @@ public class EnemyStateManager : MonoBehaviour
         {
             { EnemyState.Idle, new EnemyIdleState(_enemy, _animator) },
             { EnemyState.Alert, new EnemyAlertState(_enemy, _animator) },
-            // { EnemyState.Aggro, new EnemyAggroState(_enemy, _animator) }
         };
         _currentState = _states[EnemyState.Idle];
         _currentState.EnterState();
@@ -46,14 +46,10 @@ public class EnemyStateManager : MonoBehaviour
 
         _currentState = _states[state];
         _currentState.EnterState();
+        stateText.UpdateIndicator(state);
 
-        if (stateChangeEventChannel != null)
-        {
-            stateChangeEventChannel.RaiseEvent(state);
-            Debug.Log("State changed to: " + state);
-        }
+        Debug.Log("State changed to: " + state);
     }
-
     
     public void SetEnemyEntity(Enemy entity)
     {

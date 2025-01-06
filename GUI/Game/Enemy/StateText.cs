@@ -1,23 +1,23 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class StateText : MonoBehaviour
 {
-    public UnityEngine.UI.Text indicatorText;
-    [SerializeField] private EnemyStateChangeEventChannel stateChangeEventChannel;
+    public Text indicatorText;
 
     private void OnEnable()
     {
-        stateChangeEventChannel.OnStateChanged += UpdateIndicator;
+        indicatorText.text = "";
     }
 
-    private void OnDisable()
+    public void UpdateIndicator(EnemyState state)
     {
-        stateChangeEventChannel.OnStateChanged -= UpdateIndicator;
-    }
-
-    private void UpdateIndicator(EnemyState state)
-    {
-        Debug.Log("Request Sent State: " + state);
+        if (indicatorText == null)
+        {
+            Debug.LogError("Indicator Text is not assigned.");
+            return;
+        }
+        
         switch (state)
         {
             case EnemyState.Alert:
@@ -33,8 +33,7 @@ public class StateText : MonoBehaviour
                 break;
             case EnemyState.Attack:
                 indicatorText.text = "";
-                break; 
+                break;
         }
-        Canvas.ForceUpdateCanvases();
     }
 }
