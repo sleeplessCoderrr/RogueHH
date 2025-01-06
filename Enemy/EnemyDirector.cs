@@ -18,6 +18,7 @@ public class EnemyDirector : MonoBehaviour
 
     public int enemyCount;
     public EnemyCountUpdateEventChannel enemyCountUpdateEventChannel;
+    public EnemyStateChangeEventChannel stateChangeEventChannel;
 
     private GameObject[] _enemyInstanceList;
     private EnemyBuilder _enemyBuilder;

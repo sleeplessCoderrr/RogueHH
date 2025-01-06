@@ -8,21 +8,21 @@ public class EnemyAlertState : EnemyBaseState
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        Animator.SetBool("IsAlert", true);
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+        Animator.SetBool("IsAlert", false);
     }
 
     public override void UpdateState()
     {
-        throw new System.NotImplementedException();
+        // Additional Alert-specific logic if needed
     }
 
     public override PlayerState? GetNextState()
     {
-        throw new System.NotImplementedException();
+        return null;
     }
 }

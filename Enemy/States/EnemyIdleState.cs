@@ -8,21 +8,19 @@ public class EnemyIdleState : EnemyBaseState
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        Animator.SetBool("IsIdle", true);
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+        Animator.SetBool("IsIdle", false);
     }
 
     public override void UpdateState()
-    {
-        throw new System.NotImplementedException();
-    }
+    { return; }
 
     public override PlayerState? GetNextState()
     {
-        throw new System.NotImplementedException();
+        return null;
     }
 }

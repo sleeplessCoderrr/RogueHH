@@ -18,7 +18,9 @@ public class EnemyStateManager : MonoBehaviour
     private EnemyBaseState _currentState;
     private Dictionary<EnemyState, EnemyBaseState> _states;
     private Animator _animator;
-    
+
+    public EnemyStateChangeEventChannel stateChangeEventChannel;
+
     private void Start()
     {
         InitializeStates();
@@ -31,17 +33,28 @@ public class EnemyStateManager : MonoBehaviour
         {
             { EnemyState.Idle, new EnemyIdleState(_enemy, _animator) },
             { EnemyState.Alert, new EnemyAlertState(_enemy, _animator) },
+            // { EnemyState.Aggro, new EnemyAggroState(_enemy, _animator) }
         };
         _currentState = _states[EnemyState.Idle];
+        _currentState.EnterState();
     }
 
     public void SetState(EnemyState state)
     {
-        _currentState.ExitState();
+        if (_currentState != null)
+            _currentState.ExitState();
+
         _currentState = _states[state];
         _currentState.EnterState();
+
+        if (stateChangeEventChannel != null)
+        {
+            stateChangeEventChannel.RaiseEvent(state);
+            Debug.Log("State changed to: " + state);
+        }
     }
 
+    
     public void SetEnemyEntity(Enemy entity)
     {
         _enemy = entity;

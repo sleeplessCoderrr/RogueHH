@@ -1,3 +1,17 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: 95a6dc299661472284cd09b559a8284d
-timeCreated: 1732890939
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - enemyConfig: {fileID: 11400000, guid: 31df71b2474a67340bcd7be2810604fd, type: 2}
+  - enemyData: {fileID: 11400000, guid: 783e2b5ea8f52a14cb264dc1114ec1cf, type: 2}
+  - mapConfig: {fileID: 11400000, guid: 55533165599bcce4b9f912718f1f553f, type: 2}
+  - mapData: {fileID: 11400000, guid: 6c2f282078d17ba4f932dc3d72b4d365, type: 2}
+  - enemyCountUpdateEventChannel: {fileID: 11400000, guid: d0e058f873f9f144eabd06a885348238, type: 2}
+  - stateChangeEventChannel: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
