@@ -53,6 +53,7 @@ public class PlayerMoveCommand : ICommand
 
         _playerStateManager.SetState(PlayerState.Idle);
         PlayerDirector.Instance.playerData.isPlayerTurn = false;
+        
     }
     
     private Vector3 GetTargetPosition(Vector2Int pathPoint)

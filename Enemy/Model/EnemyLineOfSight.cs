@@ -17,7 +17,6 @@ public class EnemyLineOfSight : MonoBehaviour
 
     private void CheckLineOfSight()
     {
-        playerInSight = false;
         var rayOrigin = transform.position + Vector3.up * eyeLevelOffset; 
         var playerEyeLevel = player.position + Vector3.up * eyeLevelOffset; 
         var directionToPlayer = (playerEyeLevel - rayOrigin).normalized;
@@ -37,12 +36,11 @@ public class EnemyLineOfSight : MonoBehaviour
                 }   
             }
         }
+        else
+        {
+            playerInSight = false;
+        }
 
         Debug.DrawLine(rayOrigin, playerEyeLevel, playerInSight ? Color.green : Color.red);
-    }
-
-    public bool GetResult()
-    {
-        return playerInSight;
     }
 }

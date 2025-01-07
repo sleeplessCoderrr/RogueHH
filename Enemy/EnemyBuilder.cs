@@ -61,7 +61,7 @@ public class EnemyBuilder : EntitiesBuilder
                         var stateText = canvas.gameObject.GetComponent<StateText>();
                         var infoDisplay = canvas.gameObject.GetComponent<InfoDisplay>();
 
-                        enemyStateManager.stateText = stateText;
+                        controller.currentText = stateText;
                         controller.infoDisplay = infoDisplay;
                         infoDisplay.SetName(randomName, idx);
 

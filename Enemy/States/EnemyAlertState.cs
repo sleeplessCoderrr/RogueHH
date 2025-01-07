@@ -9,6 +9,7 @@ public class EnemyAlertState : EnemyBaseState
     public override void EnterState()
     {
         Animator.SetBool("IsAlert", true);
+        
     }
 
     public override void ExitState()

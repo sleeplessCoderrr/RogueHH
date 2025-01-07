@@ -16,10 +16,6 @@ public class CommandInvoker
         {
             var command = _commandStack.Pop();
             command.Execute();
-            foreach(var comm in  _commandStack)
-            {
-                Debug.Log(comm.CommandType);
-            }
         }
     }
 }

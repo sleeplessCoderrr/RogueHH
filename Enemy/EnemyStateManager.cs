@@ -15,11 +15,11 @@ public enum EnemyState
 public class EnemyStateManager : MonoBehaviour
 {
     private Enemy _enemy;
-    private EnemyBaseState _currentState;
-    private Dictionary<EnemyState, EnemyBaseState> _states;
     private Animator _animator;
+    private EnemyBaseState _stateInvoker;
+    private Dictionary<EnemyState, EnemyBaseState> _states;
 
-    public StateText stateText;
+    public EnemyState currentState;
 
     private void Start()
     {
@@ -33,19 +33,22 @@ public class EnemyStateManager : MonoBehaviour
         {
             { EnemyState.Idle, new EnemyIdleState(_enemy, _animator) },
             { EnemyState.Alert, new EnemyAlertState(_enemy, _animator) },
+            { EnemyState.Aggro, new EnemyAgroState(_enemy, _animator) }
         };
-        _currentState = _states[EnemyState.Idle];
-        _currentState.EnterState();
+        _stateInvoker = _states[EnemyState.Idle];
+        _stateInvoker.EnterState();
+        currentState = EnemyState.Idle;
     }
 
     public void SetState(EnemyState state)
     {
-        if (_currentState != null)
-            _currentState.ExitState();
+        if (_stateInvoker != null)
+            _stateInvoker.ExitState();
 
-        _currentState = _states[state];
-        _currentState.EnterState();
-        stateText.UpdateIndicator(state);
+        _stateInvoker = _states[state];
+        _stateInvoker.EnterState();
+        
+        currentState = state;
     }
     
     public void SetEnemyEntity(Enemy entity)
