@@ -9,14 +9,17 @@ public class HighLightTileCommand : ICommand
     private Color _highlightColor;
     private Color _originalColor;
     private GameObject _newTile;
-    private Tile[,] _tiles;
     private bool _isInitColor;
+    private Tile[,] _tiles;
 
+    public CommandType CommandType { get; set; }
+    
     public HighLightTileCommand(Color highlightColor)
     {
         this._isInitColor = false;
         this._highlightColor = highlightColor;
         this._previousPath = new List<Vector2Int>();
+        CommandType = CommandType.Player;
     }
     
     public HighLightTileCommand SetTile(Tile[,] tiles)
@@ -36,6 +39,7 @@ public class HighLightTileCommand : ICommand
         _path = path;
         return this;
     }
+
 
     public void Execute ()
     {
@@ -72,7 +76,6 @@ public class HighLightTileCommand : ICommand
     private void ResetHighlightTile()
     {
         if (_previousPath == null) return;
-
         foreach (var position in _previousPath)
         {
             var tile = GetTileFromGrid(position);

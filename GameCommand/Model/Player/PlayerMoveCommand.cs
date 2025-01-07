@@ -8,10 +8,13 @@ public class PlayerMoveCommand : ICommand
     private readonly List<Vector2Int> _path;
     private readonly GameObject _playerInstance;
     private readonly PlayerStateManager _playerStateManager;
+    
+    public CommandType CommandType { get; set; }
 
     public PlayerMoveCommand(List<Vector2Int> path)
     {
         _path = path;
+        CommandType = CommandType.Player;
         _player = PlayerDirector.Instance.Player;
         _playerStateManager = PlayerStateManager.Instance;
         _playerInstance = _player.PlayerInstance;
