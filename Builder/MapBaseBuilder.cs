@@ -37,6 +37,18 @@ namespace Builder
                         MapUtility.SetTileAttribute(tileObject);
                         Grid[x, y].TileObject = tileObject;
                     }
+                    else
+                    {
+                        var position = new Vector3(x * 2, 0, y * 2);
+                        var colliderObject = new GameObject("Obstacle");
+                        colliderObject.transform.position = position;
+                        colliderObject.transform.parent = ParentTransform;
+
+                        var boxCollider = colliderObject.AddComponent<BoxCollider>();
+                        boxCollider.size = new Vector3(2, 2, 2);
+                        boxCollider.isTrigger = false;
+                        colliderObject.layer = LayerMask.NameToLayer("Environment");
+                    }
                 }
             }
 

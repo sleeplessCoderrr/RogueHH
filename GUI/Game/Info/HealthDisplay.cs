@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthDisplay : MonoBehaviour
@@ -20,6 +21,11 @@ public class HealthDisplay : MonoBehaviour
     private void OnDisable()
     {
         healthUpdateEventChannel.OnHealthUpdated -= UpdateHealthDisplay;
+    }
+
+    private void Update()
+    {
+        UpdateHealthDisplay(playerData.CurrentHealth, playerData.MaxHealth);
     }
 
     private void UpdateHealthDisplay(float currentHealth, float maxHealth)

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ExperienceDisplay : MonoBehaviour
@@ -20,6 +21,11 @@ public class ExperienceDisplay : MonoBehaviour
     private void OnDisable()
     {
         experienceUpdateEventChannel.OnExperienceUpdated -= UpdateExperienceDisplay;
+    }
+
+    private void Update()
+    {
+        UpdateExperienceDisplay(playerData.CurrentExpPoint, playerData.MaxExpPoint);
     }
 
     private void UpdateExperienceDisplay(int currentExp, int maxExp)

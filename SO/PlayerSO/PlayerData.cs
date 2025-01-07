@@ -15,6 +15,8 @@ public class PlayerData : ScriptableObject
     public int critDamage = 150;     
     public float maxHealth = 20f;
     public float currentHealth = 20f;
+
+    public bool isPlayerTurn = true;
     
     public int zhen = 100;
     public int selectedLevel = 1;
@@ -30,7 +32,7 @@ public class PlayerData : ScriptableObject
         get => currentHealth;
         set
         {
-            if (Mathf.Abs(currentHealth - value) > Mathf.Epsilon) // Avoid unnecessary updates
+            if (Mathf.Abs(currentHealth - value) > Mathf.Epsilon) 
             {
                 currentHealth = value;
                 healthUpdateEventChannel?.RaiseEvent(currentHealth, maxHealth);
@@ -60,9 +62,27 @@ public class PlayerData : ScriptableObject
             {
                 currentExpPoint = value;
                 experienceUpdateEventChannel?.RaiseEvent(currentExpPoint, maxExpPoint);
+                CheckLevelUp();
             }
         }
     }
+
+    private void CheckLevelUp()
+    {
+        while (currentExpPoint >= maxExpPoint) 
+        {
+            currentExpPoint -= maxExpPoint; 
+            PlayerLevel++;
+            maxExpPoint = CalculateNextLevelExp(maxExpPoint);
+            experienceUpdateEventChannel?.RaiseEvent(currentExpPoint, maxExpPoint); 
+        }
+    }
+
+    private int CalculateNextLevelExp(int currentMaxExp)
+    {
+        return Mathf.RoundToInt(currentMaxExp * 1.2f);
+    }
+
 
     public int MaxExpPoint
     {

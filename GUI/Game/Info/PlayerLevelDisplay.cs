@@ -18,6 +18,11 @@ public class PlayerLevelDisplay : MonoBehaviour
         playerLevelUpdateEventChannel.OnPlayerLevelUpdated -= UpdatePlayerLevelText;
     }
 
+    private void Update()
+    {
+        UpdatePlayerLevelText(playerData.PlayerLevel);
+    }
+
     private void UpdatePlayerLevelText(int level)
     {
         levelText.text = "Level " + level;

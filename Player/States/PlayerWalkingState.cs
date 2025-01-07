@@ -8,14 +8,12 @@ public class PlayerWalkingState : PlayerStateBase
 
     public override void EnterState()
     {
-        Debug.Log("Entering Walking State");
         Animator.SetBool("IsWalk", true);
         InputManager.Instance.isPlayerMoving = true;
     }
 
     public override void ExitState()
     {
-        Debug.Log("Exiting Walking State");
         Animator.SetBool("IsWalk", false);
         InputManager.Instance.isPlayerMoving = false;
     }

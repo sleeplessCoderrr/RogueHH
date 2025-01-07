@@ -25,11 +25,13 @@ public class PlayerMoveCommand : ICommand
     private IEnumerator MovePlayer()
     {
         _playerStateManager.SetState(PlayerState.Walking);
+        PlayerDirector.Instance.playerData.isPlayerTurn = true;
         foreach (var pathPoint in _path)
         {
             if (InputManager.Instance.isCanceled)
             {
                 InputManager.Instance.isCanceled = false;
+                PlayerDirector.Instance.playerData.isPlayerTurn = false;
                 break;
             }
             var targetPosition = GetTargetPosition(pathPoint);
@@ -47,6 +49,7 @@ public class PlayerMoveCommand : ICommand
         }
 
         _playerStateManager.SetState(PlayerState.Idle);
+        PlayerDirector.Instance.playerData.isPlayerTurn = false;
     }
     
     private Vector3 GetTargetPosition(Vector2Int pathPoint)

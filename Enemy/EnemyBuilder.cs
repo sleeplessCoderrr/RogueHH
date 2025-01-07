@@ -44,15 +44,18 @@ public class EnemyBuilder : EntitiesBuilder
                         var worldPosition = new Vector3(x * 2, 1, y * 2);
                         _mapGrid[x, y].IsEnemy = true;
 
-                        var objectInstance = Object.Instantiate(
+                        var objectInstance = InstantiateEnemies(
                             _enemyConfig.enemyPrefabs[idx],
                             worldPosition,
-                            Quaternion.identity,
                             ParentTransform
                         );
 
                         var controller = objectInstance.AddComponent<EnemyController>();
                         var enemyStateManager = objectInstance.AddComponent<EnemyStateManager>();
+                        var enemyRaycast = objectInstance.AddComponent<EnemyLineOfSight>();
+
+                        enemyRaycast.player = PlayerDirector.Instance.Player.PlayerInstance.transform;
+                        enemyRaycast.obstacleMask = LayerMask.GetMask("Environment", "Player");
 
                         var canvas = objectInstance.gameObject.GetComponentInChildren<Canvas>();
                         var stateText = canvas.gameObject.GetComponent<StateText>();
@@ -73,5 +76,15 @@ public class EnemyBuilder : EntitiesBuilder
 
 
         return objects.ToArray();
+    }
+
+    private GameObject InstantiateEnemies(GameObject enemyPrefabs, Vector3 position, Transform parentTransform)
+    {
+        return Object.Instantiate(
+            enemyPrefabs,
+            position,
+            Quaternion.identity,
+            parentTransform
+        );
     }
 }

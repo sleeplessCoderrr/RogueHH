@@ -5,8 +5,9 @@ public class EnemyController : MonoBehaviour
     private Tile[,] _tiles;
     private bool _isActive;
     private Vector3 _playerPosition;
-    private const float AlertRange = 8f;
+    private const float AlertRange = 10f;
     private EnemyStateManager _stateManager;
+    private CommandInvoker _commandInvoker;
 
     public EnemyData enemyData;
     public InfoDisplay infoDisplay;
@@ -16,6 +17,7 @@ public class EnemyController : MonoBehaviour
         _isActive = false;
         enemyData = ScriptableObject.CreateInstance<EnemyData>();
         _tiles = MapManager.Instance.mapData.MapTileData;
+        _commandInvoker = InputManager.Instance.CommandInvoker;
         _stateManager = GetComponent<EnemyStateManager>();
         SetAttribute();
     }
@@ -63,13 +65,12 @@ public class EnemyController : MonoBehaviour
 
     private void CheckLineOfSight()
     {
-        if (!_isActive) return;
+        if (!_isActive || PlayerDirector.Instance.playerData.isPlayerTurn ) return;
 
-        // You can re-enable this when implementing Aggro state detection
-        // if (EnemyUtils.HasLineOfSight(transform, _playerPosition, _stateManager._enemy.LOSBlockingLayers))
-        // {
-        //     _stateManager.SetState(EnemyState.Aggro);
-        // }
+        enemyData.isTurn = true;
+        _commandInvoker.AddCommand(new CheckLOSCommand(gameObject));
+        _commandInvoker.ExecuteCommand();
+        _isActive = false;
     }
 
     private void CheckStats()

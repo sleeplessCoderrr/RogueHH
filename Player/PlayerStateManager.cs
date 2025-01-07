@@ -13,9 +13,9 @@ public class PlayerStateManager : MonoBehaviour
     public static PlayerStateManager Instance { get; private set; }
 
     private Player _player; 
+    private Animator _animator;
     private PlayerStateBase _currentState;
     private Dictionary<PlayerState, PlayerStateBase> _states;
-    private Animator _animator;
 
     private void Awake()
     {

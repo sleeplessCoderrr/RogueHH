@@ -8,13 +8,14 @@ public class InputManager : MonoBehaviour
     public static InputManager Instance;
     public bool isPlayerMoving;
     public bool isCanceled; 
+    public CommandInvoker CommandInvoker;
     
     private PlayerStateManager _playerStateManager;
     private HighLightTileCommand _tileHighlighter;
-    private CommandInvoker _commandInvoker;
     private List<Vector2Int> _currentPath;
     private GameObject _objectFromRayCast;
     private Vector3 _playerPosition;
+    private PlayerData _playerData;
     private Player _playerEntity; 
     private Color _hoverColor;
     private bool _isMapInit;
@@ -31,30 +32,15 @@ public class InputManager : MonoBehaviour
         isCanceled = false;
         
         _currentPath = new List<Vector2Int>();
-        _commandInvoker = new CommandInvoker();
+        CommandInvoker = new CommandInvoker();
         _hoverColor = new Color(0.5f, 0.5f, 0.5f);
         _tileHighlighter = new HighLightTileCommand(_hoverColor);
 
         await Task.Delay(2000); 
-        if (PlayerDirector.Instance == null)
-        {
-            Debug.LogError("PlayerDirector instance is null.");
-            return;
-        }
-
         _playerEntity = PlayerDirector.Instance.Player;
-        if (_playerEntity == null)
-        {
-            Debug.LogError("Player entity is null.");
-            return;
-        }
-
+        _playerData = PlayerDirector.Instance.playerData;
         _playerStateManager = PlayerStateManager.Instance;
-        if (_playerStateManager == null)
-        {
-            Debug.LogError("PlayerStateManager instance is null.");
-            return;
-        }
+        if (_playerStateManager == null || _playerEntity == null) return; 
 
         _playerStateManager.SetPlayerEntity(_playerEntity);
     }
@@ -75,6 +61,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
+        //##TODO: Map Preparation
         if (!_isMapInit)
         {
             _tiles = MapManager.Instance.mapData.MapTileData;
@@ -88,36 +75,26 @@ public class InputManager : MonoBehaviour
         GetPathData();
         if (_currentPath == null) return;
 
+        //##TODO: Input
         HandleHover();
-
-        if (Input.GetMouseButtonDown(0) 
-            && !(_objectFromRayCast.tag == "Tile"))
+        if (Input.GetMouseButtonDown(0) && isPlayerMoving)
         {
-            if (isPlayerMoving)
-            {
-                isCanceled = true;
-                return;
-            }
-            
-            _commandInvoker.AddCommand(new PlayerAttackCommand());
-            _commandInvoker.ExecuteCommand();
+            isCanceled = true;
+            return;
+        }
+
+        if (Input.GetMouseButtonDown(0) && (_objectFromRayCast.tag == "Enemy"))
+        {
+            _playerData.isPlayerTurn = true;
+            CommandInvoker.AddCommand(new PlayerAttackCommand());
+            CommandInvoker.ExecuteCommand();
         }
         
-        if (Input.GetMouseButtonDown(0)
-            && !MoveUtility.IsEnemy(
-            _tiles, 
-            (int)_objectFromRayCast.transform.position.x/2, 
-            (int)_objectFromRayCast.transform.position.z/2
-            ))
+        if (Input.GetMouseButtonDown(0) && !MoveUtility.IsEnemy(_tiles, (int)_objectFromRayCast.transform.position.x/2, (int)_objectFromRayCast.transform.position.z/2))
         {
-            if (isPlayerMoving)
-            {
-                isCanceled = true;
-                return;
-            }
-            
-            _commandInvoker.AddCommand(new PlayerMoveCommand(_currentPath));
-            _commandInvoker.ExecuteCommand();
+            _playerData.isPlayerTurn = true;
+            CommandInvoker.AddCommand(new PlayerMoveCommand(_currentPath));
+            CommandInvoker.ExecuteCommand();
         }
     }
 
