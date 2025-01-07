@@ -39,7 +39,7 @@ namespace Builder
                     }
                     else
                     {
-                        var position = new Vector3(x * 2, 0, y * 2);
+                        var position = new Vector3(x * 2, 2, y * 2);
                         var colliderObject = new GameObject("Obstacle");
                         colliderObject.transform.position = position;
                         colliderObject.transform.parent = ParentTransform;
