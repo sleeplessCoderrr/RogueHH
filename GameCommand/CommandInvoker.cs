@@ -14,8 +14,12 @@ public class CommandInvoker
     {
         if (_commandStack.Count > 0)
         {
-            ICommand command = _commandStack.Pop();
+            var command = _commandStack.Pop();
             command.Execute();
+            foreach(var comm in  _commandStack)
+            {
+                Debug.Log(comm.CommandType);
+            }
         }
     }
 }

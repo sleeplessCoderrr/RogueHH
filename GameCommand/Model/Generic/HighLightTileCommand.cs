@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class HighLightTileCommand : ICommand
+public class HighLightTileCommand
 {
     private List<Vector2Int> _previousPath;
     private GameObject _lastHoveredTile;
@@ -12,23 +12,20 @@ public class HighLightTileCommand : ICommand
     private bool _isInitColor;
     private Tile[,] _tiles;
 
-    public CommandType CommandType { get; set; }
-    
     public HighLightTileCommand(Color highlightColor)
     {
-        this._isInitColor = false;
-        this._highlightColor = highlightColor;
-        this._previousPath = new List<Vector2Int>();
-        CommandType = CommandType.Player;
+        _isInitColor = false;
+        _highlightColor = highlightColor;
+        _previousPath = new List<Vector2Int>();
     }
-    
+
     public HighLightTileCommand SetTile(Tile[,] tiles)
     {
-        this._tiles = tiles;
+        _tiles = tiles;
         return this;
     }
-    
-    public HighLightTileCommand SetNewTile(GameObject tile) 
+
+    public HighLightTileCommand SetNewTile(GameObject tile)
     {
         _newTile = tile;
         return this;
@@ -40,20 +37,19 @@ public class HighLightTileCommand : ICommand
         return this;
     }
 
-
-    public void Execute ()
+    public void Highlight()
     {
         if (!_isInitColor)
         {
             _originalColor = GetNormalColor();
             _isInitColor = true;
         }
-        
+
         if (_newTile != _lastHoveredTile)
         {
             _lastHoveredTile = _newTile;
-            ResetHighlightTile(); 
-            HighlightPath();      
+            ResetHighlightedTiles();
+            HighlightPath();
         }
     }
 
@@ -72,10 +68,11 @@ public class HighLightTileCommand : ICommand
 
         _previousPath = new List<Vector2Int>(_path);
     }
-    
-    private void ResetHighlightTile()
+
+    private void ResetHighlightedTiles()
     {
         if (_previousPath == null) return;
+
         foreach (var position in _previousPath)
         {
             var tile = GetTileFromGrid(position);
@@ -92,7 +89,7 @@ public class HighLightTileCommand : ICommand
     {
         return _newTile.GetComponentInChildren<Renderer>().material.color;
     }
-    
+
     private GameObject GetTileFromGrid(Vector2Int position)
     {
         return _tiles[position.x, position.y]?.TileObject;

@@ -104,7 +104,7 @@ public class InputManager : MonoBehaviour
         _tileHighlighter
         .SetNewTile(_objectFromRayCast)
         .SetPath(_currentPath)
-        .Execute();
+        .Highlight();
     }
 
     private void GetPathData()
