@@ -4,8 +4,10 @@ using UnityEngine.Serialization;
 public class EnemyController : MonoBehaviour
 {
     private bool _oneTurn;
-    private Tile[,] _tiles;
+    private bool _isAlert;
     private bool _isActive;
+        
+    private Tile[,] _tiles;
     private Vector3 _playerPosition;
     private EnemyState _currentState;
     private const float AlertRange = 10f;
@@ -19,7 +21,9 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         _oneTurn = false;
+        _isAlert = false;
         _isActive = false;
+        
         enemyData = ScriptableObject.CreateInstance<EnemyData>();
         _tiles = MapManager.Instance.mapData.MapTileData;
         _commandInvoker = InputManager.Instance.CommandInvoker;
@@ -34,14 +38,13 @@ public class EnemyController : MonoBehaviour
             .Instance
             .playerData
             .playerPosition;
-
-        ExecuteTurn();
+        
         CheckStats();
     }
 
-    private void ExecuteTurn()
+    public void ExecuteTurn()
     {
-        if (_oneTurn) return;
+        // if (_oneTurn) return;
         CheckPlayerPosition();
         CheckLineOfSight();
     }
@@ -51,9 +54,12 @@ public class EnemyController : MonoBehaviour
         if (EnemyUtils.CheckPlayerRange(transform, _playerPosition, AlertRange))
         {
             _isActive = true;
+            if (_isAlert) return;
+            
             _stateManager.SetState(EnemyState.Alert);
             _currentState = EnemyState.Alert;
             currentText.UpdateIndicator(EnemyState.Alert);
+            _isAlert = true;
         }
     }
 
@@ -87,14 +93,14 @@ public class EnemyController : MonoBehaviour
             _stateManager.SetState(EnemyState.Aggro);
             currentText.UpdateIndicator(EnemyState.Aggro);
             
-            var lookAtEnemy = gameObject.AddComponent<LookAtEnemy>();
+            var lookAtEnemy = gameObject.AddComponent<LookAtPlayer>();
             lookAtEnemy.player = PlayerDirector.Instance.Player.PlayerInstance.transform;
             lookAtEnemy.isActive = true;
         }
 
         Debug.Log("Ga keliatan");
         _isActive = false;
-        _oneTurn = true;
+        // _oneTurn = true;
         PlayerDirector.Instance.playerData.isPlayerTurn = true;
     }
 
