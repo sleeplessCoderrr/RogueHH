@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HighLightTileCommand
 {
     private List<Vector2Int> _previousPath;
+    private GameObject _lastSelectedTile;
     private GameObject _lastHoveredTile;
     private List<Vector2Int> _path;
     private Color _highlightColor;
@@ -55,7 +57,28 @@ public class HighLightTileCommand
 
     private void HighlightPath()
     {
-        if (_path == null) return;
+        if (_path == null || _path.Count == 0) return;
+
+        if (InputManager.Instance.isPlayerMoving)
+        {
+            
+            if (_previousPath.Count == 1)
+            {
+                ResetPreviousTile();
+            }
+
+            var lastTilePosition = _path.Last();
+            var tile = GetTileFromGrid(lastTilePosition);
+            if (tile == null) return;
+
+            var renderer = tile.GetComponentInChildren<Renderer>();
+            renderer.material.color = _highlightColor;
+
+            _previousPath.Clear(); 
+            _previousPath.Add(lastTilePosition);
+            _lastSelectedTile = tile; 
+            return;
+        }
 
         foreach (var position in _path)
         {
@@ -71,7 +94,7 @@ public class HighLightTileCommand
 
     private void ResetHighlightedTiles()
     {
-        if (_previousPath == null) return;
+        if (_previousPath == null || _previousPath.Count == 0) return;
 
         foreach (var position in _previousPath)
         {
@@ -81,6 +104,20 @@ public class HighLightTileCommand
             var renderer = tile.GetComponentInChildren<Renderer>();
             renderer.material.color = _originalColor;
         }
+
+        _previousPath.Clear();
+    }
+
+    private void ResetPreviousTile()
+    {
+        if (_previousPath.Count != 1) return;
+
+        var position = _previousPath[0];
+        var tile = GetTileFromGrid(position);
+        if (tile == null) return;
+
+        var renderer = tile.GetComponentInChildren<Renderer>();
+        renderer.material.color = _originalColor;
 
         _previousPath.Clear();
     }

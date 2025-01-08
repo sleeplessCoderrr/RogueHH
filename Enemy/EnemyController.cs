@@ -4,8 +4,8 @@ using UnityEngine.Serialization;
 public class EnemyController : MonoBehaviour
 {
     private bool _isDoneTurn;
-    private bool _isAlreadyAlert;
     private bool _isContinueLOS;
+    private bool _isAlreadyAlert;
         
     private Tile[,] _tiles;
     private Vector3 _playerPosition;
@@ -21,8 +21,8 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         _isDoneTurn = false;
-        _isAlreadyAlert = false;
         _isContinueLOS = false;
+        _isAlreadyAlert = false;
         
         enemyData = ScriptableObject.CreateInstance<EnemyData>();
         _tiles = MapManager.Instance.mapData.MapTileData;

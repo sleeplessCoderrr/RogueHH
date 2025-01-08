@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
 {
     public bool isPaused;
     public bool isCanceled; 
+    public bool isEnemyNearby;
     public bool isPlayerMoving;
     public static InputManager Instance;
     public CommandInvoker CommandInvoker;
@@ -105,6 +106,7 @@ public class InputManager : MonoBehaviour
     private void HandleHover()
     {
         if (!(_objectFromRayCast.tag == "Tile")) return;
+        
         _tileHighlighter
         .SetNewTile(_objectFromRayCast)
         .SetPath(_currentPath)
@@ -119,7 +121,10 @@ public class InputManager : MonoBehaviour
             new Vector2Int((int)_playerPosition.x / 2, (int)_playerPosition.z / 2),
             new Vector2Int((int)_objectFromRayCast.transform.position.x / 2, (int)_objectFromRayCast.transform.position.z / 2)
         );
+        _currentPath.RemoveAt(0);
     }
+    
+    
 
     private void GetInitialData()
     {
