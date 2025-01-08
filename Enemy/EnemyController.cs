@@ -3,9 +3,9 @@ using UnityEngine.Serialization;
 
 public class EnemyController : MonoBehaviour
 {
-    private bool _oneTurn;
-    private bool _isAlert;
-    private bool _isActive;
+    private bool _isDoneTurn;
+    private bool _isAlreadyAlert;
+    private bool _isContinueLOS;
         
     private Tile[,] _tiles;
     private Vector3 _playerPosition;
@@ -20,9 +20,9 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
-        _oneTurn = false;
-        _isAlert = false;
-        _isActive = false;
+        _isDoneTurn = false;
+        _isAlreadyAlert = false;
+        _isContinueLOS = false;
         
         enemyData = ScriptableObject.CreateInstance<EnemyData>();
         _tiles = MapManager.Instance.mapData.MapTileData;
@@ -38,11 +38,12 @@ public class EnemyController : MonoBehaviour
             .Instance
             .playerData
             .playerPosition;
-        
+
+        ExecuteTurn();
         CheckStats();
     }
 
-    public void ExecuteTurn()
+    private void ExecuteTurn()
     {
         // if (_oneTurn) return;
         CheckPlayerPosition();
@@ -53,13 +54,20 @@ public class EnemyController : MonoBehaviour
     {
         if (EnemyUtils.CheckPlayerRange(transform, _playerPosition, AlertRange))
         {
-            _isActive = true;
-            if (_isAlert) return;
+            _isContinueLOS = true;
+            if (_isAlreadyAlert) return;
             
             _stateManager.SetState(EnemyState.Alert);
             _currentState = EnemyState.Alert;
             currentText.UpdateIndicator(EnemyState.Alert);
-            _isAlert = true;
+            _isAlreadyAlert = true;
+        }
+        else
+        {
+            _stateManager.SetState(EnemyState.Idle);
+            _currentState = EnemyState.Idle;
+            currentText.UpdateIndicator(EnemyState.Idle);
+            return;
         }
     }
 
@@ -83,7 +91,7 @@ public class EnemyController : MonoBehaviour
 
     private void CheckLineOfSight()
     {
-        if (!_isActive || PlayerDirector.Instance.playerData.isPlayerTurn ) return;
+        if (!_isContinueLOS || PlayerDirector.Instance.playerData.isPlayerTurn ) return;
         enemyData.isTurn = true;
         
         _commandInvoker.AddCommand(new CheckLOSCommand(gameObject));
@@ -97,9 +105,24 @@ public class EnemyController : MonoBehaviour
             lookAtEnemy.player = PlayerDirector.Instance.Player.PlayerInstance.transform;
             lookAtEnemy.isActive = true;
         }
+        else if(!gameObject.GetComponent<EnemyLineOfSight>().playerInSight)
+        {
+            Debug.Log("Ga keliatan");
+            _stateManager.SetState(EnemyState.Alert);
+            _currentState = EnemyState.Alert;
+            currentText.UpdateIndicator(EnemyState.Alert);
+            _isAlreadyAlert = false;
+        }
+        else
+        {
+            Debug.Log("Out Sight");
+            _stateManager.SetState(EnemyState.Idle);
+            _currentState = EnemyState.Idle;
+            currentText.UpdateIndicator(EnemyState.Idle);
+            _isAlreadyAlert = false;
+        }
 
-        Debug.Log("Ga keliatan");
-        _isActive = false;
+        _isContinueLOS = false;
         // _oneTurn = true;
         PlayerDirector.Instance.playerData.isPlayerTurn = true;
     }
