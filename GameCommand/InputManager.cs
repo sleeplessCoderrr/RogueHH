@@ -5,9 +5,10 @@ using UnityEngine.Serialization;
 
 public class InputManager : MonoBehaviour
 {
-    public static InputManager Instance;
-    public bool isPlayerMoving;
+    public bool isPaused;
     public bool isCanceled; 
+    public bool isPlayerMoving;
+    public static InputManager Instance;
     public CommandInvoker CommandInvoker;
     
     private PlayerStateManager _playerStateManager;
@@ -25,11 +26,12 @@ public class InputManager : MonoBehaviour
     private async void Start()
     {
         Singleton();
-        _isMapInit = false;
         _camera = Camera.main;
         
-        isPlayerMoving = false;
+        isPaused = false;
+        _isMapInit = false;
         isCanceled = false;
+        isPlayerMoving = false;
         
         _currentPath = new List<Vector2Int>();
         CommandInvoker = new CommandInvoker();
@@ -61,6 +63,8 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
+        if (isPaused) return;
+        
         //##TODO: Map Preparation
         if (!_isMapInit)
         {

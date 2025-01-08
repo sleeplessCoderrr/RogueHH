@@ -11,7 +11,7 @@ public class EnemyLineOfSight : MonoBehaviour
 
     private void Update()
     {
-        if (activate) CheckLineOfSight();
+        CheckLineOfSight();
         // Debug.Log("Live report: " + playerInSight);
     }
 
