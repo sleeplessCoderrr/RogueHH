@@ -47,11 +47,24 @@ public class EnemyMoveCommand : ICommand
     private IEnumerator MoveToTarget(Vector3 targetPosition)
     {
         float moveSpeed = 2f; 
+        float rotationSpeed = 10f; // Speed for rotating the enemy
         float distance;
 
         do
         {
             distance = Vector3.Distance(_enemyInstance.transform.position, targetPosition);
+            var direction = (targetPosition - _enemyInstance.transform.position).normalized;
+
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                _enemyInstance.transform.rotation = Quaternion.Slerp(
+                    _enemyInstance.transform.rotation,
+                    targetRotation,
+                    rotationSpeed * Time.deltaTime
+                );
+            }
+
             _enemyInstance.transform.position = Vector3.MoveTowards(
                 _enemyInstance.transform.position,
                 targetPosition,
@@ -60,6 +73,7 @@ public class EnemyMoveCommand : ICommand
 
             yield return null; 
         }
-        while (distance > 0.1f);
+        while (distance > 0.1f); 
     }
+
 }
