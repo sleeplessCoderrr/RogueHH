@@ -10,5 +10,8 @@ public class EnemyData : ScriptableObject
     public float maxHealth = 20f;
     public float currentHealth = 20f;
 
+    public GameObject instance;
+    public Enemy Enemy;
+
     public bool isTurn = false;
 }

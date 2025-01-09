@@ -134,6 +134,5 @@ public class InputManager : MonoBehaviour
             10f,
             EnemyDirector.Instance.EnemyList
         );
-        Debug.Log(isEnemyNearby);
     }
 }

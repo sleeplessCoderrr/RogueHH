@@ -8,12 +8,13 @@ public class EnemyMoveCommand : ICommand
     private GameObject _enemyInstance;
     private readonly List<Vector2Int> _path;
     private EnemyStateManager _enemyStateManager;
-    
+
     public CommandType CommandType { get; set; }
 
-    public EnemyMoveCommand(GameObject instance, List<Vector2Int> path, EnemyStateManager stateManager)
+    public EnemyMoveCommand(Enemy enemy, GameObject instance, List<Vector2Int> path, EnemyStateManager stateManager)
     {
         _path = path;
+        _enemy = enemy;
         _enemyInstance = instance;
         CommandType = CommandType.Enemy;
         _enemyStateManager = stateManager;
@@ -27,25 +28,38 @@ public class EnemyMoveCommand : ICommand
     private IEnumerator MoveEnemy()
     {
         _enemyStateManager.SetState(EnemyState.Walk);
+        Vector2Int firstTile;
+        
         if (_path.Count > 0)
         {
-            var targetPosition = GetTargetPosition(_path[0]);
-            yield return CoroutineManager.Instance.StartCoroutine(
-                _enemy.MoveToTarget(
-                targetPosition
-            ));
+            firstTile = _path[1];
         }
-        
+        else
+        {
+            firstTile = _path[0];
+        }
+        var targetPosition = new Vector3(firstTile.x * 2, _enemyInstance.transform.position.y, firstTile.y * 2);
+        yield return CoroutineManager.Instance.StartCoroutine(MoveToTarget(targetPosition));
+
         _enemyStateManager.SetState(EnemyState.Aggro);
-        yield break;
     }
-    
-    private Vector3 GetTargetPosition(Vector2Int pathPoint)
+
+    private IEnumerator MoveToTarget(Vector3 targetPosition)
     {
-        return new Vector3(
-            pathPoint.x * 2,
-            _enemyInstance.transform.position.y,
-            pathPoint.y * 2
-        );
+        float moveSpeed = 2f; 
+        float distance;
+
+        do
+        {
+            distance = Vector3.Distance(_enemyInstance.transform.position, targetPosition);
+            _enemyInstance.transform.position = Vector3.MoveTowards(
+                _enemyInstance.transform.position,
+                targetPosition,
+                moveSpeed * Time.deltaTime
+            );
+
+            yield return null; 
+        }
+        while (distance > 0.1f);
     }
 }

@@ -54,6 +54,11 @@ public class EnemyBuilder : EntitiesBuilder
                         var enemyStateManager = objectInstance.AddComponent<EnemyStateManager>();
                         var enemyRaycast = objectInstance.AddComponent<EnemyLineOfSight>();
 
+                        var enemy = new Enemy(EnemyDirector.Instance.enemyConfig);
+                        var enemyData = ScriptableObject.CreateInstance<EnemyData>();
+                        enemyData.instance = objectInstance;
+                        enemyData.Enemy = enemy;
+
                         enemyRaycast.player = PlayerDirector.Instance.Player.PlayerInstance.transform;
                         enemyRaycast.obstacleMask = LayerMask.GetMask("Environment", "Player");
 
@@ -61,6 +66,7 @@ public class EnemyBuilder : EntitiesBuilder
                         var stateText = canvas.gameObject.GetComponent<StateText>();
                         var infoDisplay = canvas.gameObject.GetComponent<InfoDisplay>();
 
+                        controller.enemyData = enemyData;
                         controller.currentText = stateText;
                         controller.infoDisplay = infoDisplay;
                         infoDisplay.SetName(randomName, idx);

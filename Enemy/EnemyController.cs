@@ -49,6 +49,7 @@ public class EnemyController : MonoBehaviour
     {
         // if (enemyData.isTurn) return;
         CheckPlayerPosition();
+        if (_currentState == EnemyState.Idle) return;
         CheckLineOfSight();
     }
 
@@ -69,7 +70,6 @@ public class EnemyController : MonoBehaviour
             _stateManager.SetState(EnemyState.Idle);
             _currentState = EnemyState.Idle;
             currentText.UpdateIndicator(EnemyState.Idle);
-            return;
         }
     }
 
@@ -107,7 +107,6 @@ public class EnemyController : MonoBehaviour
         }
         else if(!gameObject.GetComponent<EnemyLineOfSight>().playerInSight)
         {
-            Debug.Log("Ga keliatan");
             _stateManager.SetState(EnemyState.Alert);
             _currentState = EnemyState.Alert;
             currentText.UpdateIndicator(EnemyState.Alert);
@@ -115,14 +114,12 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Out Sight");
             _stateManager.SetState(EnemyState.Idle);
             _currentState = EnemyState.Idle;
             currentText.UpdateIndicator(EnemyState.Idle);
             isAlreadyAlert = false;
         }
 
-        _isContinueLOS = false;
         PlayerDirector.Instance.playerData.isPlayerTurn = true;
     }
 
@@ -140,9 +137,11 @@ public class EnemyController : MonoBehaviour
             new Vector2Int((int)transform.position.x / 2, (int)transform.position.z / 2),
             new Vector2Int((int)_playerPosition.x / 2, (int)_playerPosition.z / 2)
         );
+        Debug.Log(_currentPath.Count);
         _commandInvoker.AddCommand(
         new EnemyMoveCommand(
-            gameObject, 
+            enemyData.Enemy,
+            gameObject,
             _currentPath,
             _stateManager
         ));
