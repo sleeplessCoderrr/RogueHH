@@ -17,7 +17,7 @@ public class EnemyDirector : MonoBehaviour
 
     private GameObject[] _enemyInstanceList;
     private EnemyBuilder _enemyBuilder;
-    private Enemy[] _enemyList;
+    public Enemy[] EnemyList;
 
     private void Start()
     {
@@ -40,7 +40,7 @@ public class EnemyDirector : MonoBehaviour
         await Task.Delay(1000);
 
         _enemyBuilder = new EnemyBuilder();
-        _enemyList = new Enemy[enemyCount];
+        EnemyList = new Enemy[enemyCount];
         
         _enemyBuilder.SetParent(transform);
         _enemyBuilder.SetData(enemyConfig);
@@ -57,7 +57,7 @@ public class EnemyDirector : MonoBehaviour
             var enemy = new Enemy(enemyConfig);
             enemy.EnemiesInstance = _enemyInstanceList[i];
             enemy.EnemiesInstance.GetComponent<EnemyStateManager>().SetEnemyEntity(enemy);
-            _enemyList[i] = enemy;
+            EnemyList[i] = enemy;
         }
     }
 

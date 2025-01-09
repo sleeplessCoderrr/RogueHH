@@ -27,8 +27,38 @@ public class PlayerMoveCommand : ICommand
 
     private IEnumerator MovePlayer()
     {
+        // Check if an enemy is nearby
+        if (InputManager.Instance.isEnemyNearby)
+        {
+            _playerStateManager.SetState(PlayerState.Walking);
+            PlayerDirector.Instance.playerData.isPlayerTurn = true;
+
+            if (_path.Count > 0)
+            {
+                // Move to only the first tile in the path
+                var targetPosition = GetTargetPosition(_path[0]);
+                _player.TargetPosition = targetPosition;
+                _player.LookAtTarget(_playerInstance, targetPosition);
+
+                yield return CoroutineManager.Instance.StartCoroutine(
+                    _player.MoveToTarget(
+                        _player,
+                        _playerInstance,
+                        targetPosition)
+                );
+                _player.UpdateData(_playerInstance);
+            }
+
+            _playerStateManager.SetState(PlayerState.Idle);
+            PlayerDirector.Instance.playerData.isPlayerTurn = false;
+
+            yield break; // Exit the coroutine
+        }
+
+        // Normal movement logic when no enemy is nearby
         _playerStateManager.SetState(PlayerState.Walking);
         PlayerDirector.Instance.playerData.isPlayerTurn = true;
+
         foreach (var pathPoint in _path)
         {
             if (InputManager.Instance.isCanceled)
@@ -37,24 +67,24 @@ public class PlayerMoveCommand : ICommand
                 PlayerDirector.Instance.playerData.isPlayerTurn = false;
                 break;
             }
+
             var targetPosition = GetTargetPosition(pathPoint);
             _player.TargetPosition = targetPosition;
-            _player.LookAtTarget(_playerInstance, targetPosition); 
-            
-            yield return 
-                CoroutineManager.Instance.StartCoroutine(
-                    _player.MoveToTarget(
-                        _player, 
-                        _playerInstance, 
-                        targetPosition)
-                );
-            _player.UpdateData(_playerInstance); 
+            _player.LookAtTarget(_playerInstance, targetPosition);
+
+            yield return CoroutineManager.Instance.StartCoroutine(
+                _player.MoveToTarget(
+                    _player,
+                    _playerInstance,
+                    targetPosition)
+            );
+            _player.UpdateData(_playerInstance);
         }
 
         _playerStateManager.SetState(PlayerState.Idle);
         PlayerDirector.Instance.playerData.isPlayerTurn = false;
-        
     }
+
     
     private Vector3 GetTargetPosition(Vector2Int pathPoint)
     {

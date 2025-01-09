@@ -32,6 +32,7 @@ public class InputManager : MonoBehaviour
         isPaused = false;
         _isMapInit = false;
         isCanceled = false;
+        isEnemyNearby = false;
         isPlayerMoving = false;
         
         _currentPath = new List<Vector2Int>();
@@ -124,11 +125,15 @@ public class InputManager : MonoBehaviour
         _currentPath.RemoveAt(0);
     }
     
-    
-
     private void GetInitialData()
     {
         _playerPosition = MoveUtility.GetPlayerData();
         _objectFromRayCast = MoveUtility.GetObjectFromRayCast(_camera);
+        isEnemyNearby = MapUtility.IsEnemyInRange(
+            transform.position, 
+            10f,
+            EnemyDirector.Instance.EnemyList
+        );
+        Debug.Log(isEnemyNearby);
     }
 }

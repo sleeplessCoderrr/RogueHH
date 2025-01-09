@@ -4,8 +4,8 @@ using UnityEngine.Serialization;
 public class EnemyController : MonoBehaviour
 {
     private bool _isDoneTurn;
+    public bool isAlreadyAlert;
     private bool _isContinueLOS;
-    private bool _isAlreadyAlert;
         
     private Tile[,] _tiles;
     private Vector3 _playerPosition;
@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour
     {
         _isDoneTurn = false;
         _isContinueLOS = false;
-        _isAlreadyAlert = false;
+        isAlreadyAlert = false;
         
         enemyData = ScriptableObject.CreateInstance<EnemyData>();
         _tiles = MapManager.Instance.mapData.MapTileData;
@@ -55,12 +55,12 @@ public class EnemyController : MonoBehaviour
         if (EnemyUtils.CheckPlayerRange(transform, _playerPosition, AlertRange))
         {
             _isContinueLOS = true;
-            if (_isAlreadyAlert) return;
+            if (isAlreadyAlert) return;
             
             _stateManager.SetState(EnemyState.Alert);
             _currentState = EnemyState.Alert;
             currentText.UpdateIndicator(EnemyState.Alert);
-            _isAlreadyAlert = true;
+            isAlreadyAlert = true;
         }
         else
         {
@@ -111,7 +111,7 @@ public class EnemyController : MonoBehaviour
             _stateManager.SetState(EnemyState.Alert);
             _currentState = EnemyState.Alert;
             currentText.UpdateIndicator(EnemyState.Alert);
-            _isAlreadyAlert = false;
+            isAlreadyAlert = false;
         }
         else
         {
@@ -119,11 +119,10 @@ public class EnemyController : MonoBehaviour
             _stateManager.SetState(EnemyState.Idle);
             _currentState = EnemyState.Idle;
             currentText.UpdateIndicator(EnemyState.Idle);
-            _isAlreadyAlert = false;
+            isAlreadyAlert = false;
         }
 
         _isContinueLOS = false;
-        // _oneTurn = true;
         PlayerDirector.Instance.playerData.isPlayerTurn = true;
     }
 

@@ -7,5 +7,4 @@ public static class EnemyUtils
     {
         return Vector3.Distance(transform.position, playerPosition) <= alertRange;
     }
-    
 }
