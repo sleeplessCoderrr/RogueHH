@@ -27,7 +27,6 @@ public class PlayerMoveCommand : ICommand
 
     private IEnumerator MovePlayer()
     {
-        // Check if an enemy is nearby
         if (InputManager.Instance.isEnemyNearby)
         {
             _playerStateManager.SetState(PlayerState.Walking);
@@ -35,7 +34,6 @@ public class PlayerMoveCommand : ICommand
 
             if (_path.Count > 0)
             {
-                // Move to only the first tile in the path
                 var targetPosition = GetTargetPosition(_path[0]);
                 _player.TargetPosition = targetPosition;
                 _player.LookAtTarget(_playerInstance, targetPosition);
@@ -51,11 +49,9 @@ public class PlayerMoveCommand : ICommand
 
             _playerStateManager.SetState(PlayerState.Idle);
             PlayerDirector.Instance.playerData.isPlayerTurn = false;
-
-            yield break; // Exit the coroutine
+            yield break;
         }
 
-        // Normal movement logic when no enemy is nearby
         _playerStateManager.SetState(PlayerState.Walking);
         PlayerDirector.Instance.playerData.isPlayerTurn = true;
 
@@ -84,7 +80,6 @@ public class PlayerMoveCommand : ICommand
         _playerStateManager.SetState(PlayerState.Idle);
         PlayerDirector.Instance.playerData.isPlayerTurn = false;
     }
-
     
     private Vector3 GetTargetPosition(Vector2Int pathPoint)
     {

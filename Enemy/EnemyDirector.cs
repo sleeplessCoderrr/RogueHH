@@ -35,7 +35,9 @@ public class EnemyDirector : MonoBehaviour
 
     private async void InitializeEnemy()
     {
-        enemyCount = MapUtility.CalculateEnemies(PlayerDirector.Instance.playerData.selectedLevel);
+        enemyCount = MapUtility.CalculateEnemies(
+            PlayerDirector.Instance.playerData.selectedLevel
+        );
         NotifyEnemyCount(); 
         await Task.Delay(1000);
 

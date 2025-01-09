@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Serialization;
+using System.Collections.Generic;
 
 public class EnemyController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class EnemyController : MonoBehaviour
     private Vector3 _playerPosition;
     private EnemyState _currentState;
     private const float AlertRange = 10f;
+    private List<Vector2Int> _currentPath;
     private CommandInvoker _commandInvoker;
     private EnemyStateManager _stateManager;
 
@@ -35,9 +37,9 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         _playerPosition = PlayerDirector
-            .Instance
-            .playerData
-            .playerPosition;
+        .Instance
+        .playerData
+        .playerPosition;
 
         ExecuteTurn();
         CheckStats();
@@ -45,7 +47,7 @@ public class EnemyController : MonoBehaviour
 
     private void ExecuteTurn()
     {
-        // if (_oneTurn) return;
+        // if (enemyData.isTurn) return;
         CheckPlayerPosition();
         CheckLineOfSight();
     }
@@ -100,10 +102,8 @@ public class EnemyController : MonoBehaviour
         { 
             _stateManager.SetState(EnemyState.Aggro);
             currentText.UpdateIndicator(EnemyState.Aggro);
-            
-            var lookAtEnemy = gameObject.AddComponent<LookAtPlayer>();
-            lookAtEnemy.player = PlayerDirector.Instance.Player.PlayerInstance.transform;
-            lookAtEnemy.isActive = true;
+            LookPlayer();
+            Move();
         }
         else if(!gameObject.GetComponent<EnemyLineOfSight>().playerInSight)
         {
@@ -124,6 +124,29 @@ public class EnemyController : MonoBehaviour
 
         _isContinueLOS = false;
         PlayerDirector.Instance.playerData.isPlayerTurn = true;
+    }
+
+    private void LookPlayer()
+    {
+        var lookAtEnemy = gameObject.AddComponent<LookAtPlayer>();
+        lookAtEnemy.player = PlayerDirector.Instance.Player.PlayerInstance.transform;
+        lookAtEnemy.isActive = true;
+    }
+
+    private void Move()
+    {
+        _currentPath = MoveUtility.GetPath(
+            MapManager.Instance.mapData.MapTileData, 
+            new Vector2Int((int)transform.position.x / 2, (int)transform.position.z / 2),
+            new Vector2Int((int)_playerPosition.x / 2, (int)_playerPosition.z / 2)
+        );
+        _commandInvoker.AddCommand(
+        new EnemyMoveCommand(
+            gameObject, 
+            _currentPath,
+            _stateManager
+        ));
+        _commandInvoker.ExecuteCommand();
     }
 
     private void CheckStats()

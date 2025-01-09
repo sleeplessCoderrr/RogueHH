@@ -74,7 +74,6 @@ public class EnemyBuilder : EntitiesBuilder
             }
         }
 
-
         return objects.ToArray();
     }
 

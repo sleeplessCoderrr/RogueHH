@@ -9,6 +9,7 @@ public enum EnemyState
     Idle,
     Alert,
     Aggro,
+    Walk,
     Attack
 }
 
@@ -28,12 +29,13 @@ public class EnemyStateManager : MonoBehaviour
 
     private void InitializeStates()
     {
-        _animator = GetComponent<Animator>();
+        _animator = gameObject.GetComponent<Animator>();
         _states = new Dictionary<EnemyState, EnemyBaseState>
         {
             { EnemyState.Idle, new EnemyIdleState(_enemy, _animator) },
             { EnemyState.Alert, new EnemyAlertState(_enemy, _animator) },
-            { EnemyState.Aggro, new EnemyAgroState(_enemy, _animator) }
+            { EnemyState.Aggro, new EnemyAgroState(_enemy, _animator) },
+            { EnemyState.Walk , new EnemyWalkingState(_enemy, _animator)}
         };
         _stateInvoker = _states[EnemyState.Idle];
         _stateInvoker.EnterState();

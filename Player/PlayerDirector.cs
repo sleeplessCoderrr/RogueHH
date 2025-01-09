@@ -30,6 +30,7 @@ public class PlayerDirector : MonoBehaviour
         
         InitializePlayer();
     }
+    
 
     private async void InitializePlayer()
     {
