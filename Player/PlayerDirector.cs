@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class PlayerDirector : MonoBehaviour
@@ -30,7 +31,11 @@ public class PlayerDirector : MonoBehaviour
         
         InitializePlayer();
     }
-    
+
+    private void Update()
+    {
+        playerData.CheckLevelUp();
+    }
 
     private async void InitializePlayer()
     {

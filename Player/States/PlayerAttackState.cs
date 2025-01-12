@@ -8,12 +8,12 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void EnterState()
     {
-        Animator.SetBool("Attacking", true);
+        Animator.SetBool("IsAttack", true);
     }
 
     public override void ExitState()
     {
-        Animator.SetBool("Attacking", false);
+        Animator.SetBool("IsAttack", false);
     }
 
     public override void UpdateState()

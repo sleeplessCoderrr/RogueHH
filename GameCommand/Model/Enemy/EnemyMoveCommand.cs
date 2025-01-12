@@ -29,16 +29,21 @@ public class EnemyMoveCommand : ICommand
     {
         if (_path.Count > 0) _path.RemoveAt(0);
         if (_path.Count == 0) yield break; 
+
         var firstTile = _path[0];
-        if (EnemyUtils.CheckPlayerPosition(firstTile)) yield break; 
+        if (EnemyUtils.CheckPlayerPosition(firstTile)) yield break;
 
         _enemyStateManager.SetState(EnemyState.Walk);
+
         var targetPosition = new Vector3(firstTile.x * 2, _enemyInstance.transform.position.y, firstTile.y * 2);
         yield return CoroutineManager.Instance.StartCoroutine(MoveToTarget(targetPosition));
-        MapManager.Instance.mapData.MapTileData[firstTile.x, firstTile.y].IsEnemy = false;
+
+        var finalTile = new Vector2Int(firstTile.x, firstTile.y);
+        MapManager.Instance.mapData.MapTileData[finalTile.x, finalTile.y].IsEnemy = true;
+
         _enemyStateManager.SetState(EnemyState.Aggro);
-        MapManager.Instance.mapData.MapTileData[(int)_enemyInstance.transform.position.x, (int)_enemyInstance.transform.position.z].IsEnemy = true;
     }
+
 
 
     private IEnumerator MoveToTarget(Vector3 targetPosition)
@@ -46,6 +51,11 @@ public class EnemyMoveCommand : ICommand
         const float moveSpeed = 2f; 
         const float rotationSpeed = 10f; 
         float distance;
+
+        var initialTile = new Vector2Int(
+            Mathf.FloorToInt(_enemyInstance.transform.position.x / 2),
+            Mathf.FloorToInt(_enemyInstance.transform.position.z / 2)
+        );
 
         do
         {
@@ -68,9 +78,22 @@ public class EnemyMoveCommand : ICommand
                 moveSpeed * Time.deltaTime
             );
 
-            yield return null; 
+            var currentTile = new Vector2Int(
+                Mathf.FloorToInt(_enemyInstance.transform.position.x / 2),
+                Mathf.FloorToInt(_enemyInstance.transform.position.z / 2)
+            );
+
+            if (currentTile != initialTile)
+            {
+                MapManager.Instance.mapData.MapTileData[initialTile.x, initialTile.y].IsEnemy = false;
+                MapManager.Instance.mapData.MapTileData[currentTile.x, currentTile.y].IsEnemy = true;
+                initialTile = currentTile; 
+            }
+
+            yield return null;
         }
-        while (distance > 0.1f); 
+        while (distance > 0.1f);
     }
+
 
 }

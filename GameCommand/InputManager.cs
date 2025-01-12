@@ -100,21 +100,28 @@ public class InputManager : MonoBehaviour
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
             if (Physics.Raycast(ray, out var hit))
             {
-                if (hit.collider.CompareTag("Enemy"))
+                Debug.Log(hit.collider.tag);
+                if (hit.collider.CompareTag("Enemy")
+                    && Vector3.Distance(hit.collider.gameObject.transform.position,
+                        _playerEntity.PlayerInstance.transform.position) <= 3f)
                 {
                     _playerData.isPlayerTurn = true;
-                    CommandInvoker.AddCommand(new PlayerAttackCommand());
+                    isPlayerMoving = false;
+                    var enemyData = hit.collider.gameObject.GetComponent<EnemyController>().enemyData;
+                        
+                    CommandInvoker.AddCommand(new PlayerAttackCommand(_playerStateManager, enemyData));
                     CommandInvoker.ExecuteCommand();
+                    return;
+                }
+
+                if (hit.collider.CompareTag("Tile"))
+                {
+                    _playerData.isPlayerTurn = true;
+                    CommandInvoker.AddCommand(new PlayerMoveCommand(_currentPath));
+                    CommandInvoker.ExecuteCommand();
+                    return;
                 }
             }
-        }
-
-        
-        if (Input.GetMouseButtonDown(0) && !MoveUtility.IsEnemy(_tiles, (int)_objectFromRayCast.transform.position.x/2, (int)_objectFromRayCast.transform.position.z/2))
-        {
-            _playerData.isPlayerTurn = true;
-            CommandInvoker.AddCommand(new PlayerMoveCommand(_currentPath));
-            CommandInvoker.ExecuteCommand();
         }
     }
 
@@ -134,6 +141,9 @@ public class InputManager : MonoBehaviour
             new Vector2Int((int)_playerPosition.x / 2, (int)_playerPosition.z / 2),
             new Vector2Int((int)_objectFromRayCast.transform.position.x / 2, (int)_objectFromRayCast.transform.position.z / 2)
         );
+        
+        if(_currentPath == null) return;
+        if(_currentPath.Count <= 0) return;
         _currentPath.RemoveAt(0);
     }
     

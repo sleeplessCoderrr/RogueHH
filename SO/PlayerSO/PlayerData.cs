@@ -67,12 +67,16 @@ public class PlayerData : ScriptableObject
         }
     }
 
-    private void CheckLevelUp()
+    public void CheckLevelUp()
     {
         while (currentExpPoint >= maxExpPoint) 
         {
             currentExpPoint -= maxExpPoint; 
             PlayerLevel++;
+            attack += 3;
+            defense += 2;
+            currentHealth = maxHealth = maxHealth + 10;
+            
             maxExpPoint = CalculateNextLevelExp(maxExpPoint);
             experienceUpdateEventChannel?.RaiseEvent(currentExpPoint, maxExpPoint); 
         }
