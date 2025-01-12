@@ -89,7 +89,7 @@ public class InputManager : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(0) && (_objectFromRayCast.tag == "Enemy"))
+        if (Input.GetMouseButtonDown(0) && (_objectFromRayCast.CompareTag("Enemy")))
         {
             _playerData.isPlayerTurn = true;
             CommandInvoker.AddCommand(new PlayerAttackCommand());
@@ -106,8 +106,6 @@ public class InputManager : MonoBehaviour
 
     private void HandleHover()
     {
-        if (!(_objectFromRayCast.tag == "Tile")) return;
-        
         _tileHighlighter
         .SetNewTile(_objectFromRayCast)
         .SetPath(_currentPath)

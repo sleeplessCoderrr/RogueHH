@@ -5,9 +5,9 @@ using UnityEngine;
 public class EnemyMoveCommand : ICommand
 {
     private readonly Enemy _enemy;
-    private GameObject _enemyInstance;
+    private readonly GameObject _enemyInstance;
     private readonly List<Vector2Int> _path;
-    private EnemyStateManager _enemyStateManager;
+    private readonly EnemyStateManager _enemyStateManager;
 
     public CommandType CommandType { get; set; }
 
@@ -27,27 +27,22 @@ public class EnemyMoveCommand : ICommand
 
     private IEnumerator MoveEnemy()
     {
+        if (_path.Count > 0) _path.RemoveAt(0);
+        if (_path.Count == 0) yield break; 
+        var firstTile = _path[0];
+        if (EnemyUtils.CheckPlayerPosition(firstTile)) yield break; 
+
         _enemyStateManager.SetState(EnemyState.Walk);
-        Vector2Int firstTile;
-        
-        if (_path.Count > 0)
-        {
-            firstTile = _path[1];
-        }
-        else
-        {
-            firstTile = _path[0];
-        }
         var targetPosition = new Vector3(firstTile.x * 2, _enemyInstance.transform.position.y, firstTile.y * 2);
         yield return CoroutineManager.Instance.StartCoroutine(MoveToTarget(targetPosition));
-
         _enemyStateManager.SetState(EnemyState.Aggro);
     }
 
+
     private IEnumerator MoveToTarget(Vector3 targetPosition)
     {
-        float moveSpeed = 2f; 
-        float rotationSpeed = 10f; // Speed for rotating the enemy
+        const float moveSpeed = 2f; 
+        const float rotationSpeed = 10f; 
         float distance;
 
         do
@@ -57,7 +52,7 @@ public class EnemyMoveCommand : ICommand
 
             if (direction != Vector3.zero)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                var targetRotation = Quaternion.LookRotation(direction);
                 _enemyInstance.transform.rotation = Quaternion.Slerp(
                     _enemyInstance.transform.rotation,
                     targetRotation,
