@@ -57,13 +57,25 @@ public class PlayerMoveCommand : ICommand
 
         foreach (var pathPoint in _path)
         {
+            
+            
+            if (MapUtility.IsEnemyInRange(
+                _playerInstance.transform.position,
+                10f,
+                EnemyDirector.Instance.EnemyList))
+            {
+                InputManager.Instance.isCanceled = false;
+                PlayerDirector.Instance.playerData.isPlayerTurn = false;
+                break;
+            }
+            
             if (InputManager.Instance.isCanceled)
             {
                 InputManager.Instance.isCanceled = false;
                 PlayerDirector.Instance.playerData.isPlayerTurn = false;
                 break;
             }
-
+            
             var targetPosition = GetTargetPosition(pathPoint);
             _player.TargetPosition = targetPosition;
             _player.LookAtTarget(_playerInstance, targetPosition);

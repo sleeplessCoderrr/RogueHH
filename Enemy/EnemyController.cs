@@ -137,7 +137,6 @@ public class EnemyController : MonoBehaviour
             new Vector2Int((int)transform.position.x / 2, (int)transform.position.z / 2),
             new Vector2Int((int)_playerPosition.x / 2, (int)_playerPosition.z / 2)
         );
-        Debug.Log(_currentPath.Count);
         _commandInvoker.AddCommand(
         new EnemyMoveCommand(
             enemyData.Enemy,

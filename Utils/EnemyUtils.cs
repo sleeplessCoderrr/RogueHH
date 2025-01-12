@@ -12,8 +12,6 @@ public static class EnemyUtils
     {
         var playerPosition = PlayerDirector.Instance.Player.PlayerInstance.transform.position;
         var targetPosition = new Vector3(nextPosition.x * 2, PlayerDirector.Instance.Player.PlayerInstance.transform.position.y, nextPosition.y * 2);
-        Debug.Log(playerPosition);
-        Debug.Log(targetPosition);
         
         return playerPosition == targetPosition;
     }

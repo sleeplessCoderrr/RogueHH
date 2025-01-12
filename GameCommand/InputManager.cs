@@ -83,18 +83,32 @@ public class InputManager : MonoBehaviour
 
         //##TODO: Input
         HandleHover();
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            _playerData.isPlayerTurn = false;
+            return;
+        }
         if (Input.GetMouseButtonDown(0) && isPlayerMoving)
         {
             isCanceled = true;
             return;
         }
 
-        if (Input.GetMouseButtonDown(0) && (_objectFromRayCast.CompareTag("Enemy")))
+        if (Input.GetMouseButtonDown(0))
         {
-            _playerData.isPlayerTurn = true;
-            CommandInvoker.AddCommand(new PlayerAttackCommand());
-            CommandInvoker.ExecuteCommand();
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
+            if (Physics.Raycast(ray, out var hit))
+            {
+                if (hit.collider.CompareTag("Enemy"))
+                {
+                    _playerData.isPlayerTurn = true;
+                    CommandInvoker.AddCommand(new PlayerAttackCommand());
+                    CommandInvoker.ExecuteCommand();
+                }
+            }
         }
+
         
         if (Input.GetMouseButtonDown(0) && !MoveUtility.IsEnemy(_tiles, (int)_objectFromRayCast.transform.position.x/2, (int)_objectFromRayCast.transform.position.z/2))
         {
@@ -114,7 +128,7 @@ public class InputManager : MonoBehaviour
 
     private void GetPathData()
     {   
-        if(!MoveUtility.IsValidMove(_tiles, (int)_playerPosition.x / 2, (int)_playerPosition.z / 2))return;
+        if(!MoveUtility.IsValidMove(_tiles, (int)_objectFromRayCast.transform.position.x / 2, (int)_objectFromRayCast.transform.position.z / 2))return;
         _currentPath = MoveUtility.GetPath(
             _tiles,
             new Vector2Int((int)_playerPosition.x / 2, (int)_playerPosition.z / 2),

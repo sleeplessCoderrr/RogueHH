@@ -35,7 +35,9 @@ public class EnemyMoveCommand : ICommand
         _enemyStateManager.SetState(EnemyState.Walk);
         var targetPosition = new Vector3(firstTile.x * 2, _enemyInstance.transform.position.y, firstTile.y * 2);
         yield return CoroutineManager.Instance.StartCoroutine(MoveToTarget(targetPosition));
+        MapManager.Instance.mapData.MapTileData[firstTile.x, firstTile.y].IsEnemy = false;
         _enemyStateManager.SetState(EnemyState.Aggro);
+        MapManager.Instance.mapData.MapTileData[(int)_enemyInstance.transform.position.x, (int)_enemyInstance.transform.position.z].IsEnemy = true;
     }
 
 
