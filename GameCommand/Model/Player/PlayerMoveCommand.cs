@@ -91,6 +91,12 @@ public class PlayerMoveCommand : ICommand
 
         _playerStateManager.SetState(PlayerState.Idle);
         PlayerDirector.Instance.playerData.isPlayerTurn = false;
+
+        if (InputManager.Instance.isLifeSteel)
+        {
+            InputManager.Instance.lifeSteelCount--;
+            if (InputManager.Instance.lifeSteelCount == 0) InputManager.Instance.isLifeSteel = false;
+        }
     }
     
     private Vector3 GetTargetPosition(Vector2Int pathPoint)

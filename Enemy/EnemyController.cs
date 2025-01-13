@@ -168,6 +168,11 @@ public class EnemyController : MonoBehaviour
         
         _stateManager.SetState(EnemyState.Aggro); 
         Debug.Log("Damage = " + damage);
+        if (InputManager.Instance.isLifeSteel)
+        {
+            InputManager.Instance.lifeSteelCount--;
+            if (InputManager.Instance.lifeSteelCount == 0) InputManager.Instance.isLifeSteel = false;
+        }
     }
     
     private static float CalculateDamageOutput(

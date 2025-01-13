@@ -11,6 +11,16 @@ public class InputManager : MonoBehaviour
     public bool isPlayerMoving;
     public static InputManager Instance;
     public CommandInvoker CommandInvoker;
+
+    public AudioClip dungeonSound;
+    public AudioClip attackSound;
+    private bool _isPlayingAttackMusic;
+
+    public bool isOneHit;
+    public int oneHitCount;
+    
+    public bool isLifeSteel;
+    public int lifeSteelCount;
     
     private PlayerStateManager _playerStateManager;
     private HighLightTileCommand _tileHighlighter;
@@ -28,6 +38,12 @@ public class InputManager : MonoBehaviour
     {
         Singleton();
         _camera = Camera.main;
+
+        isOneHit = false;
+        oneHitCount = 0;
+        
+        isLifeSteel = false;
+        lifeSteelCount = 0;
         
         isPaused = false;
         _isMapInit = false;
@@ -81,13 +97,27 @@ public class InputManager : MonoBehaviour
         if (_currentPath == null) return;
 
         //##TODO: Input
+        HandleMusic();
         HandleHover();
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            isOneHit = true;
+            oneHitCount = 1;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            isLifeSteel = true;
+            lifeSteelCount = 4;
+        }
 
         if (Input.GetKey(KeyCode.Space))
         {
             _playerData.isPlayerTurn = false;
             return;
         }
+        
         if (Input.GetMouseButtonDown(0) && isPlayerMoving)
         {
             isCanceled = true;
@@ -124,6 +154,12 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    private void CheckSkillCount()
+    {
+        Debug.Log("Life Steel: " + lifeSteelCount);
+        Debug.Log("OneHit: " + oneHitCount);
+    }
+
     private void HandleHover()
     {
         _tileHighlighter
@@ -155,5 +191,19 @@ public class InputManager : MonoBehaviour
             10f,
             EnemyDirector.Instance.EnemyList
         );
+    }
+    
+    private void HandleMusic()
+    {
+        if (isEnemyNearby && !_isPlayingAttackMusic)
+        {
+            GameBgmManager.Instance.ChangeAudioClip(attackSound);
+            _isPlayingAttackMusic = true;
+        }
+        else if (!isEnemyNearby && _isPlayingAttackMusic)
+        {
+            GameBgmManager.Instance.ChangeAudioClip(dungeonSound);
+            _isPlayingAttackMusic = false;
+        }
     }
 }

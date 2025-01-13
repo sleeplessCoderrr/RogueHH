@@ -27,11 +27,34 @@ public class PlayerAttackCommand : ICommand
             _playerData.critDamage
         );
 
-        Debug.Log(damage);
-        _enemyData.currentHealth -= damage;
+        if (InputManager.Instance.isOneHit)
+        {
+            _enemyData.currentHealth = 0;
+            InputManager.Instance.isOneHit = false;
+            InputManager.Instance.oneHitCount--;
+        }
+        else
+        {
+            _enemyData.currentHealth -= damage;
+        }
+
+        if (InputManager.Instance.isLifeSteel)
+        {
+            if (Random.Range(0f, 1f) <= 0.2f)
+            {
+                var additionHealth = damage * 0.2f;
+                if(_playerData.currentExpPoint < _playerData.maxHealth) _playerData.currentHealth += additionHealth;
+            }
+        }
         
         _playerStateManager.SetState(PlayerState.Idle);
         PlayerDirector.Instance.playerData.isPlayerTurn = false;
+        
+        if (InputManager.Instance.isLifeSteel)
+        {
+            InputManager.Instance.lifeSteelCount--;
+            if (InputManager.Instance.lifeSteelCount == 0) InputManager.Instance.isLifeSteel = false;
+        }
     }
     
     private static float CalculateDamageOutput(

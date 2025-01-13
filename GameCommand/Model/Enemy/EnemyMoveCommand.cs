@@ -42,6 +42,11 @@ public class EnemyMoveCommand : ICommand
         MapManager.Instance.mapData.MapTileData[finalTile.x, finalTile.y].IsEnemy = true;
 
         _enemyStateManager.SetState(EnemyState.Aggro);
+        if (InputManager.Instance.isLifeSteel)
+        {
+            InputManager.Instance.lifeSteelCount--;
+            if (InputManager.Instance.lifeSteelCount == 0) InputManager.Instance.isLifeSteel = false;
+        }
     }
 
 
