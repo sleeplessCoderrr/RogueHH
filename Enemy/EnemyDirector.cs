@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using System.Threading.Tasks;
 
 public class EnemyDirector : MonoBehaviour
@@ -17,18 +18,17 @@ public class EnemyDirector : MonoBehaviour
 
     private GameObject[] _enemyInstanceList;
     private EnemyBuilder _enemyBuilder;
-    public Enemy[] EnemyList;
+    public List<Enemy> EnemyList;
 
     private void Start()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this);
         }
         InitializeEnemy();
     }
@@ -42,7 +42,7 @@ public class EnemyDirector : MonoBehaviour
         await Task.Delay(1000);
 
         _enemyBuilder = new EnemyBuilder();
-        EnemyList = new Enemy[enemyCount];
+        EnemyList = new List<Enemy>();
         
         _enemyBuilder.SetParent(transform);
         _enemyBuilder.SetData(enemyConfig);

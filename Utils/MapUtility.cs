@@ -158,10 +158,11 @@ public static class MapUtility
         return UnityEngine.Random.Range(0f, 100f) >= 90;
     }
 
-    public static bool IsEnemyInRange(Vector3 position, float range, Enemy[] enemies)
+    public static bool IsEnemyInRange(Vector3 position, float range, List<Enemy> enemies)
     {
         foreach(var enemy in enemies)
         {
+            if(enemy == null) continue;
             if (enemy.EnemiesInstance
                 .GetComponent<EnemyController>()
                 .isAlreadyAlert) return true;

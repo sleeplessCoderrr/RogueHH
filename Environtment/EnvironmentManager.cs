@@ -11,21 +11,16 @@ public class EnvironmentManager : MonoBehaviour
     private Light _playerLight;
     private GameObject _player;
     
-    private void Awake()
+    private async void Start()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this);
         }
-    }
-
-    private async void Start()
-    {
         _skyboxBuilder = new SkyboxBuilder()
             .SetColor(Color.black)        
             .SetShader("Unlit/Color")    

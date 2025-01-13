@@ -13,7 +13,6 @@ public class CoroutineManager : MonoBehaviour
             {
                 GameObject obj = new GameObject("CoroutineManager");
                 _instance = obj.AddComponent<CoroutineManager>();
-                DontDestroyOnLoad(obj); 
             }
             return _instance;
         }

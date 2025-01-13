@@ -6,6 +6,11 @@ public class EnemyCountDisplay : MonoBehaviour
     public Text enemyCountText;
     public EnemyCountUpdateEventChannel enemyCountUpdateEventChannel;
 
+    private void Update()
+    {
+        UpdateEnemyCountText(EnemyDirector.Instance.enemyCount);
+    }
+    
     private void OnEnable()
     {
         enemyCountUpdateEventChannel.OnEnemyCountUpdated += UpdateEnemyCountText;

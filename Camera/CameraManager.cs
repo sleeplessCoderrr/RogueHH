@@ -12,22 +12,17 @@ public class CameraManager : MonoBehaviour
 
     private Vector3 _originalPosition;
     private bool _isShaking = false;
-
-    private void Awake()
+    
+    private async void Start()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this);
         }
-    }
-
-    private async void Start()
-    {
         await Task.Delay(1000);
         _playerData = PlayerDirector.Instance.playerData;
         _originalPosition = transform.position; // Store the initial position

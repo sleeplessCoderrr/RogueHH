@@ -18,22 +18,17 @@ public class MapManager : MonoBehaviour
     private TunnelBuilder _tunnelBuilder;
     private RoomBuilder _roomBuilder;
     private KruskalMST _kruskalMst;
-
-    private void Awake()
+    
+    private async void Start()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this);
         }
-    }
-    
-    private async void Start()
-    {
         _kruskalMst = new KruskalMST();
         _roomBuilder = new RoomBuilder();
         _tunnelBuilder = new TunnelBuilder();

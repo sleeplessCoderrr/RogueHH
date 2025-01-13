@@ -35,7 +35,8 @@ public class EnemyStateManager : MonoBehaviour
             { EnemyState.Idle, new EnemyIdleState(_enemy, _animator) },
             { EnemyState.Alert, new EnemyAlertState(_enemy, _animator) },
             { EnemyState.Aggro, new EnemyAgroState(_enemy, _animator) },
-            { EnemyState.Walk , new EnemyWalkingState(_enemy, _animator)}
+            { EnemyState.Walk , new EnemyWalkingState(_enemy, _animator)},
+            { EnemyState.Attack , new EnemyAttackState(_enemy, _animator)}
         };
         _stateInvoker = _states[EnemyState.Idle];
         _stateInvoker.EnterState();

@@ -102,8 +102,18 @@ public class EnemyController : MonoBehaviour
         { 
             _stateManager.SetState(EnemyState.Aggro);
             currentText.UpdateIndicator(EnemyState.Aggro);
+            
             LookPlayer();
-            Move();
+            Debug.Log("Jarak: " + Vector3.Distance(gameObject.transform.position, _playerPosition));
+            if (Vector3.Distance(gameObject.transform.position, _playerPosition) <= 3f)
+            {
+                Debug.Log("In");
+                AttackPlayer();
+            }
+            else
+            {
+                Move();
+            }
         }
         else if(!gameObject.GetComponent<EnemyLineOfSight>().playerInSight)
         {
@@ -147,11 +157,44 @@ public class EnemyController : MonoBehaviour
         _commandInvoker.ExecuteCommand();
     }
 
+    private void AttackPlayer()
+    {
+        _stateManager.SetState(EnemyState.Attack);
+        var damage = CalculateDamageOutput(
+            enemyData.attack,
+            PlayerDirector.Instance.playerData.defense
+        );
+        PlayerDirector.Instance.playerData.currentHealth -= damage;
+        
+        _stateManager.SetState(EnemyState.Aggro); 
+        Debug.Log("Damage = " + damage);
+    }
+    
+    private static float CalculateDamageOutput(
+        float attack, 
+        float defense, 
+        float randomFactorRange = 0.1f)
+    {
+        var defenseScalingFactor = Random.Range(20, 50);
+        var defenseFactor = 1 - (defense / (defense + defenseScalingFactor));
+        var baseDamage = attack * defenseFactor;
+        var randomFactor = Random.Range(1 - randomFactorRange, 1 + randomFactorRange);
+        
+        return baseDamage * randomFactor;;
+    }
+
     private void CheckStats()
     {
         infoDisplay.UpdateInfo(
             enemyData.currentHealth, 
             enemyData.maxHealth
         );
+
+        if (enemyData.currentHealth <= 0)
+        {
+            EnemyDirector.Instance.EnemyList.Remove(enemyData.Enemy);
+            EnemyDirector.Instance.enemyCount--;
+            Destroy(gameObject);
+        }
     }
 }
